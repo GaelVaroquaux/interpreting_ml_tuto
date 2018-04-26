@@ -12,4 +12,12 @@ MSE versus MAD
 Classification settings
 -------------------------
 
+Accuracy and its shortcomings
+
+precision, recall, and their shortcomings
+
+ROC AUC
+
+average precision
+
 

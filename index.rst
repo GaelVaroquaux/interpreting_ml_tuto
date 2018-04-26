@@ -3,62 +3,30 @@
 |
 
 
-.. include:: includes/big_toc_css.rst
-
-.. include:: tune_toc.rst
-
-Understanding how well a classifier predicts
+A. Measuring how well a classifier predicts
 =============================================
 
 .. toctree::
+   :numbered:
 
    metrics.rst
    content/cross_validation.rst
    content/underfit_vs_overfit.rst
 
-Understanding why a classifier predicts
-========================================
+B. Understanding why a classifier predicts
+===========================================
 
-Black-box interpretation of models: LIME
------------------------------------------
+.. toctree::
+   :numbered:
 
-Interpreting linear models
----------------------------
-
-Conditional versus marginal relations (and the link to univariate feature selection)
-
-The challenge of correlated features
-
-Gauging significance of observed associations
-
-The effect of regularization
-
-Interpreting random forests
-----------------------------
-
-* Feature importance
-
-* Danger: higher-entropy variables will have large feature importances
-
-Partial dependence plots
--------------------------
+   content/black_box_interpretation.rst
+   content/interpreting_linear_models.rst
+   content/interpreting_random_forests.rst
+   content/partial_dep_plots.rst
 
 _______________________________
 
 
 .. include:: content/index.rst
    :start-line: 1
-
-..  
- .. rst-class:: tune
- 
-  .. toctree::
- 
-   intro.rst
-   language/python_language.rst
-   numpy/index.rst
-   matplotlib/index.rst
-   scipy.rst
-   help/help.rst
-
 
