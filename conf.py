@@ -63,6 +63,7 @@ sphinx_gallery_conf = {
         'statsmodels': 'http://www.statsmodels.org/stable/',
         },
     'backreferences_dir': False,
+    'filename_pattern': '.*',
     }
 
 # Add any paths that contain templates here, relative to this directory.

@@ -9,7 +9,7 @@ A. Measuring how well a classifier predicts
 .. toctree::
    :numbered:
 
-   metrics.rst
+   content/metrics.rst
    content/cross_validation.rst
    content/underfit_vs_overfit.rst
 
