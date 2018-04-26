@@ -4,10 +4,4 @@
 *.so
 build
 _build
-/euroscipy2010_tutorials/source/advanced_numpy/examples/mandel.c
-PythonScientific-simple.pdf
-PythonScientific.pdf
-*/auto_examples
-*/*/auto_examples
-advanced/image_processing/examples/lena.png
-advanced/image_processing/examples/face.png
+content
