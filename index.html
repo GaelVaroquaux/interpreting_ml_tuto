@@ -27,7 +27,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/copybutton.js"></script>
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Metrics to judge the sucess of a model" href="metrics.html" />
+    <link rel="next" title="1. Metrics to judge the sucess of a model" href="content/metrics.html" />
    
     <link rel="stylesheet"
 	  href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
@@ -135,7 +135,7 @@ $(function () {
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="metrics.html" title="Metrics to judge the sucess of a model"
+          <a href="content/metrics.html" title="1. Metrics to judge the sucess of a model"
              accesskey="N">next</a></li>
         <li class="nav-item nav-item-0"><a href="#">Tutorial</a> &#187;</li>
      
@@ -173,244 +173,98 @@ prediction.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
-<style type="text/css">
-  div.bodywrapper blockquote {
-      margin: 0 ;
-  }
-
-  div.toctree-wrapper ul {
-      margin-top: 0 ;
-      margin-bottom: 0 ;
-      padding-left: 10px ;
-  }
-
-  li.toctree-l1 {
-      padding: 0 0 0.5em 0 ;
-      list-style-type: none;
-      font-size: 150% ;
-      font-weight: bold;
-      }
-
-  li.toctree-l1 ul {
-      padding-left: 40px ;
-  }
-
-  li.toctree-l2 {
-      font-size: 70% ;
-      list-style-type: square;
-      font-weight: normal;
-      }
-
-  li.toctree-l3 {
-      font-size: 85% ;
-      list-style-type: circle;
-      font-weight: normal;
-      }
-
-</style> <SCRIPT>
- //Function to make the index toctree collapsible
- $(function () {
-     $('.toctree-l2')
-         .click(function(event){
-             if (event.target.tagName.toLowerCase() != "a") {
-                 if ($(this).children('ul').length > 0) {
-                      $(this).attr('data-content',
-                          (!$(this).children('ul').is(':hidden')) ? '\u25ba' : '\u25bc');
-                     $(this).children('ul').toggle();
-                 }
-                 return true; //Makes links clickable
-             }
-         })
-         .mousedown(function(event){ return false; }) //Firefox highlighting fix
-         .children('ul').hide();
-     // Initialize the values
-     $('li.toctree-l2:not(:has(ul))').attr('data-content', '-');
-     $('li.toctree-l2:has(ul)').attr('data-content', '\u25ba');
-     $('li.toctree-l2:has(ul)').css('cursor', 'pointer');
-
-     $('.toctree-l2').hover(
-         function () {
-             if ($(this).children('ul').length > 0) {
-                 $(this).css('background-color', '#D0D0D0').children('ul').css('background-color', '#F0F0F0');
-                 $(this).attr('data-content',
-                     (!$(this).children('ul').is(':hidden')) ? '\u25bc' : '\u25ba');
-             }
-             else {
-                 $(this).css('background-color', '#F9F9F9');
-             }
-         },
-         function () {
-             $(this).css('background-color', 'white').children('ul').css('background-color', 'white');
-             if ($(this).children('ul').length > 0) {
-                 $(this).attr('data-content',
-                     (!$(this).children('ul').is(':hidden')) ? '\u25bc' : '\u25ba');
-             }
-         }
-     );
- });
-
- </SCRIPT>
-
-<style type="text/css">
-  div.bodywrapper blockquote {
-      margin: 0 ;
-  }
-
-  div.toctree-wrapper ul {
-      margin: 0 ;
-      padding-left: 0px ;
-  }
-
-  div.tune li, div.tune ul {
-      transition-duration: 0.2s;
-  }
-
-  div.tune li.toctree-l1 {
-      padding: 5px 0 0;
-      list-style-type: none;
-      font-size: 150% ;
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      font-weight: normal;
-      color: #20435c;
-      margin-left: 0;
-      margin-bottom: 1.2em;
-      font-weight: bold;
-      }
-
-  div.tune li.toctree-l1 a {
-      padding: 0 0 0 10px ;
-      color: #314F64 ;
-  }
-
-  div.tune li.toctree-l2 {
-      padding: 0.25em 0 0.25em 0 ;
-      list-style-type: none;
-      background-color: #FFFFFF;
-      font-size: 85% ;
-      font-weight: normal;
-  }
-
-  div.tune li.toctree-l2 ul {
-      padding-left: 40px ;
-  }
-
-
-  div.tune li.toctree-l2:before {
-      content: attr(data-content) ;
-      font-size: 85% ;
-      color: #777 ;
-      display: inline-block;
-      width: 10px;
-  }
-
-  div.tune li.toctree-l3 {
-      font-size: 75% ;
-      list-style-type: square;
-      font-weight: normal;
-  }
-
-  div.tune li.toctree-l4 {
-      font-size: 85% ;
-      list-style-type: circle;
-      font-weight: normal;
-  }
-
-  div.preface li.toctree-l1 {
-      font-weight: bold;
-      background-color: transparent;
-      margin-bottom: 0;
-      margin-left: 0;
-      margin-top: 10px;
-      display: inline;
-  }
-
-  div.preface li.toctree-l2 {
-      background-color: transparent;
-      margin-bottom: 0;
-      margin-left: 1.5em;
-      display: inline;
-  }
-
-  div.sidebar {
-      width: 25ex ;
-  }
-
-  @media      only screen and (max-width: 1080px) and (-webkit-min-device-pixel-ratio: 2.5), (max-width: 70ex) {
-      div.sidebar {
-          width: 79%;
-          padding-left: 5%;
-          font-size: 80%;
-          margin-left: auto;
-          margin-right: 1px;
-      }
-  }
-
-@media (max-width: 1324px) {
-      div.sphinxsidebar {
-          display: none;
-      }
-}
-
-</style><div class="section" id="understanding-how-well-a-classifier-predicts">
-<h2>Understanding how well a classifier predicts<a class="headerlink" href="#understanding-how-well-a-classifier-predicts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="a-measuring-how-well-a-classifier-predicts">
+<h2>A. Measuring how well a classifier predicts<a class="headerlink" href="#a-measuring-how-well-a-classifier-predicts" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics to judge the sucess of a model</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="metrics.html#regression-settings">Regression settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="metrics.html#classification-settings">Classification settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/metrics.html">1. Metrics to judge the sucess of a model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="content/metrics.html#regression-settings">1.1. Regression settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="content/metrics.html#the-boston-housing-data">1.1.1. The Boston housing data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="content/metrics.html#explained-variance-vs-mean-square-error">1.1.2. Explained variance vs Mean Square Error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="content/metrics.html#mean-squared-error-versus-mean-absolute-error">1.1.3. Mean Squared Error versus Mean Absolute Error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="content/metrics.html#summary">1.1.4. Summary</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="content/cross_validation.html">Cross-validation: some gotchas</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/cross_validation.html#the-variance-of-measured-accuracy">The variance of measured accuracy</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/cross_validation.html#confounding-effects-and-non-independence">Confounding effects and non independence</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/cross_validation.html#permutations-to-measure-chance">Permutations to measure chance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/metrics.html#classification-settings">1.2. Classification settings</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="content/underfit_vs_overfit.html">Underfit vs overfit: do I need more data, or more complex models?</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="content/underfit_vs_overfit.html#train-error-versus-test-error">Train error versus test error</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/underfit_vs_overfit.html#learning-curves">Learning curves</a></li>
-<li class="toctree-l2"><a class="reference internal" href="content/underfit_vs_overfit.html#tuning-curves">Tuning curves</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/cross_validation.html">2. Cross-validation: some gotchas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="content/cross_validation.html#the-variance-of-measured-accuracy">2.1. The variance of measured accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/cross_validation.html#confounding-effects-and-non-independence">2.2. Confounding effects and non independence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/cross_validation.html#permutations-to-measure-chance">2.3. Permutations to measure chance</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="content/underfit_vs_overfit.html">3. Underfit vs overfit: do I need more data, or more complex models?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="content/underfit_vs_overfit.html#train-error-versus-test-error">3.1. Train error versus test error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/underfit_vs_overfit.html#learning-curves">3.2. Learning curves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/underfit_vs_overfit.html#tuning-curves">3.3. Tuning curves</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div class="section" id="understanding-why-a-classifier-predicts">
-<h2>Understanding why a classifier predicts<a class="headerlink" href="#understanding-why-a-classifier-predicts" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="black-box-interpretation-of-models-lime">
-<h3>Black-box interpretation of models: LIME<a class="headerlink" href="#black-box-interpretation-of-models-lime" title="Permalink to this headline">¶</a></h3>
-</div>
-<div class="section" id="interpreting-linear-models">
-<h3>Interpreting linear models<a class="headerlink" href="#interpreting-linear-models" title="Permalink to this headline">¶</a></h3>
-<p>Conditional versus marginal relations (and the link to univariate feature selection)</p>
-<p>The challenge of correlated features</p>
-<p>Gauging significance of observed associations</p>
-<p>The effect of regularization</p>
-</div>
-<div class="section" id="interpreting-random-forests">
-<h3>Interpreting random forests<a class="headerlink" href="#interpreting-random-forests" title="Permalink to this headline">¶</a></h3>
-<ul class="simple">
-<li>Feature importance</li>
-<li>Danger: higher-entropy variables will have large feature importances</li>
+<div class="section" id="b-understanding-why-a-classifier-predicts">
+<h2>B. Understanding why a classifier predicts<a class="headerlink" href="#b-understanding-why-a-classifier-predicts" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="content/black_box_interpretation.html">1. Black-box interpretation of models: LIME</a></li>
+<li class="toctree-l1"><a class="reference internal" href="content/interpreting_linear_models.html">2. Interpreting linear models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="content/interpreting_linear_models.html#conditional-versus-marginal-relations">2.1. Conditional versus marginal relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/interpreting_linear_models.html#the-challenge-of-correlated-features">2.2. The challenge of correlated features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/interpreting_linear_models.html#the-effect-of-regularization">2.3. The effect of regularization</a></li>
 </ul>
-</div>
-<div class="section" id="partial-dependence-plots">
-<h3>Partial dependence plots<a class="headerlink" href="#partial-dependence-plots" title="Permalink to this headline">¶</a></h3>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="content/interpreting_random_forests.html">3. Interpreting random forests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="content/interpreting_random_forests.html#feature-importance">3.1. Feature importance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/interpreting_random_forests.html#caveats">3.2. Caveats</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="content/partial_dep_plots.html">4. Partial dependency plots</a></li>
+</ul>
 </div>
 </div>
 <hr class="docutils" />
 <div class="section" id="notebooks">
 <h2>Notebooks<a class="headerlink" href="#notebooks" title="Permalink to this headline">¶</a></h2>
-<div class="sphx-glr-thumbcontainer" tooltip="Cross-validation is the ubiquitous test of a machine learning. Yet many things can go wrong."><div class="figure" id="id1">
+<div class="sphx-glr-thumbcontainer" tooltip="Partial dependency plots "><div class="figure" id="id1">
+<img alt="_images/sphx_glr_partial_dep_plots_thumb.png" src="_images/sphx_glr_partial_dep_plots_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="content/partial_dep_plots.html#sphx-glr-content-partial-dep-plots-py"><span class="std std-ref">Partial dependency plots</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Cross-validation is the ubiquitous test of a machine learning. Yet many things can go wrong."><div class="figure" id="id2">
 <img alt="_images/sphx_glr_cross_validation_thumb.png" src="_images/sphx_glr_cross_validation_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="content/cross_validation.html#sphx-glr-content-cross-validation-py"><span class="std std-ref">Cross-validation: some gotchas</span></a></span></p>
 </div>
 </div><div class="toctree-wrapper compound">
 </div>
-<div class="sphx-glr-thumbcontainer" tooltip="(adapt the end of the scikit-learn chapter in the scipy lectures) "><div class="figure" id="id2">
+<div class="sphx-glr-thumbcontainer" tooltip="(adapt the end of the scikit-learn chapter in the scipy lectures) "><div class="figure" id="id3">
 <img alt="_images/sphx_glr_underfit_vs_overfit_thumb.png" src="_images/sphx_glr_underfit_vs_overfit_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="content/underfit_vs_overfit.html#sphx-glr-content-underfit-vs-overfit-py"><span class="std std-ref">Underfit vs overfit: do I need more data, or more complex models?</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip=" "><div class="figure" id="id4">
+<img alt="_images/sphx_glr_black_box_interpretation_thumb.png" src="_images/sphx_glr_black_box_interpretation_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="content/black_box_interpretation.html#sphx-glr-content-black-box-interpretation-py"><span class="std std-ref">Black-box interpretation of models: LIME</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Interpreting random forests "><div class="figure" id="id5">
+<img alt="_images/sphx_glr_interpreting_random_forests_thumb.png" src="_images/sphx_glr_interpreting_random_forests_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="content/interpreting_random_forests.html#sphx-glr-content-interpreting-random-forests-py"><span class="std std-ref">Interpreting random forests</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip=""><div class="figure" id="id6">
+<img alt="_images/sphx_glr_interpreting_linear_models_thumb.png" src="_images/sphx_glr_interpreting_linear_models_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="content/interpreting_linear_models.html#sphx-glr-content-interpreting-linear-models-py"><span class="std std-ref">Interpreting linear models</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Pro &amp; cons of various performance metrics."><div class="figure" id="id7">
+<img alt="_images/sphx_glr_metrics_thumb.png" src="_images/sphx_glr_metrics_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="content/metrics.html#sphx-glr-content-metrics-py"><span class="std std-ref">Metrics to judge the sucess of a model</span></a></span></p>
 </div>
 </div><div class="toctree-wrapper compound">
 </div>
@@ -458,7 +312,7 @@ prediction.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="metrics.html" title="Metrics to judge the sucess of a model"
+          <a href="content/metrics.html" title="1. Metrics to judge the sucess of a model"
              >next</a></li>
         <li class="nav-item nav-item-0"><a href="#">Tutorial</a> &#187;</li>
      
@@ -478,7 +332,7 @@ prediction.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2012,2013,2015,2016,2017.
+        &#169; Copyright .
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>

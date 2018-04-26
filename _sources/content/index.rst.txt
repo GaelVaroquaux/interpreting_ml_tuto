@@ -1,11 +1,30 @@
 :orphan:
 
-
 Notebooks
-==========
+===========
 
 
 
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Partial dependency plots ">
+
+.. only:: html
+
+    .. figure:: /content/images/thumb/sphx_glr_partial_dep_plots_thumb.png
+
+        :ref:`sphx_glr_content_partial_dep_plots.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /content/partial_dep_plots
 
 .. raw:: html
 
@@ -46,6 +65,86 @@ Notebooks
    :hidden:
 
    /content/underfit_vs_overfit
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip=" ">
+
+.. only:: html
+
+    .. figure:: /content/images/thumb/sphx_glr_black_box_interpretation_thumb.png
+
+        :ref:`sphx_glr_content_black_box_interpretation.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /content/black_box_interpretation
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Interpreting random forests ">
+
+.. only:: html
+
+    .. figure:: /content/images/thumb/sphx_glr_interpreting_random_forests_thumb.png
+
+        :ref:`sphx_glr_content_interpreting_random_forests.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /content/interpreting_random_forests
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="">
+
+.. only:: html
+
+    .. figure:: /content/images/thumb/sphx_glr_interpreting_linear_models_thumb.png
+
+        :ref:`sphx_glr_content_interpreting_linear_models.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /content/interpreting_linear_models
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Pro &amp; cons of various performance metrics.">
+
+.. only:: html
+
+    .. figure:: /content/images/thumb/sphx_glr_metrics_thumb.png
+
+        :ref:`sphx_glr_content_metrics.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /content/metrics
 .. raw:: html
 
     <div style='clear:both'></div>

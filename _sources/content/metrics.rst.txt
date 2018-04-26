@@ -1,0 +1,352 @@
+
+
+.. _sphx_glr_content_metrics.py:
+
+
+Metrics to judge the sucess of a model
+=======================================
+
+Pro & cons of various performance metrics.
+
+.. contents::
+
+The simple way to use a scoring metric during cross-validation is
+via the `scoring` parameter of
+:func:`sklearn.model_selection.cross_val_score`.
+
+
+Regression settings
+-----------------------
+
+The Boston housing data
+........................
+
+
+
+.. code-block:: python
+
+
+    from sklearn import datasets
+    boston = datasets.load_boston()
+
+    # Shuffle the data
+    from sklearn.utils import shuffle
+    data, target = shuffle(boston.data, boston.target, random_state=0)
+
+
+
+
+
+
+
+A quick plot of how each feature is related to the target
+
+
+
+.. code-block:: python
+
+    from matplotlib import pyplot as plt
+
+    for feature, name in zip(data.T, boston.feature_names):
+        plt.figure(figsize=(4, 3))
+        plt.scatter(feature, target)
+        plt.xlabel(name, size=22)
+        plt.ylabel('Price (US$)', size=22)
+        plt.tight_layout()
+
+
+
+
+.. rst-class:: sphx-glr-horizontal
+
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_001.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_002.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_003.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_004.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_005.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_006.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_007.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_008.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_009.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_010.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_011.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_012.png
+            :scale: 47
+
+    *
+
+      .. image:: /content/images/sphx_glr_metrics_013.png
+            :scale: 47
+
+
+
+
+We will be using a random forest regressor to predict the price
+
+
+
+.. code-block:: python
+
+    from sklearn.ensemble import RandomForestRegressor
+    model = RandomForestRegressor()
+
+
+
+
+
+
+
+Explained variance vs Mean Square Error
+.......................................
+
+The default score is explained variance
+
+
+
+.. code-block:: python
+
+    from sklearn.model_selection import cross_val_score
+    print(cross_val_score(model, data, target))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.84507036  0.84673895  0.84906985]
+
+
+Explained variance is convienent because it has a natural scaling: 1 is
+perfect prediction, and 0 is around chance
+
+Now let us see which houses are easier to predict:
+
+Not along the Charles river (feature 3)
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(model, data[data[:, 3] == 0],
+                          target[data[:, 3] == 0]))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.78927789  0.88757544  0.84007914]
+
+
+Along the Charles river
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(model, data[data[:, 3] == 1],
+                          target[data[:, 3] == 1]))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.5787267  -0.72040433  0.54862048]
+
+
+So the houses along the Charles are harder to predict?
+
+It's not so easy to conclude this from the explained variance: in two
+different sets of observations, the variance of the target differs, and
+the explained variance is a relative measure
+
+**MSE**: We can use the mean squared error (here negated)
+
+Not along the Charles river
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(model, data[data[:, 3] == 0],
+                          target[data[:, 3] == 0],
+                          scoring='neg_mean_squared_error'))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [-12.89045223  -8.8973121  -13.0458172 ]
+
+
+Along the Charles river
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(model, data[data[:, 3] == 1],
+                          target[data[:, 3] == 1],
+                          scoring='neg_mean_squared_error'))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [-79.5311     -95.940875   -45.68478182]
+
+
+So the error is larger along the Charles river
+
+
+Mean Squared Error versus Mean Absolute Error
+..................................................
+
+What if we want to report an error in dollars, meaningful for an
+application?
+
+The Mean Absolute Error is useful for this goal
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(model, data, target,
+                          scoring='neg_mean_absolute_error'))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [-2.56532544 -2.25343195 -2.62434524]
+
+
+Summary
+.........
+
+* **explained variance**: scaled with regards to chance: 1 = perfect,
+  0 = around chance, but it shouldn't used to compare predictions
+  across datasets
+
+* **mean absolute error**: enables comparison across datasets in the
+  units of the target
+
+
+Classification settings
+-----------------------
+
+
+
+.. code-block:: python
+
+
+    # Accuracy and its shortcomings
+
+    # precision, recall, and their shortcomings
+
+    # ROC AUC
+
+    # average precision
+
+
+
+
+
+
+
+**Total running time of the script:** ( 0 minutes  1.649 seconds)
+
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Python source code: metrics.py <metrics.py>`
+
+
+
+  .. container:: sphx-glr-download
+
+     :download:`Download Jupyter notebook: metrics.ipynb <metrics.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.readthedocs.io>`_

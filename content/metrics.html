@@ -1,0 +1,429 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. Metrics to judge the sucess of a model &#8212; Tutorial</title>
+    
+    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2017.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="2. Cross-validation: some gotchas" href="cross_validation.html" />
+    <link rel="prev" title="Understanding and diagnosing your machine-learning models" href="../index.html" />
+   
+    <link rel="stylesheet"
+	  href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+
+<script type="text/javascript">
+$(function () {
+    // Highlight the table of content as we scroll
+    sections = {},
+    i        = 0,
+    url	 = document.URL.replace(/#.*$/, ""),
+    current_section = 0;
+
+    // Grab positions of our sections
+    $('.headerlink').each(function(){
+        sections[this.href.replace(url, '')] = $(this).offset().top - 50;
+    });
+
+    $(window).scroll(function(event) {
+	var pos   = $(window).scrollTop();
+
+	// Highlight the current section
+	$('a.internal').parent().removeClass('active');
+        for(i in sections){
+            if(sections[i] > pos){
+		break;
+            };
+	    if($('a.internal[href$="' + i + '"]').is(':visible')){
+		current_section = i;
+	    };
+        }
+	$('a.internal[href$="' + current_section + '"]').parent().addClass('active');
+	$('a.internal[href$="' + current_section + '"]').parent().parent().parent().addClass('active');
+	$('a.internal[href$="' + current_section + '"]').parent().parent().parent().parent().parent().addClass('active');
+    });
+
+});
+</script>
+
+
+  </head>
+  <body role="document">
+   <!-- Use the header to add javascript -->
+    
+
+    <script type="text/javascript">
+    // Function to collapse the tip divs
+    function collapse_tip_div(obj){
+	// Update the representation on the tip div based on whether it
+	// has the 'collapsed' css class or not: we only want to
+	// collapse divs that are not already collapsed
+	if($(obj).hasClass("collapsed")) {
+	} else {
+	    $(obj).find("p.summary").remove();
+	    var content = $(obj).text();
+	    var html = $(obj).html();
+
+	    if(content.length > 40) {
+		if ($.browser.msie) {
+		    // We start at '3' to avoid 'tip', as IE
+		    // does not count whitespace
+		    var content = content.substr(3, 50);
+		} else {
+		    // We start at '5' to avoid 'tip '
+		    var content = content.substr(5, 50);
+		}
+	    }
+	    $(obj).html('<p class="summary"><img src="../_static/plus.png">' + content + '...</p>' + html);
+	}
+    }
+    </script>
+
+    <script type="text/javascript">
+    $(function () {
+	$(".tip")
+	    .click(function(event){
+		$(this).toggleClass("collapsed");
+		// Change state of the global button
+		$('div.related li.transparent').removeClass('transparent')
+		$(this).find("p.summary").remove();
+		if($(this).hasClass("collapsed")) {
+		    var content = $(this).text();
+		    var html = $(this).html();
+
+		    if(content.length > 40) {
+			if ($.browser.msie) {
+			    // We start at '3' to avoid 'tip', as IE
+			    // does not count whitespace
+			    var content = content.substr(3, 50);
+			} else {
+			    // We start at '5' to avoid 'tip '
+			    var content = content.substr(5, 50);
+			}
+		    }
+		    $(this).html('<p class="summary"><img src="../_static/plus.png">' + content + '...</p>' + html);
+		}
+		if (event.target.tagName.toLowerCase() != "a") {
+                   return true; //Makes links clickable
+		}
+	});
+    });
+    </script>
+
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="cross_validation.html" title="2. Cross-validation: some gotchas"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="Understanding and diagnosing your machine-learning models"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Tutorial</a> &#187;</li>
+     
+    <!-- Insert a menu in the navigation bar -->
+    <li class="left">
+	<!-- On click toggle the 'tip' on or off-->
+	<a onclick="$('.tip').each(function (index, obj) {
+			    collapse_tip_div(obj);
+		    });
+		    $('.tip').addClass('collapsed');
+		    $('.left').addClass('transparent');">
+	<img src="../_static/minus.png"
+         alt="Collapse to compact view" style="padding: 1ex;"/>
+	<span class="hiddenlink">Collapse document to compact view</span>
+    </a></li>
+
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="metrics-to-judge-the-sucess-of-a-model">
+<span id="sphx-glr-content-metrics-py"></span><h1><a class="toc-backref" href="#id1">1. Metrics to judge the sucess of a model</a><a class="headerlink" href="#metrics-to-judge-the-sucess-of-a-model" title="Permalink to this headline">¶</a></h1>
+<p>Pro &amp; cons of various performance metrics.</p>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#metrics-to-judge-the-sucess-of-a-model" id="id1">Metrics to judge the sucess of a model</a><ul>
+<li><a class="reference internal" href="#regression-settings" id="id2">Regression settings</a><ul>
+<li><a class="reference internal" href="#the-boston-housing-data" id="id3">The Boston housing data</a></li>
+<li><a class="reference internal" href="#explained-variance-vs-mean-square-error" id="id4">Explained variance vs Mean Square Error</a></li>
+<li><a class="reference internal" href="#mean-squared-error-versus-mean-absolute-error" id="id5">Mean Squared Error versus Mean Absolute Error</a></li>
+<li><a class="reference internal" href="#summary" id="id6">Summary</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#classification-settings" id="id7">Classification settings</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The simple way to use a scoring metric during cross-validation is
+via the <cite>scoring</cite> parameter of
+<a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="(in scikit-learn v0.19.1)"><code class="xref py py-func docutils literal"><span class="pre">sklearn.model_selection.cross_val_score()</span></code></a>.</p>
+<div class="section" id="regression-settings">
+<h2><a class="toc-backref" href="#id2">1.1. Regression settings</a><a class="headerlink" href="#regression-settings" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-boston-housing-data">
+<h3><a class="toc-backref" href="#id3">1.1.1. The Boston housing data</a><a class="headerlink" href="#the-boston-housing-data" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span>
+<div class="newline"></div><span class="n">boston</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_boston</span><span class="p">()</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Shuffle the data</span>
+<div class="newline"></div><span class="kn">from</span> <span class="nn">sklearn.utils</span> <span class="kn">import</span> <span class="n">shuffle</span>
+<div class="newline"></div><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">shuffle</span><span class="p">(</span><span class="n">boston</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">boston</span><span class="o">.</span><span class="n">target</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>A quick plot of how each feature is related to the target</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="k">for</span> <span class="n">feature</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">boston</span><span class="o">.</span><span class="n">feature_names</span><span class="p">):</span>
+<div class="newline"></div>    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<div class="newline"></div>    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+<div class="newline"></div>    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<div class="newline"></div>    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Price (US$)&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">22</span><span class="p">)</span>
+<div class="newline"></div>    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<div class="newline"></div></pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_001.png"><img alt="../_images/sphx_glr_metrics_001.png" src="../_images/sphx_glr_metrics_001.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_002.png"><img alt="../_images/sphx_glr_metrics_002.png" src="../_images/sphx_glr_metrics_002.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_003.png"><img alt="../_images/sphx_glr_metrics_003.png" src="../_images/sphx_glr_metrics_003.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_004.png"><img alt="../_images/sphx_glr_metrics_004.png" src="../_images/sphx_glr_metrics_004.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_005.png"><img alt="../_images/sphx_glr_metrics_005.png" src="../_images/sphx_glr_metrics_005.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_006.png"><img alt="../_images/sphx_glr_metrics_006.png" src="../_images/sphx_glr_metrics_006.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_007.png"><img alt="../_images/sphx_glr_metrics_007.png" src="../_images/sphx_glr_metrics_007.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_008.png"><img alt="../_images/sphx_glr_metrics_008.png" src="../_images/sphx_glr_metrics_008.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_009.png"><img alt="../_images/sphx_glr_metrics_009.png" src="../_images/sphx_glr_metrics_009.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_010.png"><img alt="../_images/sphx_glr_metrics_010.png" src="../_images/sphx_glr_metrics_010.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_011.png"><img alt="../_images/sphx_glr_metrics_011.png" src="../_images/sphx_glr_metrics_011.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_012.png"><img alt="../_images/sphx_glr_metrics_012.png" src="../_images/sphx_glr_metrics_012.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+<li><a class="first reference internal image-reference" href="../_images/sphx_glr_metrics_013.png"><img alt="../_images/sphx_glr_metrics_013.png" src="../_images/sphx_glr_metrics_013.png" style="width: 188.0px; height: 141.0px;" /></a>
+</li>
+</ul>
+<p>We will be using a random forest regressor to predict the price</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
+<div class="newline"></div><span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">()</span>
+<div class="newline"></div></pre></div>
+</div>
+</div>
+<div class="section" id="explained-variance-vs-mean-square-error">
+<h3><a class="toc-backref" href="#id4">1.1.2. Explained variance vs Mean Square Error</a><a class="headerlink" href="#explained-variance-vs-mean-square-error" title="Permalink to this headline">¶</a></h3>
+<p>The default score is explained variance</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_score</span>
+<div class="newline"></div><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.84507036</span>  <span class="mf">0.84673895</span>  <span class="mf">0.84906985</span><span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>Explained variance is convienent because it has a natural scaling: 1 is
+perfect prediction, and 0 is around chance</p>
+<p>Now let us see which houses are easier to predict:</p>
+<p>Not along the Charles river (feature 3)</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">],</span>
+<div class="newline"></div>                      <span class="n">target</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.78927789</span>  <span class="mf">0.88757544</span>  <span class="mf">0.84007914</span><span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>Along the Charles river</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span>
+<div class="newline"></div>                      <span class="n">target</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.5787267</span>  <span class="o">-</span><span class="mf">0.72040433</span>  <span class="mf">0.54862048</span><span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>So the houses along the Charles are harder to predict?</p>
+<p>It&#8217;s not so easy to conclude this from the explained variance: in two
+different sets of observations, the variance of the target differs, and
+the explained variance is a relative measure</p>
+<p><strong>MSE</strong>: We can use the mean squared error (here negated)</p>
+<p>Not along the Charles river</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">],</span>
+<div class="newline"></div>                      <span class="n">target</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">],</span>
+<div class="newline"></div>                      <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_squared_error&#39;</span><span class="p">))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">12.89045223</span>  <span class="o">-</span><span class="mf">8.8973121</span>  <span class="o">-</span><span class="mf">13.0458172</span> <span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>Along the Charles river</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span>
+<div class="newline"></div>                      <span class="n">target</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span>
+<div class="newline"></div>                      <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_squared_error&#39;</span><span class="p">))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">79.5311</span>     <span class="o">-</span><span class="mf">95.940875</span>   <span class="o">-</span><span class="mf">45.68478182</span><span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>So the error is larger along the Charles river</p>
+</div>
+<div class="section" id="mean-squared-error-versus-mean-absolute-error">
+<h3><a class="toc-backref" href="#id5">1.1.3. Mean Squared Error versus Mean Absolute Error</a><a class="headerlink" href="#mean-squared-error-versus-mean-absolute-error" title="Permalink to this headline">¶</a></h3>
+<p>What if we want to report an error in dollars, meaningful for an
+application?</p>
+<p>The Mean Absolute Error is useful for this goal</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span>
+<div class="newline"></div>                      <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">2.56532544</span> <span class="o">-</span><span class="mf">2.25343195</span> <span class="o">-</span><span class="mf">2.62434524</span><span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+</div>
+<div class="section" id="summary">
+<h3><a class="toc-backref" href="#id6">1.1.4. Summary</a><a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><strong>explained variance</strong>: scaled with regards to chance: 1 = perfect,
+0 = around chance, but it shouldn&#8217;t used to compare predictions
+across datasets</li>
+<li><strong>mean absolute error</strong>: enables comparison across datasets in the
+units of the target</li>
+</ul>
+</div>
+</div>
+<div class="section" id="classification-settings">
+<h2><a class="toc-backref" href="#id7">1.2. Classification settings</a><a class="headerlink" href="#classification-settings" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Accuracy and its shortcomings</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># precision, recall, and their shortcomings</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># ROC AUC</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># average precision</span>
+<div class="newline"></div></pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  1.649 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../_downloads/metrics.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">metrics.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../_downloads/metrics.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">metrics.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<p><div style="clear: both"></div></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+	<div class="sidebartoc">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1. Metrics to judge the sucess of a model</a><ul>
+<li><a class="reference internal" href="#regression-settings">1.1. Regression settings</a><ul>
+<li><a class="reference internal" href="#the-boston-housing-data">1.1.1. The Boston housing data</a></li>
+<li><a class="reference internal" href="#explained-variance-vs-mean-square-error">1.1.2. Explained variance vs Mean Square Error</a></li>
+<li><a class="reference internal" href="#mean-squared-error-versus-mean-absolute-error">1.1.3. Mean Squared Error versus Mean Absolute Error</a></li>
+<li><a class="reference internal" href="#summary">1.1.4. Summary</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#classification-settings">1.2. Classification settings</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+
+    <div class="script_container">
+    <script>
+    (function() {
+	var cx = '004523248466141510607:hgv2yimrahw';
+	var gcse = document.createElement('script');
+	gcse.type = 'text/javascript';
+	gcse.async = true;
+	gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+	    '//cse.google.com/cse.js?cx=' + cx;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(gcse, s);
+    })();
+    </script>
+    <gcse:search></gcse:search>
+    </div>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="cross_validation.html" title="2. Cross-validation: some gotchas"
+             >next</a></li>
+        <li class="right" >
+          <a href="../index.html" title="Understanding and diagnosing your machine-learning models"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Tutorial</a> &#187;</li>
+     
+    <!-- Insert a menu in the navigation bar -->
+    <li class="left">
+	<!-- On click toggle the 'tip' on or off-->
+	<a onclick="$('.tip').each(function (index, obj) {
+			    collapse_tip_div(obj);
+		    });
+		    $('.tip').addClass('collapsed');
+		    $('.left').addClass('transparent');">
+	<img src="../_static/minus.png"
+         alt="Collapse to compact view" style="padding: 1ex;"/>
+	<span class="hiddenlink">Collapse document to compact view</span>
+    </a></li>
+
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>
