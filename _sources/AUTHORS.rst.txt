@@ -1,0 +1,6 @@
+
+Authors
+========
+
+- Gaël Varoquaux
+
