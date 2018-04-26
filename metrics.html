@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Cross-validation: some gotchas &#8212; Tutorial</title>
+    <title>Metrics to judge the sucess of a model &#8212; Tutorial</title>
     
-    <link rel="stylesheet" href="../_static/nature.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    '../',
+        URL_ROOT:    './',
         VERSION:     '2017.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -22,13 +22,13 @@
         SOURCELINK_SUFFIX: '.txt'
       };
     </script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/copybutton.js"></script>
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Underfit vs overfit: do I need more data, or more complex models?" href="underfit_vs_overfit.html" />
-    <link rel="prev" title="Metrics to judge the sucess of a model" href="../metrics.html" />
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/copybutton.js"></script>
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Cross-validation: some gotchas" href="content/cross_validation.html" />
+    <link rel="prev" title="Understanding and diagnosing your machine-learning models" href="index.html" />
    
     <link rel="stylesheet"
 	  href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
@@ -95,7 +95,7 @@ $(function () {
 		    var content = content.substr(5, 50);
 		}
 	    }
-	    $(obj).html('<p class="summary"><img src="../_static/plus.png">' + content + '...</p>' + html);
+	    $(obj).html('<p class="summary"><img src="_static/plus.png">' + content + '...</p>' + html);
 	}
     }
     </script>
@@ -122,7 +122,7 @@ $(function () {
 			    var content = content.substr(5, 50);
 			}
 		    }
-		    $(this).html('<p class="summary"><img src="../_static/plus.png">' + content + '...</p>' + html);
+		    $(this).html('<p class="summary"><img src="_static/plus.png">' + content + '...</p>' + html);
 		}
 		if (event.target.tagName.toLowerCase() != "a") {
                    return true; //Makes links clickable
@@ -136,12 +136,12 @@ $(function () {
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="underfit_vs_overfit.html" title="Underfit vs overfit: do I need more data, or more complex models?"
+          <a href="content/cross_validation.html" title="Cross-validation: some gotchas"
              accesskey="N">next</a></li>
         <li class="right" >
-          <a href="../metrics.html" title="Metrics to judge the sucess of a model"
+          <a href="index.html" title="Understanding and diagnosing your machine-learning models"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tutorial</a> &#187;</li>
      
     <!-- Insert a menu in the navigation bar -->
     <li class="left">
@@ -151,7 +151,7 @@ $(function () {
 		    });
 		    $('.tip').addClass('collapsed');
 		    $('.left').addClass('transparent');">
-	<img src="../_static/minus.png"
+	<img src="_static/minus.png"
          alt="Collapse to compact view" style="padding: 1ex;"/>
 	<span class="hiddenlink">Collapse document to compact view</span>
     </a></li>
@@ -164,26 +164,15 @@ $(function () {
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="cross-validation-some-gotchas">
-<span id="sphx-glr-content-cross-validation-py"></span><h1>Cross-validation: some gotchas<a class="headerlink" href="#cross-validation-some-gotchas" title="Permalink to this headline">¶</a></h1>
-<p>Cross-validation is the ubiquitous test of a machine learning. Yet many
-things can go wrong.</p>
-<div class="section" id="the-variance-of-measured-accuracy">
-<h2>The variance of measured accuracy<a class="headerlink" href="#the-variance-of-measured-accuracy" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="metrics-to-judge-the-sucess-of-a-model">
+<h1>Metrics to judge the sucess of a model<a class="headerlink" href="#metrics-to-judge-the-sucess-of-a-model" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="regression-settings">
+<h2>Regression settings<a class="headerlink" href="#regression-settings" title="Permalink to this headline">¶</a></h2>
+<p>Explained variance vs MSE</p>
+<p>MSE versus MAD</p>
 </div>
-<div class="section" id="confounding-effects-and-non-independence">
-<h2>Confounding effects and non independence<a class="headerlink" href="#confounding-effects-and-non-independence" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="permutations-to-measure-chance">
-<h2>Permutations to measure chance<a class="headerlink" href="#permutations-to-measure-chance" title="Permalink to this headline">¶</a></h2>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container">
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/cross_validation.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">cross_validation.py</span></code></a></div>
-<div class="sphx-glr-download docutils container">
-<a class="reference download internal" href="../_downloads/cross_validation.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">cross_validation.ipynb</span></code></a></div>
-</div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<div class="section" id="classification-settings">
+<h2>Classification settings<a class="headerlink" href="#classification-settings" title="Permalink to this headline">¶</a></h2>
 <p><div style="clear: both"></div></p>
 </div>
 </div>
@@ -195,12 +184,11 @@ things can go wrong.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
 	<div class="sidebartoc">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Cross-validation: some gotchas</a><ul>
-<li><a class="reference internal" href="#the-variance-of-measured-accuracy">The variance of measured accuracy</a></li>
-<li><a class="reference internal" href="#confounding-effects-and-non-independence">Confounding effects and non independence</a></li>
-<li><a class="reference internal" href="#permutations-to-measure-chance">Permutations to measure chance</a></li>
+<li><a class="reference internal" href="#">Metrics to judge the sucess of a model</a><ul>
+<li><a class="reference internal" href="#regression-settings">Regression settings</a></li>
+<li><a class="reference internal" href="#classification-settings">Classification settings</a></li>
 </ul>
 </li>
 </ul>
@@ -232,12 +220,12 @@ things can go wrong.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="underfit_vs_overfit.html" title="Underfit vs overfit: do I need more data, or more complex models?"
+          <a href="content/cross_validation.html" title="Cross-validation: some gotchas"
              >next</a></li>
         <li class="right" >
-          <a href="../metrics.html" title="Metrics to judge the sucess of a model"
+          <a href="index.html" title="Understanding and diagnosing your machine-learning models"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Tutorial</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Tutorial</a> &#187;</li>
      
     <!-- Insert a menu in the navigation bar -->
     <li class="left">
@@ -247,7 +235,7 @@ things can go wrong.</p>
 		    });
 		    $('.tip').addClass('collapsed');
 		    $('.left').addClass('transparent');">
-	<img src="../_static/minus.png"
+	<img src="_static/minus.png"
          alt="Collapse to compact view" style="padding: 1ex;"/>
 	<span class="hiddenlink">Collapse document to compact view</span>
     </a></li>

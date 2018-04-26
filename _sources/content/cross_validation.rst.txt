@@ -11,19 +11,16 @@ things can go wrong.
 
 
 
+The variance of measured accuracy
+----------------------------------
 
-.. code-block:: python
+
+Confounding effects and non independence
+-----------------------------------------
 
 
-    # The variance of measured accuracy
-    # ----------------------------------
-
-    # Confounding effects and non independence
-    # -----------------------------------------
-
-    # Permutations to measure chance
-    # -------------------------------
-
+Permutations to measure chance
+-------------------------------
 
 
 **Total running time of the script:** ( 0 minutes  0.000 seconds)

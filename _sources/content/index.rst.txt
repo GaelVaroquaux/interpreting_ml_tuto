@@ -26,6 +26,26 @@ Notebooks
    :hidden:
 
    /content/cross_validation
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="(adapt the end of the scikit-learn chapter in the scipy lectures) ">
+
+.. only:: html
+
+    .. figure:: /content/images/thumb/sphx_glr_underfit_vs_overfit_thumb.png
+
+        :ref:`sphx_glr_content_underfit_vs_overfit.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /content/underfit_vs_overfit
 .. raw:: html
 
     <div style='clear:both'></div>

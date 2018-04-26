@@ -27,7 +27,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/copybutton.js"></script>
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Cross-validation: some gotchas" href="content/cross_validation.html" />
+    <link rel="next" title="Metrics to judge the sucess of a model" href="metrics.html" />
    
     <link rel="stylesheet"
 	  href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
@@ -135,7 +135,7 @@ $(function () {
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="content/cross_validation.html" title="Cross-validation: some gotchas"
+          <a href="metrics.html" title="Metrics to judge the sucess of a model"
              accesskey="N">next</a></li>
         <li class="nav-item nav-item-0"><a href="#">Tutorial</a> &#187;</li>
      
@@ -352,11 +352,65 @@ prediction.</p>
       }
 }
 
-</style><div class="section" id="notebooks">
+</style><div class="section" id="understanding-how-well-a-classifier-predicts">
+<h2>Understanding how well a classifier predicts<a class="headerlink" href="#understanding-how-well-a-classifier-predicts" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="metrics.html">Metrics to judge the sucess of a model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#regression-settings">Regression settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="metrics.html#classification-settings">Classification settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="content/cross_validation.html">Cross-validation: some gotchas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="content/cross_validation.html#the-variance-of-measured-accuracy">The variance of measured accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/cross_validation.html#confounding-effects-and-non-independence">Confounding effects and non independence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/cross_validation.html#permutations-to-measure-chance">Permutations to measure chance</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="content/underfit_vs_overfit.html">Underfit vs overfit: do I need more data, or more complex models?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="content/underfit_vs_overfit.html#train-error-versus-test-error">Train error versus test error</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/underfit_vs_overfit.html#learning-curves">Learning curves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="content/underfit_vs_overfit.html#tuning-curves">Tuning curves</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="understanding-why-a-classifier-predicts">
+<h2>Understanding why a classifier predicts<a class="headerlink" href="#understanding-why-a-classifier-predicts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="black-box-interpretation-of-models-lime">
+<h3>Black-box interpretation of models: LIME<a class="headerlink" href="#black-box-interpretation-of-models-lime" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="interpreting-linear-models">
+<h3>Interpreting linear models<a class="headerlink" href="#interpreting-linear-models" title="Permalink to this headline">¶</a></h3>
+<p>Conditional versus marginal relations (and the link to univariate feature selection)</p>
+<p>The challenge of correlated features</p>
+<p>Gauging significance of observed associations</p>
+<p>The effect of regularization</p>
+</div>
+<div class="section" id="interpreting-random-forests">
+<h3>Interpreting random forests<a class="headerlink" href="#interpreting-random-forests" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Feature importance</li>
+<li>Danger: higher-entropy variables will have large feature importances</li>
+</ul>
+</div>
+<div class="section" id="partial-dependence-plots">
+<h3>Partial dependence plots<a class="headerlink" href="#partial-dependence-plots" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<hr class="docutils" />
+<div class="section" id="notebooks">
 <h2>Notebooks<a class="headerlink" href="#notebooks" title="Permalink to this headline">¶</a></h2>
 <div class="sphx-glr-thumbcontainer" tooltip="Cross-validation is the ubiquitous test of a machine learning. Yet many things can go wrong."><div class="figure" id="id1">
 <img alt="_images/sphx_glr_cross_validation_thumb.png" src="_images/sphx_glr_cross_validation_thumb.png" />
 <p class="caption"><span class="caption-text"><a class="reference internal" href="content/cross_validation.html#sphx-glr-content-cross-validation-py"><span class="std std-ref">Cross-validation: some gotchas</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="(adapt the end of the scikit-learn chapter in the scipy lectures) "><div class="figure" id="id2">
+<img alt="_images/sphx_glr_underfit_vs_overfit_thumb.png" src="_images/sphx_glr_underfit_vs_overfit_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="content/underfit_vs_overfit.html#sphx-glr-content-underfit-vs-overfit-py"><span class="std std-ref">Underfit vs overfit: do I need more data, or more complex models?</span></a></span></p>
 </div>
 </div><div class="toctree-wrapper compound">
 </div>
@@ -404,7 +458,7 @@ prediction.</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="content/cross_validation.html" title="Cross-validation: some gotchas"
+          <a href="metrics.html" title="Metrics to judge the sucess of a model"
              >next</a></li>
         <li class="nav-item nav-item-0"><a href="#">Tutorial</a> &#187;</li>
      
