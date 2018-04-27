@@ -9,11 +9,8 @@ effect of the other features.
 They can be computed by varying only one feature, or more
 """
 
-
-####################################################################
 # Load and prepare the data
 from sklearn import datasets
-
 boston = datasets.load_boston()
 
 from sklearn.model_selection import train_test_split
@@ -36,8 +33,9 @@ from sklearn.ensemble.partial_dependence import plot_partial_dependence
 import matplotlib.pyplot as plt
 
 ####################################################################
-# Inspect feature 0, 2, 3, 5, 6, and the interaction between 5 and 0
-target_features = [0, 2, 3, 5, 6, (5, 0)]
+# Inspect feature 0, 3, 5, 6, and the interaction between 5 and 0, and 5
+# and 3
+target_features = [0, 3, 5, 6, (5, 0), (5, 3)]
 fig, axs = plot_partial_dependence(clf, X_train, target_features,
                                     feature_names=boston.feature_names,
                                     grid_resolution=30)
@@ -47,7 +45,7 @@ plt.tight_layout()
 # Lower-level partial_dependence function
 # ----------------------------------------
 
-target_feature = (1, 5)
+target_feature = (5, 0)
 from sklearn.ensemble.partial_dependence import partial_dependence
 partial_deps, grid = partial_dependence(clf, target_feature,
                                         X=X_train, grid_resolution=50)
@@ -70,7 +68,6 @@ ax.set_xlabel(boston.feature_names[target_feature[0]])
 ax.set_ylabel(boston.feature_names[target_feature[1]])
 ax.set_zlabel('Partial dependence')
 #  pretty init view
-ax.view_init(elev=22, azim=122)
+ax.view_init(elev=22, azim=230)
 plt.colorbar(surf)
-plt.subplots_adjust(top=0.9)
 
