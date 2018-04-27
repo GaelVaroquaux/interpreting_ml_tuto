@@ -22,8 +22,7 @@ data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)])
 classifier = discriminant_analysis.LinearDiscriminantAnalysis()
 
 ###############################################################
-# Characterizing the uncertainty of cross-validation
-# ...................................................
+# One cross-validation gives spread out measures
 from sklearn.model_selection import cross_val_score
 print(cross_val_score(classifier, data, target))
 
@@ -64,13 +63,38 @@ for n in [100, 1000, 10000, 100000]:
 # fall more than .5% away of the true rate
 #
 # **Keep in mind that cross-val is a noisy measure**
+#
+# Importantly, the variance across folds is not a good measure of this
+# error, as the different data folds are not independent. For instance,
+# doing many random splits will can reduce the variance arbitrarily, but
+# does not provide actually new data points
 
 ###############################################################
 # Confounding effects and non independence
 # -----------------------------------------
 
 ###############################################################
-# Permutations to measure chance
+# Measuring baselines and chance
 # -------------------------------
+#
+# Because of class imbalances, or confounding effects, it is easy to get
+# it wrong it terms of what constitutes chances. There are two approaches
+# to measure peformances of baselines or chance:
+#
+# **DummyClassifier** The dummy classifier:
+# :class:`sklearn.dummy.DummyClassifier`, with different strategies to
+# provide simple baselines
+from sklearn.dummy import DummyClassifier
+dummy = DummyClassifier(strategy="stratified")
+print(cross_val_score(dummy, data, target))
 
+###############################################################
+# **Chance level** To measure actual chance, the most robust approach is
+# to use permutations:
+# :func:`sklearn.model_selection.permutation_test_score`, which is used
+# as cross_val_score
+from sklearn.model_selection import permutation_test_score
+score, permuted_scores, p_value = permutation_test_score(classifier, data, target)
+print("Classifier score: {0},\np value: {1}\nPermutation scores {2}"
+        .format(score, p_value, permuted_scores))
 
