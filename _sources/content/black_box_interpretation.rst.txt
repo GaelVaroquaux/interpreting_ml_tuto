@@ -106,7 +106,7 @@ Now use a lime explainer for tabular data
 
  Out::
 
-    [('LSTAT <= 6.75', 8.7194292414954866), ('RM > 6.63', 6.322250413509515), ('TAX <= 280.00', 0.7077605224964284), ('DIS > 5.27', -0.69456697608892226), ('CRIM <= 0.08', -0.62043533637629689), ('AGE <= 44.70', 0.53893682457558401), ('RAD=4', 0.41052961475175387), ('NOX <= 0.45', 0.34974938058307581), ('372.28 < B <= 390.94', 0.14173575014530143), ('INDUS <= 5.04', -0.10459547169760436)]
+    [('LSTAT <= 7.44', 7.7596752211035458), ('6.18 < RM <= 6.58', -0.9093968629223903), ('DIS > 4.72', -0.70512543216415358), ('NOX <= 0.46', 0.51560566507743), ('CRIM <= 0.09', -0.45722319351284785), ('ZN > 0.00', 0.39788175678697063), ('B > 396.00', 0.3814292667526803), ('19.10 < PTRATIO <= 20.20', -0.38084477008612727), ('RAD=1', -0.30284784526829844), ('281.00 < TAX <= 345.00', -0.30202335699846755)]
 
 
 Explain a few more predictions
@@ -120,6 +120,7 @@ Explain a few more predictions
                 num_features=10)
         exp.as_pyplot_figure()
         plt.tight_layout()
+
 
 
 
@@ -146,7 +147,7 @@ Explain a few more predictions
 
 
 
-**Total running time of the script:** ( 0 minutes  3.138 seconds)
+**Total running time of the script:** ( 0 minutes  1.539 seconds)
 
 
 .. _sphx_glr_download_content_black_box_interpretation.py:

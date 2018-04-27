@@ -108,4 +108,12 @@ plt.barh(np.arange(coefs.size), coefs)
 plt.yticks(np.arange(coefs.size), features)
 plt.tight_layout()
 
+########################################################
+# l1 regularization (sparse models) puts variables to zero.
+#
+# When two variables are very correlated, it will put arbitrary one or
+# the other to zero depending on their SNR. Here we can see that age
+# probably overshadowed experience.
+#
+# _____________________
 
