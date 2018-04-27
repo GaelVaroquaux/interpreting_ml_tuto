@@ -1,4 +1,8 @@
+.. note::
+    :class: sphx-glr-download-link-note
 
+    Click :ref:`here <sphx_glr_download_content_metrics.py>` to download the full example code or run this example in your browser via Binder
+.. rst-class:: sphx-glr-example-title
 
 .. _sphx_glr_content_metrics.py:
 
@@ -63,67 +67,67 @@ A quick plot of how each feature is related to the target
     *
 
       .. image:: /content/images/sphx_glr_metrics_001.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_002.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_003.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_004.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_005.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_006.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_007.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_008.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_009.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_010.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_011.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_012.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
     *
 
       .. image:: /content/images/sphx_glr_metrics_013.png
-            :scale: 47
+            :class: sphx-glr-multi-img
 
 
 
@@ -163,7 +167,7 @@ The default score is explained variance
 
  Out::
 
-    [ 0.80283841  0.8367954   0.83993873]
+    [ 0.79909671  0.84516593  0.81727035]
 
 
 Explained variance is convienent because it has a natural scaling: 1 is
@@ -188,7 +192,7 @@ Not along the Charles river (feature 3)
 
  Out::
 
-    [ 0.80602689  0.89345599  0.8376363 ]
+    [ 0.76822789  0.89762207  0.82581889]
 
 
 Along the Charles river
@@ -208,7 +212,7 @@ Along the Charles river
 
  Out::
 
-    [ 0.5641373  -0.22390645  0.76227924]
+    [ 0.63024554 -0.03537074  0.58345236]
 
 
 So the houses along the Charles are harder to predict?
@@ -237,7 +241,7 @@ Not along the Charles river
 
  Out::
 
-    [-11.74966879  -9.0364293  -14.75852611]
+    [-12.15537197  -8.50765414 -15.33496178]
 
 
 Along the Charles river
@@ -258,7 +262,7 @@ Along the Charles river
 
  Out::
 
-    [-77.14865833 -52.42084167 -20.44624545]
+    [ -76.33384167 -132.695325    -77.19796364]
 
 
 So the error is larger along the Charles river
@@ -287,7 +291,7 @@ The Mean Absolute Error is useful for this goal
 
  Out::
 
-    [-2.6052071  -2.29236686 -2.66791667]
+    [-2.50686391 -2.33946746 -2.61470238]
 
 
 Summary
@@ -344,7 +348,7 @@ It takes values between 0 and 1, where 1 is perfect prediction
 
  Out::
 
-    [ 0.96666667  0.95826377  0.98829431]
+    [ 0.97166667  0.97328881  0.97826087]
 
 
 However, a stupid classifier can each good prediction wit imbalanced
@@ -395,7 +399,7 @@ correct
 
  Out::
 
-    [ 1.          1.          0.98076923]
+    [ 0.97826087  0.94545455  0.94545455]
 
 
 Our classifier has a good precision: most of the sevens that it
@@ -438,7 +442,7 @@ defined. Scikit-learn puts it to zero
 
  Out::
 
-    [ 0.7         0.76666667  0.86440678]
+    [ 0.7         0.83333333  0.89830508]
 
 
 Our recall isn't as good: we miss many sevens
@@ -492,7 +496,7 @@ prediction and .5 is chance, independently of class imbalance
 
  Out::
 
-    [ 0.98757716  0.9894094   0.99863212]
+    [ 0.99945988  0.99465059  0.99770447]
 
 
 
@@ -520,8 +524,10 @@ Multiclass and multilabel settings
 ...................................
 
 
-**Total running time of the script:** ( 0 minutes  2.144 seconds)
+**Total running time of the script:** ( 0 minutes  1.881 seconds)
 
+
+.. _sphx_glr_download_content_metrics.py:
 
 
 .. only :: html
@@ -529,6 +535,12 @@ Multiclass and multilabel settings
  .. container:: sphx-glr-footer
     :class: sphx-glr-footer-example
 
+
+  .. container:: binder-badge
+
+    .. image:: https://static.mybinder.org/badge.svg
+      :target: https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/metrics.ipynb
+      :width: 150 px
 
 
   .. container:: sphx-glr-download
