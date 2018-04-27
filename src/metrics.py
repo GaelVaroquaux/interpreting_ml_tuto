@@ -259,7 +259,7 @@ print(cross_val_score(classifier, digits.data, digit_labels,
 
 #############################################################
 # Summary
-# ----------------
+# ..........
 #
 # Class imbalance and the tradeoffs between accepting many misses or many
 # false detections are the things to keep in mind in classification.
