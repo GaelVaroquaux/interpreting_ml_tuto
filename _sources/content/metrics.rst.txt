@@ -135,7 +135,7 @@ We will be using a random forest regressor to predict the price
 .. code-block:: python
 
     from sklearn.ensemble import RandomForestRegressor
-    model = RandomForestRegressor()
+    regressor = RandomForestRegressor()
 
 
 
@@ -153,7 +153,7 @@ The default score is explained variance
 .. code-block:: python
 
     from sklearn.model_selection import cross_val_score
-    print(cross_val_score(model, data, target))
+    print(cross_val_score(regressor, data, target))
 
 
 
@@ -163,7 +163,7 @@ The default score is explained variance
 
  Out::
 
-    [ 0.84507036  0.84673895  0.84906985]
+    [ 0.78483499  0.85422444  0.80553583]
 
 
 Explained variance is convienent because it has a natural scaling: 1 is
@@ -177,7 +177,7 @@ Not along the Charles river (feature 3)
 
 .. code-block:: python
 
-    print(cross_val_score(model, data[data[:, 3] == 0],
+    print(cross_val_score(regressor, data[data[:, 3] == 0],
                           target[data[:, 3] == 0]))
 
 
@@ -188,7 +188,7 @@ Not along the Charles river (feature 3)
 
  Out::
 
-    [ 0.78927789  0.88757544  0.84007914]
+    [ 0.77247247  0.881074    0.84407958]
 
 
 Along the Charles river
@@ -197,7 +197,7 @@ Along the Charles river
 
 .. code-block:: python
 
-    print(cross_val_score(model, data[data[:, 3] == 1],
+    print(cross_val_score(regressor, data[data[:, 3] == 1],
                           target[data[:, 3] == 1]))
 
 
@@ -208,7 +208,7 @@ Along the Charles river
 
  Out::
 
-    [ 0.5787267  -0.72040433  0.54862048]
+    [ 0.60530401 -0.7860339   0.76638284]
 
 
 So the houses along the Charles are harder to predict?
@@ -225,7 +225,7 @@ Not along the Charles river
 
 .. code-block:: python
 
-    print(cross_val_score(model, data[data[:, 3] == 0],
+    print(cross_val_score(regressor, data[data[:, 3] == 0],
                           target[data[:, 3] == 0],
                           scoring='neg_mean_squared_error'))
 
@@ -237,7 +237,7 @@ Not along the Charles river
 
  Out::
 
-    [-12.89045223  -8.8973121  -13.0458172 ]
+    [-15.92755287  -8.85544713 -15.4903121 ]
 
 
 Along the Charles river
@@ -246,7 +246,7 @@ Along the Charles river
 
 .. code-block:: python
 
-    print(cross_val_score(model, data[data[:, 3] == 1],
+    print(cross_val_score(regressor, data[data[:, 3] == 1],
                           target[data[:, 3] == 1],
                           scoring='neg_mean_squared_error'))
 
@@ -258,7 +258,7 @@ Along the Charles river
 
  Out::
 
-    [-79.5311     -95.940875   -45.68478182]
+    [-76.88910833 -61.10774167 -40.27349091]
 
 
 So the error is larger along the Charles river
@@ -276,7 +276,7 @@ The Mean Absolute Error is useful for this goal
 
 .. code-block:: python
 
-    print(cross_val_score(model, data, target,
+    print(cross_val_score(regressor, data, target,
                           scoring='neg_mean_absolute_error'))
 
 
@@ -287,7 +287,7 @@ The Mean Absolute Error is useful for this goal
 
  Out::
 
-    [-2.56532544 -2.25343195 -2.62434524]
+    [-2.49473373 -2.21272189 -2.53345238]
 
 
 Summary
@@ -304,18 +304,17 @@ Summary
 Classification settings
 -----------------------
 
+The Wisconsin breast cancer data
+.................................
+
 
 
 .. code-block:: python
 
+    cancer = datasets.load_breast_cancer()
 
-    # Accuracy and its shortcomings
-
-    # precision, recall, and their shortcomings
-
-    # ROC AUC
-
-    # average precision
+    from sklearn.ensemble import RandomForestClassifier
+    classifier = RandomForestClassifier()
 
 
 
@@ -323,7 +322,113 @@ Classification settings
 
 
 
-**Total running time of the script:** ( 0 minutes  1.649 seconds)
+Accuracy and its shortcomings
+.............................
+
+The default metric is the accuracy: the averaged fraction of success.
+It takes values between 0 and 1, where 1 is perfect prediction
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(classifier, cancer.data, cancer.target))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.94210526  0.97368421  0.95238095]
+
+
+However, .5 is not chance on imbalanced classes
+
+
+
+.. code-block:: python
+
+    from sklearn.dummy import DummyClassifier
+    dummy = DummyClassifier(strategy='most_frequent')
+    print(cross_val_score(dummy, cancer.data, cancer.target))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.62631579  0.62631579  0.62962963]
+
+
+Balanced accuracy (available in development scikit-learn versions)
+fixes this, but can have surprising behaviors, such as being negative
+
+
+Precision, recall, and their shortcomings
+..........................................
+
+In some application, a false detection or a miss have different
+implications
+
+Precision counts the ratio of detections that are correct
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(classifier, cancer.data, cancer.target,
+                          scoring='precision'))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.93548387  0.95901639  0.98290598]
+
+
+Recall counts the fraction of class 1 actually detected
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(classifier, cancer.data, cancer.target,
+                          scoring='recall'))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.95798319  0.96638655  0.94957983]
+
+
+Area under the ROC curve
+..........................
+
+
+Average precision
+..................
+
+
+Multiclass and multilabel settings
+...................................
+
+
+**Total running time of the script:** ( 0 minutes  1.735 seconds)
 
 
 

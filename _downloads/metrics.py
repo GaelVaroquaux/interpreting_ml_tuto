@@ -40,7 +40,7 @@ for feature, name in zip(data.T, boston.feature_names):
 #############################################################
 # We will be using a random forest regressor to predict the price
 from sklearn.ensemble import RandomForestRegressor
-model = RandomForestRegressor()
+regressor = RandomForestRegressor()
 
 #############################################################
 # Explained variance vs Mean Square Error
@@ -48,7 +48,7 @@ model = RandomForestRegressor()
 #
 # The default score is explained variance
 from sklearn.model_selection import cross_val_score
-print(cross_val_score(model, data, target))
+print(cross_val_score(regressor, data, target))
 
 #############################################################
 # Explained variance is convienent because it has a natural scaling: 1 is
@@ -57,12 +57,12 @@ print(cross_val_score(model, data, target))
 # Now let us see which houses are easier to predict:
 #
 # Not along the Charles river (feature 3)
-print(cross_val_score(model, data[data[:, 3] == 0],
+print(cross_val_score(regressor, data[data[:, 3] == 0],
                       target[data[:, 3] == 0]))
 
 #############################################################
 # Along the Charles river
-print(cross_val_score(model, data[data[:, 3] == 1],
+print(cross_val_score(regressor, data[data[:, 3] == 1],
                       target[data[:, 3] == 1]))
 
 #############################################################
@@ -75,13 +75,13 @@ print(cross_val_score(model, data[data[:, 3] == 1],
 # **MSE**: We can use the mean squared error (here negated)
 #
 # Not along the Charles river
-print(cross_val_score(model, data[data[:, 3] == 0],
+print(cross_val_score(regressor, data[data[:, 3] == 0],
                       target[data[:, 3] == 0],
                       scoring='neg_mean_squared_error'))
 
 #############################################################
 # Along the Charles river
-print(cross_val_score(model, data[data[:, 3] == 1],
+print(cross_val_score(regressor, data[data[:, 3] == 1],
                       target[data[:, 3] == 1],
                       scoring='neg_mean_squared_error'))
 
@@ -97,7 +97,7 @@ print(cross_val_score(model, data[data[:, 3] == 1],
 # application?
 #
 # The Mean Absolute Error is useful for this goal
-print(cross_val_score(model, data, target,
+print(cross_val_score(regressor, data, target,
                       scoring='neg_mean_absolute_error'))
 
 #############################################################
@@ -114,12 +114,56 @@ print(cross_val_score(model, data, target,
 #############################################################
 # Classification settings
 # -----------------------
+#
+# The Wisconsin breast cancer data
+# .................................
+cancer = datasets.load_breast_cancer()
 
+from sklearn.ensemble import RandomForestClassifier
+classifier = RandomForestClassifier()
+
+#############################################################
 # Accuracy and its shortcomings
+# .............................
+#
+# The default metric is the accuracy: the averaged fraction of success.
+# It takes values between 0 and 1, where 1 is perfect prediction
+print(cross_val_score(classifier, cancer.data, cancer.target))
 
-# precision, recall, and their shortcomings
+#############################################################
+# However, .5 is not chance on imbalanced classes
+from sklearn.dummy import DummyClassifier
+dummy = DummyClassifier(strategy='most_frequent')
+print(cross_val_score(dummy, cancer.data, cancer.target))
 
-# ROC AUC
+#############################################################
+# Balanced accuracy (available in development scikit-learn versions)
+# fixes this, but can have surprising behaviors, such as being negative
 
-# average precision
+#############################################################
+# Precision, recall, and their shortcomings
+# ..........................................
+#
+# In some application, a false detection or a miss have different
+# implications
+#
+# Precision counts the ratio of detections that are correct
+print(cross_val_score(classifier, cancer.data, cancer.target,
+                      scoring='precision'))
 
+#############################################################
+# Recall counts the fraction of class 1 actually detected
+print(cross_val_score(classifier, cancer.data, cancer.target,
+                      scoring='recall'))
+
+#############################################################
+# Area under the ROC curve
+# ..........................
+
+#############################################################
+# Average precision
+# ..................
+
+#############################################################
+# Multiclass and multilabel settings
+# ...................................

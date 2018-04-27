@@ -178,7 +178,15 @@ $(function () {
 <li><a class="reference internal" href="#summary" id="id6">Summary</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#classification-settings" id="id7">Classification settings</a></li>
+<li><a class="reference internal" href="#classification-settings" id="id7">Classification settings</a><ul>
+<li><a class="reference internal" href="#the-wisconsin-breast-cancer-data" id="id8">The Wisconsin breast cancer data</a></li>
+<li><a class="reference internal" href="#accuracy-and-its-shortcomings" id="id9">Accuracy and its shortcomings</a></li>
+<li><a class="reference internal" href="#precision-recall-and-their-shortcomings" id="id10">Precision, recall, and their shortcomings</a></li>
+<li><a class="reference internal" href="#area-under-the-roc-curve" id="id11">Area under the ROC curve</a></li>
+<li><a class="reference internal" href="#average-precision" id="id12">Average precision</a></li>
+<li><a class="reference internal" href="#multiclass-and-multilabel-settings" id="id13">Multiclass and multilabel settings</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -239,7 +247,7 @@ via the <cite>scoring</cite> parameter of
 </ul>
 <p>We will be using a random forest regressor to predict the price</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
-<div class="newline"></div><span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">()</span>
+<div class="newline"></div><span class="n">regressor</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
 </div>
@@ -247,32 +255,32 @@ via the <cite>scoring</cite> parameter of
 <h3><a class="toc-backref" href="#id4">1.1.2. Explained variance vs Mean Square Error</a><a class="headerlink" href="#explained-variance-vs-mean-square-error" title="Permalink to this headline">¶</a></h3>
 <p>The default score is explained variance</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_score</span>
-<div class="newline"></div><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">))</span>
+<div class="newline"></div><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">regressor</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">))</span>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.84507036</span>  <span class="mf">0.84673895</span>  <span class="mf">0.84906985</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.78483499</span>  <span class="mf">0.85422444</span>  <span class="mf">0.80553583</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>Explained variance is convienent because it has a natural scaling: 1 is
 perfect prediction, and 0 is around chance</p>
 <p>Now let us see which houses are easier to predict:</p>
 <p>Not along the Charles river (feature 3)</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">],</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">regressor</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">],</span>
 <div class="newline"></div>                      <span class="n">target</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]))</span>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.78927789</span>  <span class="mf">0.88757544</span>  <span class="mf">0.84007914</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.77247247</span>  <span class="mf">0.881074</span>    <span class="mf">0.84407958</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>Along the Charles river</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">regressor</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span>
 <div class="newline"></div>                      <span class="n">target</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">]))</span>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.5787267</span>  <span class="o">-</span><span class="mf">0.72040433</span>  <span class="mf">0.54862048</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.60530401</span> <span class="o">-</span><span class="mf">0.7860339</span>   <span class="mf">0.76638284</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>So the houses along the Charles are harder to predict?</p>
@@ -281,23 +289,23 @@ different sets of observations, the variance of the target differs, and
 the explained variance is a relative measure</p>
 <p><strong>MSE</strong>: We can use the mean squared error (here negated)</p>
 <p>Not along the Charles river</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">],</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">regressor</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">],</span>
 <div class="newline"></div>                      <span class="n">target</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">],</span>
 <div class="newline"></div>                      <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_squared_error&#39;</span><span class="p">))</span>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">12.89045223</span>  <span class="o">-</span><span class="mf">8.8973121</span>  <span class="o">-</span><span class="mf">13.0458172</span> <span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">15.92755287</span>  <span class="o">-</span><span class="mf">8.85544713</span> <span class="o">-</span><span class="mf">15.4903121</span> <span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>Along the Charles river</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">regressor</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span>
 <div class="newline"></div>                      <span class="n">target</span><span class="p">[</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">],</span>
 <div class="newline"></div>                      <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_squared_error&#39;</span><span class="p">))</span>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">79.5311</span>     <span class="o">-</span><span class="mf">95.940875</span>   <span class="o">-</span><span class="mf">45.68478182</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">76.88910833</span> <span class="o">-</span><span class="mf">61.10774167</span> <span class="o">-</span><span class="mf">40.27349091</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>So the error is larger along the Charles river</p>
@@ -307,12 +315,12 @@ the explained variance is a relative measure</p>
 <p>What if we want to report an error in dollars, meaningful for an
 application?</p>
 <p>The Mean Absolute Error is useful for this goal</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">regressor</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span>
 <div class="newline"></div>                      <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">))</span>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">2.56532544</span> <span class="o">-</span><span class="mf">2.25343195</span> <span class="o">-</span><span class="mf">2.62434524</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">2.49473373</span> <span class="o">-</span><span class="mf">2.21272189</span> <span class="o">-</span><span class="mf">2.53345238</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 </div>
@@ -329,16 +337,71 @@ units of the target</li>
 </div>
 <div class="section" id="classification-settings">
 <h2><a class="toc-backref" href="#id7">1.2. Classification settings</a><a class="headerlink" href="#classification-settings" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Accuracy and its shortcomings</span>
+<div class="section" id="the-wisconsin-breast-cancer-data">
+<h3><a class="toc-backref" href="#id8">1.2.1. The Wisconsin breast cancer data</a><a class="headerlink" href="#the-wisconsin-breast-cancer-data" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cancer</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">load_breast_cancer</span><span class="p">()</span>
 <div class="newline"></div>
-<div class="newline"></div><span class="c1"># precision, recall, and their shortcomings</span>
-<div class="newline"></div>
-<div class="newline"></div><span class="c1"># ROC AUC</span>
-<div class="newline"></div>
-<div class="newline"></div><span class="c1"># average precision</span>
+<div class="newline"></div><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestClassifier</span>
+<div class="newline"></div><span class="n">classifier</span> <span class="o">=</span> <span class="n">RandomForestClassifier</span><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  1.649 seconds)</p>
+</div>
+<div class="section" id="accuracy-and-its-shortcomings">
+<h3><a class="toc-backref" href="#id9">1.2.2. Accuracy and its shortcomings</a><a class="headerlink" href="#accuracy-and-its-shortcomings" title="Permalink to this headline">¶</a></h3>
+<p>The default metric is the accuracy: the averaged fraction of success.
+It takes values between 0 and 1, where 1 is perfect prediction</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">cancer</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">cancer</span><span class="o">.</span><span class="n">target</span><span class="p">))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.94210526</span>  <span class="mf">0.97368421</span>  <span class="mf">0.95238095</span><span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>However, .5 is not chance on imbalanced classes</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.dummy</span> <span class="kn">import</span> <span class="n">DummyClassifier</span>
+<div class="newline"></div><span class="n">dummy</span> <span class="o">=</span> <span class="n">DummyClassifier</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">)</span>
+<div class="newline"></div><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">dummy</span><span class="p">,</span> <span class="n">cancer</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">cancer</span><span class="o">.</span><span class="n">target</span><span class="p">))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.62631579</span>  <span class="mf">0.62631579</span>  <span class="mf">0.62962963</span><span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>Balanced accuracy (available in development scikit-learn versions)
+fixes this, but can have surprising behaviors, such as being negative</p>
+</div>
+<div class="section" id="precision-recall-and-their-shortcomings">
+<h3><a class="toc-backref" href="#id10">1.2.3. Precision, recall, and their shortcomings</a><a class="headerlink" href="#precision-recall-and-their-shortcomings" title="Permalink to this headline">¶</a></h3>
+<p>In some application, a false detection or a miss have different
+implications</p>
+<p>Precision counts the ratio of detections that are correct</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">cancer</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">cancer</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
+<div class="newline"></div>                      <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;precision&#39;</span><span class="p">))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.93548387</span>  <span class="mf">0.95901639</span>  <span class="mf">0.98290598</span><span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>Recall counts the fraction of class 1 actually detected</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">cancer</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">cancer</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
+<div class="newline"></div>                      <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;recall&#39;</span><span class="p">))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.95798319</span>  <span class="mf">0.96638655</span>  <span class="mf">0.94957983</span><span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+</div>
+<div class="section" id="area-under-the-roc-curve">
+<h3><a class="toc-backref" href="#id11">1.2.4. Area under the ROC curve</a><a class="headerlink" href="#area-under-the-roc-curve" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="average-precision">
+<h3><a class="toc-backref" href="#id12">1.2.5. Average precision</a><a class="headerlink" href="#average-precision" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="multiclass-and-multilabel-settings">
+<h3><a class="toc-backref" href="#id13">1.2.6. Multiclass and multilabel settings</a><a class="headerlink" href="#multiclass-and-multilabel-settings" title="Permalink to this headline">¶</a></h3>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  1.735 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container">
 <div class="sphx-glr-download docutils container">
 <a class="reference download internal" href="../_downloads/metrics.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">metrics.py</span></code></a></div>
@@ -347,6 +410,7 @@ units of the target</li>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 <p><div style="clear: both"></div></p>
+</div>
 </div>
 </div>
 
@@ -367,7 +431,15 @@ units of the target</li>
 <li><a class="reference internal" href="#summary">1.1.4. Summary</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#classification-settings">1.2. Classification settings</a></li>
+<li><a class="reference internal" href="#classification-settings">1.2. Classification settings</a><ul>
+<li><a class="reference internal" href="#the-wisconsin-breast-cancer-data">1.2.1. The Wisconsin breast cancer data</a></li>
+<li><a class="reference internal" href="#accuracy-and-its-shortcomings">1.2.2. Accuracy and its shortcomings</a></li>
+<li><a class="reference internal" href="#precision-recall-and-their-shortcomings">1.2.3. Precision, recall, and their shortcomings</a></li>
+<li><a class="reference internal" href="#area-under-the-roc-curve">1.2.4. Area under the ROC curve</a></li>
+<li><a class="reference internal" href="#average-precision">1.2.5. Average precision</a></li>
+<li><a class="reference internal" href="#multiclass-and-multilabel-settings">1.2.6. Multiclass and multilabel settings</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
