@@ -27,7 +27,7 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/copybutton.js"></script>
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3. Underfit vs overfit: do I need more data, or more complex models?" href="underfit_vs_overfit.html" />
+    <link rel="next" title="3. SyntaxError" href="underfit_vs_overfit.html" />
     <link rel="prev" title="1. Metrics to judge the sucess of a model" href="metrics.html" />
    
     <link rel="stylesheet"
@@ -136,7 +136,7 @@ $(function () {
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="underfit_vs_overfit.html" title="3. Underfit vs overfit: do I need more data, or more complex models?"
+          <a href="underfit_vs_overfit.html" title="3. SyntaxError"
              accesskey="N">next</a></li>
         <li class="right" >
           <a href="metrics.html" title="1. Metrics to judge the sucess of a model"
@@ -256,9 +256,56 @@ does not provide actually new data points</p>
 <div class="section" id="confounding-effects-and-non-independence">
 <h2>2.2. Confounding effects and non independence<a class="headerlink" href="#confounding-effects-and-non-independence" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="permutations-to-measure-chance">
-<h2>2.3. Permutations to measure chance<a class="headerlink" href="#permutations-to-measure-chance" title="Permalink to this headline">¶</a></h2>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.322 seconds)</p>
+<div class="section" id="measuring-baselines-and-chance">
+<h2>2.3. Measuring baselines and chance<a class="headerlink" href="#measuring-baselines-and-chance" title="Permalink to this headline">¶</a></h2>
+<p>Because of class imbalances, or confounding effects, it is easy to get
+it wrong it terms of what constitutes chances. There are two approaches
+to measure peformances of baselines or chance:</p>
+<p><strong>DummyClassifier</strong> The dummy classifier:
+<a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyClassifier.html#sklearn.dummy.DummyClassifier" title="(in scikit-learn v0.19.1)"><code class="xref py py-class docutils literal"><span class="pre">sklearn.dummy.DummyClassifier</span></code></a>, with different strategies to
+provide simple baselines</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.dummy</span> <span class="kn">import</span> <span class="n">DummyClassifier</span>
+<div class="newline"></div><span class="n">dummy</span> <span class="o">=</span> <span class="n">DummyClassifier</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;stratified&quot;</span><span class="p">)</span>
+<div class="newline"></div><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">dummy</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.44117647</span>  <span class="mf">0.61764706</span>  <span class="mf">0.40625</span>   <span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p><strong>Chance level</strong> To measure actual chance, the most robust approach is
+to use permutations:
+<a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.permutation_test_score.html#sklearn.model_selection.permutation_test_score" title="(in scikit-learn v0.19.1)"><code class="xref py py-func docutils literal"><span class="pre">sklearn.model_selection.permutation_test_score()</span></code></a>, which is used
+as cross_val_score</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">permutation_test_score</span>
+<div class="newline"></div><span class="n">score</span><span class="p">,</span> <span class="n">permuted_scores</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <span class="n">permutation_test_score</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+<div class="newline"></div><span class="k">print</span><span class="p">(</span><span class="s2">&quot;Classifier score: {0},</span><span class="se">\n</span><span class="s2">p value: {1}</span><span class="se">\n</span><span class="s2">Permutation scores {2}&quot;</span>
+<div class="newline"></div>        <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="n">p_value</span><span class="p">,</span> <span class="n">permuted_scores</span><span class="p">))</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="n">Classifier</span> <span class="n">score</span><span class="p">:</span> <span class="mf">0.669117647059</span><span class="p">,</span>
+<div class="newline"></div><span class="n">p</span> <span class="n">value</span><span class="p">:</span> <span class="mf">0.00990099009901</span>
+<div class="newline"></div><span class="n">Permutation</span> <span class="n">scores</span> <span class="p">[</span> <span class="mf">0.54963235</span>  <span class="mf">0.47120098</span>  <span class="mf">0.51041667</span>  <span class="mf">0.59926471</span>  <span class="mf">0.45036765</span>  <span class="mf">0.44852941</span>
+<div class="newline"></div>  <span class="mf">0.52941176</span>  <span class="mf">0.59865196</span>  <span class="mf">0.47855392</span>  <span class="mf">0.39031863</span>  <span class="mf">0.45955882</span>  <span class="mf">0.56066176</span>
+<div class="newline"></div>  <span class="mf">0.60110294</span>  <span class="mf">0.38112745</span>  <span class="mf">0.45159314</span>  <span class="mf">0.46017157</span>  <span class="mf">0.58026961</span>  <span class="mf">0.57904412</span>
+<div class="newline"></div>  <span class="mf">0.59191176</span>  <span class="mf">0.58026961</span>  <span class="mf">0.51041667</span>  <span class="mf">0.53921569</span>  <span class="mf">0.41176471</span>  <span class="mf">0.37806373</span>
+<div class="newline"></div>  <span class="mf">0.62193627</span>  <span class="mf">0.52022059</span>  <span class="mf">0.41789216</span>  <span class="mf">0.50980392</span>  <span class="mf">0.4497549</span>   <span class="mf">0.59987745</span>
+<div class="newline"></div>  <span class="mf">0.47855392</span>  <span class="mf">0.53921569</span>  <span class="mf">0.44056373</span>  <span class="mf">0.60784314</span>  <span class="mf">0.47120098</span>  <span class="mf">0.47916667</span>
+<div class="newline"></div>  <span class="mf">0.48958333</span>  <span class="mf">0.5814951</span>   <span class="mf">0.50857843</span>  <span class="mf">0.43014706</span>  <span class="mf">0.53002451</span>  <span class="mf">0.48039216</span>
+<div class="newline"></div>  <span class="mf">0.48835784</span>  <span class="mf">0.43872549</span>  <span class="mf">0.43872549</span>  <span class="mf">0.59987745</span>  <span class="mf">0.45894608</span>  <span class="mf">0.40931373</span>
+<div class="newline"></div>  <span class="mf">0.52022059</span>  <span class="mf">0.45955882</span>  <span class="mf">0.44914216</span>  <span class="mf">0.52022059</span>  <span class="mf">0.55147059</span>  <span class="mf">0.47120098</span>
+<div class="newline"></div>  <span class="mf">0.49080882</span>  <span class="mf">0.49203431</span>  <span class="mf">0.47794118</span>  <span class="mf">0.5379902</span>   <span class="mf">0.62990196</span>  <span class="mf">0.51041667</span>
+<div class="newline"></div>  <span class="mf">0.46997549</span>  <span class="mf">0.44056373</span>  <span class="mf">0.56127451</span>  <span class="mf">0.60968137</span>  <span class="mf">0.47120098</span>  <span class="mf">0.54963235</span>
+<div class="newline"></div>  <span class="mf">0.54718137</span>  <span class="mf">0.56066176</span>  <span class="mf">0.47977941</span>  <span class="mf">0.42953431</span>  <span class="mf">0.43872549</span>  <span class="mf">0.38051471</span>
+<div class="newline"></div>  <span class="mf">0.43872549</span>  <span class="mf">0.41115196</span>  <span class="mf">0.48897059</span>  <span class="mf">0.48039216</span>  <span class="mf">0.60968137</span>  <span class="mf">0.60906863</span>
+<div class="newline"></div>  <span class="mf">0.57169118</span>  <span class="mf">0.52757353</span>  <span class="mf">0.5122549</span>   <span class="mf">0.52022059</span>  <span class="mf">0.46017157</span>  <span class="mf">0.62009804</span>
+<div class="newline"></div>  <span class="mf">0.47058824</span>  <span class="mf">0.59987745</span>  <span class="mf">0.55085784</span>  <span class="mf">0.46813725</span>  <span class="mf">0.53737745</span>  <span class="mf">0.54105392</span>
+<div class="newline"></div>  <span class="mf">0.48897059</span>  <span class="mf">0.51102941</span>  <span class="mf">0.48039216</span>  <span class="mf">0.50122549</span>  <span class="mf">0.47058824</span>  <span class="mf">0.59926471</span>
+<div class="newline"></div>  <span class="mf">0.49080882</span>  <span class="mf">0.4185049</span>   <span class="mf">0.47058824</span>  <span class="mf">0.49019608</span><span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.602 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-cross-validation-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/cross_validation.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>
@@ -285,7 +332,7 @@ does not provide actually new data points</p>
 <li><a class="reference internal" href="#">2. Cross-validation: some gotchas</a><ul>
 <li><a class="reference internal" href="#the-uncertainty-of-measured-accuracy">2.1. The uncertainty of measured accuracy</a></li>
 <li><a class="reference internal" href="#confounding-effects-and-non-independence">2.2. Confounding effects and non independence</a></li>
-<li><a class="reference internal" href="#permutations-to-measure-chance">2.3. Permutations to measure chance</a></li>
+<li><a class="reference internal" href="#measuring-baselines-and-chance">2.3. Measuring baselines and chance</a></li>
 </ul>
 </li>
 </ul>
@@ -317,7 +364,7 @@ does not provide actually new data points</p>
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
-          <a href="underfit_vs_overfit.html" title="3. Underfit vs overfit: do I need more data, or more complex models?"
+          <a href="underfit_vs_overfit.html" title="3. SyntaxError"
              >next</a></li>
         <li class="right" >
           <a href="metrics.html" title="1. Metrics to judge the sucess of a model"

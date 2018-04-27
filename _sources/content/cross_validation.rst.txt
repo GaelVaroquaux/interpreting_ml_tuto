@@ -171,11 +171,80 @@ Confounding effects and non independence
 -----------------------------------------
 
 
-Permutations to measure chance
+Measuring baselines and chance
 -------------------------------
 
+Because of class imbalances, or confounding effects, it is easy to get
+it wrong it terms of what constitutes chances. There are two approaches
+to measure peformances of baselines or chance:
 
-**Total running time of the script:** ( 0 minutes  0.322 seconds)
+**DummyClassifier** The dummy classifier:
+:class:`sklearn.dummy.DummyClassifier`, with different strategies to
+provide simple baselines
+
+
+
+.. code-block:: python
+
+    from sklearn.dummy import DummyClassifier
+    dummy = DummyClassifier(strategy="stratified")
+    print(cross_val_score(dummy, data, target))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.44117647  0.61764706  0.40625   ]
+
+
+**Chance level** To measure actual chance, the most robust approach is
+to use permutations:
+:func:`sklearn.model_selection.permutation_test_score`, which is used
+as cross_val_score
+
+
+
+.. code-block:: python
+
+    from sklearn.model_selection import permutation_test_score
+    score, permuted_scores, p_value = permutation_test_score(classifier, data, target)
+    print("Classifier score: {0},\np value: {1}\nPermutation scores {2}"
+            .format(score, p_value, permuted_scores))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    Classifier score: 0.669117647059,
+    p value: 0.00990099009901
+    Permutation scores [ 0.54963235  0.47120098  0.51041667  0.59926471  0.45036765  0.44852941
+      0.52941176  0.59865196  0.47855392  0.39031863  0.45955882  0.56066176
+      0.60110294  0.38112745  0.45159314  0.46017157  0.58026961  0.57904412
+      0.59191176  0.58026961  0.51041667  0.53921569  0.41176471  0.37806373
+      0.62193627  0.52022059  0.41789216  0.50980392  0.4497549   0.59987745
+      0.47855392  0.53921569  0.44056373  0.60784314  0.47120098  0.47916667
+      0.48958333  0.5814951   0.50857843  0.43014706  0.53002451  0.48039216
+      0.48835784  0.43872549  0.43872549  0.59987745  0.45894608  0.40931373
+      0.52022059  0.45955882  0.44914216  0.52022059  0.55147059  0.47120098
+      0.49080882  0.49203431  0.47794118  0.5379902   0.62990196  0.51041667
+      0.46997549  0.44056373  0.56127451  0.60968137  0.47120098  0.54963235
+      0.54718137  0.56066176  0.47977941  0.42953431  0.43872549  0.38051471
+      0.43872549  0.41115196  0.48897059  0.48039216  0.60968137  0.60906863
+      0.57169118  0.52757353  0.5122549   0.52022059  0.46017157  0.62009804
+      0.47058824  0.59987745  0.55085784  0.46813725  0.53737745  0.54105392
+      0.48897059  0.51102941  0.48039216  0.50122549  0.47058824  0.59926471
+      0.49080882  0.4185049   0.47058824  0.49019608]
+
+
+**Total running time of the script:** ( 0 minutes  0.602 seconds)
 
 
 .. _sphx_glr_download_content_cross_validation.py:
