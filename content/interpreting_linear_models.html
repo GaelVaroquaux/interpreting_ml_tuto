@@ -170,24 +170,98 @@ $(function () {
 </div>
 <div class="sphx-glr-example-title section" id="interpreting-linear-models">
 <span id="sphx-glr-content-interpreting-linear-models-py"></span><h1>2. Interpreting linear models<a class="headerlink" href="#interpreting-linear-models" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="conditional-versus-marginal-relations">
-<h2>2.1. Conditional versus marginal relations<a class="headerlink" href="#conditional-versus-marginal-relations" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># The link to univariate feature selection</span>
+<p>Linear models are not that easy to interpret when variables are
+correlated.</p>
+<p>See also the statistics chapter of the scipy lecture notes</p>
+<div class="section" id="data-on-wages">
+<h2>2.1. Data on wages<a class="headerlink" href="#data-on-wages" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib</span>
+<div class="newline"></div><span class="kn">import</span> <span class="nn">os</span>
+<div class="newline"></div><span class="kn">import</span> <span class="nn">pandas</span>
 <div class="newline"></div>
-<div class="newline"></div><span class="c1"># The IQ example</span>
+<div class="newline"></div><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">):</span>
+<div class="newline"></div>    <span class="c1"># Download the file if it is not present</span>
+<div class="newline"></div>    <span class="n">urllib</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="s1">&#39;http://lib.stat.cmu.edu/datasets/CPS_85_Wages&#39;</span><span class="p">,</span>
+<div class="newline"></div>                       <span class="s1">&#39;wages.txt&#39;</span><span class="p">)</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Give names to the columns</span>
+<div class="newline"></div><span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
+<div class="newline"></div>    <span class="s1">&#39;EDUCATION: Number of years of education&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;SOUTH: 1=Person lives in South, 0=Person lives elsewhere&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;SEX: 1=Female, 0=Male&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;EXPERIENCE: Number of years of work experience&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;UNION: 1=Union member, 0=Not union member&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;WAGE: Wage (dollars per hour)&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;AGE: years&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;RACE: 1=Other, 2=Hispanic, 3=White&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;OCCUPATION: 1=Management, 2=Sales, 3=Clerical, 4=Service, 5=Professional, 6=Other&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;SECTOR: 0=Other, 1=Manufacturing, 2=Construction&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;MARR: 0=Unmarried,  1=Married&#39;</span><span class="p">,</span>
+<div class="newline"></div><span class="p">]</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">short_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">skipfooter</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="newline"></div>                       <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<div class="newline"></div><span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">short_names</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Log-transform the wages, as they typically increase with</span>
+<div class="newline"></div><span class="c1"># multiplicative factors</span>
+<div class="newline"></div><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="newline"></div><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">])</span>
 <div class="newline"></div></pre></div>
 </div>
 </div>
 <div class="section" id="the-challenge-of-correlated-features">
 <h2>2.2. The challenge of correlated features<a class="headerlink" href="#the-challenge-of-correlated-features" title="Permalink to this headline">¶</a></h2>
+<p>Plot scatter matrices highlighting different aspects</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span>
+<div class="newline"></div><span class="n">seaborn</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">,</span> <span class="s1">&#39;AGE&#39;</span><span class="p">,</span> <span class="s1">&#39;EDUCATION&#39;</span><span class="p">,</span> <span class="s1">&#39;EXPERIENCE&#39;</span><span class="p">])</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../_images/sphx_glr_interpreting_linear_models_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_interpreting_linear_models_001.png" />
+<p>Note that age and experience are highly correlated</p>
+</div>
+<div class="section" id="coefficients-of-a-linear-model">
+<h2>2.3. Coefficients of a linear model<a class="headerlink" href="#coefficients-of-a-linear-model" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
+<div class="newline"></div><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="s1">&#39;WAGE&#39;</span><span class="p">]</span>
+<div class="newline"></div><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">features</span><span class="p">]</span>
+<div class="newline"></div><span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">]</span>
+<div class="newline"></div><span class="n">ridge</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">RidgeCV</span><span class="p">()</span>
+<div class="newline"></div><span class="n">ridge</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Visualize the coefs</span>
+<div class="newline"></div><span class="n">coefs</span> <span class="o">=</span> <span class="n">ridge</span><span class="o">.</span><span class="n">coef_</span>
+<div class="newline"></div><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">coefs</span><span class="p">)</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../_images/sphx_glr_interpreting_linear_models_002.png" class="sphx-glr-single-img" src="../_images/sphx_glr_interpreting_linear_models_002.png" />
+<p>Note: coefs cannot easily be compared if X is not standardized</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Gauging significance of observed associations</span>
-<div class="newline"></div><span class="c1"># XXX: what to say?</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># The link to univariate feature selection</span>
 <div class="newline"></div></pre></div>
 </div>
 </div>
 <div class="section" id="the-effect-of-regularization">
-<h2>2.3. The effect of regularization<a class="headerlink" href="#the-effect-of-regularization" title="Permalink to this headline">¶</a></h2>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<h2>2.4. The effect of regularization<a class="headerlink" href="#the-effect-of-regularization" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">lasso</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LassoCV</span><span class="p">()</span>
+<div class="newline"></div><span class="n">lasso</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Visualize the coefs</span>
+<div class="newline"></div><span class="n">coefs</span> <span class="o">=</span> <span class="n">lasso</span><span class="o">.</span><span class="n">coef_</span>
+<div class="newline"></div><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">coefs</span><span class="p">)</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../_images/sphx_glr_interpreting_linear_models_003.png" class="sphx-glr-single-img" src="../_images/sphx_glr_interpreting_linear_models_003.png" />
+<p><strong>Total running time of the script:</strong> ( 0 minutes  5.043 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-interpreting-linear-models-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/interpreting_linear_models.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>
@@ -212,9 +286,10 @@ $(function () {
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">2. Interpreting linear models</a><ul>
-<li><a class="reference internal" href="#conditional-versus-marginal-relations">2.1. Conditional versus marginal relations</a></li>
+<li><a class="reference internal" href="#data-on-wages">2.1. Data on wages</a></li>
 <li><a class="reference internal" href="#the-challenge-of-correlated-features">2.2. The challenge of correlated features</a></li>
-<li><a class="reference internal" href="#the-effect-of-regularization">2.3. The effect of regularization</a></li>
+<li><a class="reference internal" href="#coefficients-of-a-linear-model">2.3. Coefficients of a linear model</a></li>
+<li><a class="reference internal" href="#the-effect-of-regularization">2.4. The effect of regularization</a></li>
 </ul>
 </li>
 </ul>
