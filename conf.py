@@ -64,6 +64,12 @@ sphinx_gallery_conf = {
         },
     'backreferences_dir': False,
     'filename_pattern': '.*',
+    'binder': {'org': 'gaelvaroquaux',
+               'repo': 'interpreting_ml_tuto',
+               'url': 'https://mybinder.org',
+               'branch': 'master',
+               'dependencies': './requirements.txt'
+               }
     }
 
 # Add any paths that contain templates here, relative to this directory.
