@@ -128,7 +128,7 @@ Notebooks
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Example script with invalid Python syntax ">
+    <div class="sphx-glr-thumbcontainer" tooltip="This is adapted from the scikit-learn chapter in the scipy lectures ">
 
 .. only:: html
 
