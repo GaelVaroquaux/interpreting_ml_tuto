@@ -221,6 +221,10 @@ correlated.</p>
 </div>
 <img alt="../_images/sphx_glr_interpreting_linear_models_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_interpreting_linear_models_001.png" />
 <p>Note that age and experience are highly correlated</p>
+<p>A link between a single feature and the target is a <em>marginal</em> link.</p>
+<p>Univariate feature selection selects on marginal links.</p>
+<p>Linear model compute <em>conditional</em> links: removing the effects of other
+features on each feature. This is hard when features are correlated.</p>
 </div>
 <div class="section" id="coefficients-of-a-linear-model">
 <h2>2.3. Coefficients of a linear model<a class="headerlink" href="#coefficients-of-a-linear-model" title="Permalink to this headline">¶</a></h2>
@@ -240,19 +244,18 @@ correlated.</p>
 <div class="newline"></div></pre></div>
 </div>
 <img alt="../_images/sphx_glr_interpreting_linear_models_002.png" class="sphx-glr-single-img" src="../_images/sphx_glr_interpreting_linear_models_002.png" />
-<p>Note: coefs cannot easily be compared if X is not standardized</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Gauging significance of observed associations</span>
-<div class="newline"></div>
-<div class="newline"></div><span class="c1"># The link to univariate feature selection</span>
-<div class="newline"></div></pre></div>
-</div>
+<p>Note: coefs cannot easily be compared if X is not standardized: they
+should be normalized to the variance of X.</p>
+<p>When features are not too correlated and their is plenty, this is the
+well-known regime of standard statistics in linear models. Machine
+learning is not needs, and statsmodels is a great tool (see the
+statistics chapter in scipy-lectures)</p>
 </div>
 <div class="section" id="the-effect-of-regularization">
 <h2>2.4. The effect of regularization<a class="headerlink" href="#the-effect-of-regularization" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">lasso</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LassoCV</span><span class="p">()</span>
 <div class="newline"></div><span class="n">lasso</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <div class="newline"></div>
-<div class="newline"></div><span class="c1"># Visualize the coefs</span>
 <div class="newline"></div><span class="n">coefs</span> <span class="o">=</span> <span class="n">lasso</span><span class="o">.</span><span class="n">coef_</span>
 <div class="newline"></div><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
 <div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">coefs</span><span class="p">)</span>
@@ -261,7 +264,7 @@ correlated.</p>
 <div class="newline"></div></pre></div>
 </div>
 <img alt="../_images/sphx_glr_interpreting_linear_models_003.png" class="sphx-glr-single-img" src="../_images/sphx_glr_interpreting_linear_models_003.png" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  5.043 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  2.295 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-interpreting-linear-models-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/interpreting_linear_models.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>

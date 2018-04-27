@@ -58,7 +58,14 @@ seaborn.pairplot(data, vars=['WAGE', 'AGE', 'EDUCATION', 'EXPERIENCE'])
 
 ########################################################################
 # Note that age and experience are highly correlated
-
+#
+# A link between a single feature and the target is a *marginal* link.
+#
+#
+# Univariate feature selection selects on marginal links.
+#
+# Linear model compute *conditional* links: removing the effects of other
+# features on each feature. This is hard when features are correlated.
 
 
 ########################################################
@@ -80,11 +87,13 @@ plt.yticks(np.arange(coefs.size), features)
 plt.tight_layout()
 
 ########################################################
-# Note: coefs cannot easily be compared if X is not standardized
-
-# Gauging significance of observed associations
-
-# The link to univariate feature selection
+# Note: coefs cannot easily be compared if X is not standardized: they
+# should be normalized to the variance of X.
+#
+# When features are not too correlated and their is plenty, this is the
+# well-known regime of standard statistics in linear models. Machine
+# learning is not needs, and statsmodels is a great tool (see the
+# statistics chapter in scipy-lectures)
 
 ########################################################
 # The effect of regularization
@@ -93,7 +102,6 @@ plt.tight_layout()
 lasso = linear_model.LassoCV()
 lasso.fit(X, y)
 
-# Visualize the coefs
 coefs = lasso.coef_
 from matplotlib import pyplot as plt
 plt.barh(np.arange(coefs.size), coefs)

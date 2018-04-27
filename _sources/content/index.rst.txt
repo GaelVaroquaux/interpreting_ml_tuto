@@ -8,26 +8,6 @@ Notebooks
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Interpreting random forests ">
-
-.. only:: html
-
-    .. figure:: /content/images/thumb/sphx_glr_interpreting_random_forests_thumb.png
-
-        :ref:`sphx_glr_content_interpreting_random_forests.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /content/interpreting_random_forests
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="See also skater: a more modern variant relying on heavier dependencies https://github.com/datas...">
 
 .. only:: html
@@ -68,13 +48,13 @@ Notebooks
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Partial dependency plots consists in evaluating the model prediction while varying one of more ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Interpreting random forests ">
 
 .. only:: html
 
-    .. figure:: /content/images/thumb/sphx_glr_partial_dep_plots_thumb.png
+    .. figure:: /content/images/thumb/sphx_glr_interpreting_random_forests_thumb.png
 
-        :ref:`sphx_glr_content_partial_dep_plots.py`
+        :ref:`sphx_glr_content_interpreting_random_forests.py`
 
 .. raw:: html
 
@@ -84,7 +64,7 @@ Notebooks
 .. toctree::
    :hidden:
 
-   /content/partial_dep_plots
+   /content/interpreting_random_forests
 
 .. raw:: html
 
@@ -105,6 +85,26 @@ Notebooks
    :hidden:
 
    /content/interpreting_linear_models
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Partial dependency plots consists in evaluating the model prediction while varying one of more ...">
+
+.. only:: html
+
+    .. figure:: /content/images/thumb/sphx_glr_partial_dep_plots_thumb.png
+
+        :ref:`sphx_glr_content_partial_dep_plots.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /content/partial_dep_plots
 
 .. raw:: html
 

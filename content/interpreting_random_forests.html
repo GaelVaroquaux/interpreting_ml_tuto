@@ -171,15 +171,76 @@ $(function () {
 <div class="sphx-glr-example-title section" id="interpreting-random-forests">
 <span id="sphx-glr-content-interpreting-random-forests-py"></span><h1>3. Interpreting random forests<a class="headerlink" href="#interpreting-random-forests" title="Permalink to this headline">¶</a></h1>
 <p>Interpreting random forests</p>
-<div class="section" id="feature-importance">
-<h2>3.1. Feature importance<a class="headerlink" href="#feature-importance" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="caveats">
-<h2>3.2. Caveats<a class="headerlink" href="#caveats" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># Danger: higher-entropy variables will have large feature importances</span>
+<div class="section" id="data-on-wages">
+<h2>3.1. Data on wages<a class="headerlink" href="#data-on-wages" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib</span>
+<div class="newline"></div><span class="kn">import</span> <span class="nn">os</span>
+<div class="newline"></div><span class="kn">import</span> <span class="nn">pandas</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">):</span>
+<div class="newline"></div>    <span class="c1"># Download the file if it is not present</span>
+<div class="newline"></div>    <span class="n">urllib</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="s1">&#39;http://lib.stat.cmu.edu/datasets/CPS_85_Wages&#39;</span><span class="p">,</span>
+<div class="newline"></div>                       <span class="s1">&#39;wages.txt&#39;</span><span class="p">)</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Give names to the columns</span>
+<div class="newline"></div><span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
+<div class="newline"></div>    <span class="s1">&#39;EDUCATION: Number of years of education&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;SOUTH: 1=Person lives in South, 0=Person lives elsewhere&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;SEX: 1=Female, 0=Male&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;EXPERIENCE: Number of years of work experience&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;UNION: 1=Union member, 0=Not union member&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;WAGE: Wage (dollars per hour)&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;AGE: years&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;RACE: 1=Other, 2=Hispanic, 3=White&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;OCCUPATION: 1=Management, 2=Sales, 3=Clerical, 4=Service, 5=Professional, 6=Other&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;SECTOR: 0=Other, 1=Manufacturing, 2=Construction&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;MARR: 0=Unmarried,  1=Married&#39;</span><span class="p">,</span>
+<div class="newline"></div><span class="p">]</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">short_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">skipfooter</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="newline"></div>                       <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<div class="newline"></div><span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">short_names</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Log-transform the wages, as they typically increase with</span>
+<div class="newline"></div><span class="c1"># multiplicative factors</span>
+<div class="newline"></div><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="newline"></div><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">])</span>
+<div class="newline"></div>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="s1">&#39;WAGE&#39;</span><span class="p">]</span>
+<div class="newline"></div><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">features</span><span class="p">]</span>
+<div class="newline"></div><span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+</div>
+<div class="section" id="feature-importance">
+<h2>3.2. Feature importance<a class="headerlink" href="#feature-importance" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">ensemble</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">forest</span> <span class="o">=</span> <span class="n">ensemble</span><span class="o">.</span><span class="n">RandomForestRegressor</span><span class="p">()</span>
+<div class="newline"></div><span class="n">forest</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Visualize the feature importance</span>
+<div class="newline"></div><span class="n">importance</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">feature_importances_</span>
+<div class="newline"></div><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">importance</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">importance</span><span class="p">)</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">importance</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../_images/sphx_glr_interpreting_random_forests_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_interpreting_random_forests_001.png" />
+</div>
+<div class="section" id="meaning-and-caveats">
+<h2>3.3. Meaning and Caveats<a class="headerlink" href="#meaning-and-caveats" title="Permalink to this headline">¶</a></h2>
+<p>Feature importances are a proxy for the mutual information between the
+feature and the target, conditionally on the other features. The
+conditioning is difficult and not well controlled.</p>
+<p>Higher-cardinality categorical variables will have larger
+feature importances</p>
+<hr class="docutils" />
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.525 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-interpreting-random-forests-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/interpreting_random_forests.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>
@@ -204,8 +265,9 @@ $(function () {
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">3. Interpreting random forests</a><ul>
-<li><a class="reference internal" href="#feature-importance">3.1. Feature importance</a></li>
-<li><a class="reference internal" href="#caveats">3.2. Caveats</a></li>
+<li><a class="reference internal" href="#data-on-wages">3.1. Data on wages</a></li>
+<li><a class="reference internal" href="#feature-importance">3.2. Feature importance</a></li>
+<li><a class="reference internal" href="#meaning-and-caveats">3.3. Meaning and Caveats</a></li>
 </ul>
 </li>
 </ul>
