@@ -242,7 +242,7 @@ print(cross_val_score(random_choice, digits.data, digits.target))
 # slightly different
 from sklearn.preprocessing import LabelBinarizer
 digit_labels = LabelBinarizer().fit_transform(digits.target)
-print(digit_labels[:10])
+print(digit_labels[:15])
 
 #############################################################
 # The ROC AUC can then be computed for each label
@@ -257,3 +257,16 @@ print(cross_val_score(classifier, digits.data, digit_labels,
 # Such a measure, as in multiclass predictions are exclusive, and not
 # in multilabel.
 
+#############################################################
+# Summary
+# ----------------
+#
+# Class imbalance and the tradeoffs between accepting many misses or many
+# false detections are the things to keep in mind in classification.
+#
+# In single-class settings, ROC AUC and average precision give nice
+# summaries to compare classifiers when the threshold can be varied. In
+# multiclass settings, this is harder, unless we are willing to consider
+# the problem as multiple single-class problems (one-vs-all).
+#
+# ____________________
