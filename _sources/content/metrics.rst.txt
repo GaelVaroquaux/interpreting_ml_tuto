@@ -167,7 +167,7 @@ The default score is explained variance
 
  Out::
 
-    [ 0.79909671  0.84516593  0.81727035]
+    [ 0.79894812  0.84597461  0.83026371]
 
 
 Explained variance is convienent because it has a natural scaling: 1 is
@@ -192,7 +192,7 @@ Not along the Charles river (feature 3)
 
  Out::
 
-    [ 0.76822789  0.89762207  0.82581889]
+    [ 0.80682409  0.88450825  0.82598924]
 
 
 Along the Charles river
@@ -212,7 +212,7 @@ Along the Charles river
 
  Out::
 
-    [ 0.63024554 -0.03537074  0.58345236]
+    [ 0.58349604 -0.54263543  0.7461984 ]
 
 
 So the houses along the Charles are harder to predict?
@@ -241,7 +241,7 @@ Not along the Charles river
 
  Out::
 
-    [-12.15537197  -8.50765414 -15.33496178]
+    [-14.40412229  -7.74785478 -13.19905414]
 
 
 Along the Charles river
@@ -262,7 +262,7 @@ Along the Charles river
 
  Out::
 
-    [ -76.33384167 -132.695325    -77.19796364]
+    [-76.94955    -60.958975   -40.81830909]
 
 
 So the error is larger along the Charles river
@@ -291,7 +291,7 @@ The Mean Absolute Error is useful for this goal
 
  Out::
 
-    [-2.50686391 -2.33946746 -2.61470238]
+    [-2.34017751 -2.26100592 -2.74535714]
 
 
 Summary
@@ -348,7 +348,7 @@ It takes values between 0 and 1, where 1 is perfect prediction
 
  Out::
 
-    [ 0.97166667  0.97328881  0.97826087]
+    [ 0.97333333  0.97161937  0.98327759]
 
 
 However, a stupid classifier can each good prediction wit imbalanced
@@ -359,8 +359,8 @@ classes
 .. code-block:: python
 
     from sklearn.dummy import DummyClassifier
-    dummy = DummyClassifier(strategy='most_frequent')
-    print(cross_val_score(dummy, digits.data, sevens))
+    most_frequent = DummyClassifier(strategy='most_frequent')
+    print(cross_val_score(most_frequent, digits.data, sevens))
 
 
 
@@ -399,7 +399,7 @@ correct
 
  Out::
 
-    [ 0.97826087  0.94545455  0.94545455]
+    [ 0.97674419  1.          0.96078431]
 
 
 Our classifier has a good precision: most of the sevens that it
@@ -412,7 +412,8 @@ defined. Scikit-learn puts it to zero
 
 .. code-block:: python
 
-    print(cross_val_score(dummy, digits.data, sevens, scoring='precision'))
+    print(cross_val_score(most_frequent, digits.data, sevens,
+                          scoring='precision'))
 
 
 
@@ -442,7 +443,7 @@ defined. Scikit-learn puts it to zero
 
  Out::
 
-    [ 0.7         0.83333333  0.89830508]
+    [ 0.68333333  0.78333333  0.89830508]
 
 
 Our recall isn't as good: we miss many sevens
@@ -453,7 +454,7 @@ But predicting the most frequent never predicts sevens:
 
 .. code-block:: python
 
-    print(cross_val_score(dummy, digits.data, sevens, scoring='recall'))
+    print(cross_val_score(most_frequent, digits.data, sevens, scoring='recall'))
 
 
 
@@ -496,13 +497,13 @@ prediction and .5 is chance, independently of class imbalance
 
  Out::
 
-    [ 0.99945988  0.99465059  0.99770447]
+    [ 0.99493827  0.99860853  0.99864784]
 
 
 
 .. code-block:: python
 
-    print(cross_val_score(dummy, digits.data, sevens, scoring='roc_auc'))
+    print(cross_val_score(most_frequent, digits.data, sevens, scoring='roc_auc'))
 
 
 
@@ -519,12 +520,198 @@ prediction and .5 is chance, independently of class imbalance
 Average precision
 ..................
 
+When the classifier exposes its unthresholded decision, another
+interesting metric is the average precision for all recall. Compared to
+ROC AUC it has a more linear behavior for very rare classes. Indeed,
+with very rare classes, small changes in the ROC AUC may mean large
+changes in terms of precision
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(classifier, digits.data, sevens,
+                          scoring='average_precision'))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.95214092  0.95704672  0.99313993]
+
+
+Naive decisions are no longer at .5
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(most_frequent, digits.data, sevens,
+                          scoring='average_precision'))
+
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.1         0.10016694  0.09866221]
+
 
 Multiclass and multilabel settings
 ...................................
 
+To simplify the discussion, we have reduced the problem to detecting
+sevens, but maybe it is more interesting to predict the digit: a
+10-class classification problem
 
-**Total running time of the script:** ( 0 minutes  1.881 seconds)
+**Accuracy** The accuracy is naturally defined in such multiclass settings
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(classifier, digits.data, digits.target))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.89202658  0.90984975  0.90771812]
+
+
+The most frequent label is no longer a very interesting baseline
+
+
+
+.. code-block:: python
+
+    random_choice = DummyClassifier()
+    print(cross_val_score(random_choice, digits.data, digits.target))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.11129568  0.08013356  0.12416107]
+
+
+Precision and recall need the notion of specific class to detect
+(called positive class) and are not that easily defined in these
+settings, hence ROC AUC cannot be easily computed.
+
+These notions are however well defined in a multi-label problem.
+In such a problem, the goal is to assign one or more labels to each
+instance, as opposed to a multiclass. A multiclass problem can be
+turned into a multilabel one, though the prediction will then be
+slightly different
+
+
+
+.. code-block:: python
+
+    from sklearn.preprocessing import LabelBinarizer
+    digit_labels = LabelBinarizer().fit_transform(digits.target)
+    print(digit_labels[:15])
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [[1 0 0 0 0 0 0 0 0 0]
+     [0 1 0 0 0 0 0 0 0 0]
+     [0 0 1 0 0 0 0 0 0 0]
+     [0 0 0 1 0 0 0 0 0 0]
+     [0 0 0 0 1 0 0 0 0 0]
+     [0 0 0 0 0 1 0 0 0 0]
+     [0 0 0 0 0 0 1 0 0 0]
+     [0 0 0 0 0 0 0 1 0 0]
+     [0 0 0 0 0 0 0 0 1 0]
+     [0 0 0 0 0 0 0 0 0 1]
+     [1 0 0 0 0 0 0 0 0 0]
+     [0 1 0 0 0 0 0 0 0 0]
+     [0 0 1 0 0 0 0 0 0 0]
+     [0 0 0 1 0 0 0 0 0 0]
+     [0 0 0 0 1 0 0 0 0 0]]
+
+
+The ROC AUC can then be computed for each label
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(classifier, digits.data, digit_labels,
+                          scoring='roc_auc'))
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.98869139  0.99084568  0.98528605]
+
+
+as well as the average precision
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(classifier, digits.data, digit_labels,
+                          scoring='average_precision'))
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.93230216  0.96280483  0.93353751]
+
+
+Note that the confusion between classes may not well be captured in
+Such a measure, as in multiclass predictions are exclusive, and not
+in multilabel.
+
+
+Summary
+..........
+
+Class imbalance and the tradeoffs between accepting many misses or many
+false detections are the things to keep in mind in classification.
+
+In single-class settings, ROC AUC and average precision give nice
+summaries to compare classifiers when the threshold can be varied. In
+multiclass settings, this is harder, unless we are willing to consider
+the problem as multiple single-class problems (one-vs-all).
+
+____________________
+
+
+**Total running time of the script:** ( 0 minutes  2.393 seconds)
 
 
 .. _sphx_glr_download_content_metrics.py:
