@@ -115,9 +115,11 @@ print(cross_val_score(regressor, data, target,
 # Classification settings
 # -----------------------
 #
-# The Wisconsin breast cancer data
-# .................................
-cancer = datasets.load_breast_cancer()
+# The digits data
+# .................
+digits = datasets.load_digits()
+# Let us try to detect sevens:
+sevens = (digits.target == 7)
 
 from sklearn.ensemble import RandomForestClassifier
 classifier = RandomForestClassifier()
@@ -128,13 +130,14 @@ classifier = RandomForestClassifier()
 #
 # The default metric is the accuracy: the averaged fraction of success.
 # It takes values between 0 and 1, where 1 is perfect prediction
-print(cross_val_score(classifier, cancer.data, cancer.target))
+print(cross_val_score(classifier, digits.data, sevens))
 
 #############################################################
-# However, .5 is not chance on imbalanced classes
+# However, a stupid classifier can each good prediction wit imbalanced
+# classes
 from sklearn.dummy import DummyClassifier
 dummy = DummyClassifier(strategy='most_frequent')
-print(cross_val_score(dummy, cancer.data, cancer.target))
+print(cross_val_score(dummy, digits.data, sevens))
 
 #############################################################
 # Balanced accuracy (available in development scikit-learn versions)
@@ -144,21 +147,50 @@ print(cross_val_score(dummy, cancer.data, cancer.target))
 # Precision, recall, and their shortcomings
 # ..........................................
 #
-# In some application, a false detection or a miss have different
-# implications
+# We can measure separately false detection and misses
 #
-# Precision counts the ratio of detections that are correct
-print(cross_val_score(classifier, cancer.data, cancer.target,
+# **Precision**: Precision counts the ratio of detections that are
+# correct
+print(cross_val_score(classifier, digits.data, sevens,
                       scoring='precision'))
+#############################################################
+# Our classifier has a good precision: most of the sevens that it
+# predicts are really sevens.
+#
+# As predicting the most frequent never predicts sevens, precision is ill
+# defined. Scikit-learn puts it to zero
+print(cross_val_score(dummy, digits.data, sevens, scoring='precision'))
+
 
 #############################################################
-# Recall counts the fraction of class 1 actually detected
-print(cross_val_score(classifier, cancer.data, cancer.target,
-                      scoring='recall'))
+# **Recall**: Recall counts the fraction of class 1 actually detected
+print(cross_val_score(classifier, digits.data, sevens, scoring='recall'))
+
+#############################################################
+# Our recall isn't as good: we miss many sevens
+#
+# But predicting the most frequent never predicts sevens:
+print(cross_val_score(dummy, digits.data, sevens, scoring='recall'))
+
+#############################################################
+#
+# **Note** Measuring only the precision without the recall makes no
+# sense, it is easy to maximize one at the cost of the other. Ideally,
+# classifiers should be compared on a precision at a given recall
 
 #############################################################
 # Area under the ROC curve
 # ..........................
+#
+# If the classifier provides a decision function that can be thresholded
+# to control false positives versus false negatives, the ROC curve
+# summarise the different tradeoffs that can be achieved by varying this
+# threshold.
+#
+# Its Area Under the Curve (AUC) is a useful metric where 1 is perfect
+# prediction and .5 is chance, independently of class imbalance
+print(cross_val_score(classifier, digits.data, sevens, scoring='roc_auc'))
+
 
 #############################################################
 # Average precision
