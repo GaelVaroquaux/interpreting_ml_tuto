@@ -8,26 +8,6 @@ Notebooks
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Partial dependency plots ">
-
-.. only:: html
-
-    .. figure:: /content/images/thumb/sphx_glr_partial_dep_plots_thumb.png
-
-        :ref:`sphx_glr_content_partial_dep_plots.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   /content/partial_dep_plots
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="Interpreting random forests ">
 
 .. only:: html
@@ -105,6 +85,26 @@ Notebooks
    :hidden:
 
    /content/cross_validation
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Partial dependency plots consists in evaluating the model prediction while varying one of more ...">
+
+.. only:: html
+
+    .. figure:: /content/images/thumb/sphx_glr_partial_dep_plots_thumb.png
+
+        :ref:`sphx_glr_content_partial_dep_plots.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /content/partial_dep_plots
 
 .. raw:: html
 
