@@ -136,8 +136,8 @@ print(cross_val_score(classifier, digits.data, sevens))
 # However, a stupid classifier can each good prediction wit imbalanced
 # classes
 from sklearn.dummy import DummyClassifier
-dummy = DummyClassifier(strategy='most_frequent')
-print(cross_val_score(dummy, digits.data, sevens))
+most_frequent = DummyClassifier(strategy='most_frequent')
+print(cross_val_score(most_frequent, digits.data, sevens))
 
 #############################################################
 # Balanced accuracy (available in development scikit-learn versions)
@@ -159,7 +159,8 @@ print(cross_val_score(classifier, digits.data, sevens,
 #
 # As predicting the most frequent never predicts sevens, precision is ill
 # defined. Scikit-learn puts it to zero
-print(cross_val_score(dummy, digits.data, sevens, scoring='precision'))
+print(cross_val_score(most_frequent, digits.data, sevens,
+                      scoring='precision'))
 
 
 #############################################################
@@ -170,7 +171,7 @@ print(cross_val_score(classifier, digits.data, sevens, scoring='recall'))
 # Our recall isn't as good: we miss many sevens
 #
 # But predicting the most frequent never predicts sevens:
-print(cross_val_score(dummy, digits.data, sevens, scoring='recall'))
+print(cross_val_score(most_frequent, digits.data, sevens, scoring='recall'))
 
 #############################################################
 #
@@ -192,13 +193,67 @@ print(cross_val_score(dummy, digits.data, sevens, scoring='recall'))
 print(cross_val_score(classifier, digits.data, sevens, scoring='roc_auc'))
 
 #############################################################
-print(cross_val_score(dummy, digits.data, sevens, scoring='roc_auc'))
+print(cross_val_score(most_frequent, digits.data, sevens, scoring='roc_auc'))
 
 
 #############################################################
 # Average precision
 # ..................
+#
+# When the classifier exposes its unthresholded decision, another
+# interesting metric is the average precision for all recall. Compared to
+# ROC AUC it has a more linear behavior for very rare classes. Indeed,
+# with very rare classes, small changes in the ROC AUC may mean large
+# changes in terms of precision
+print(cross_val_score(classifier, digits.data, sevens,
+                      scoring='average_precision'))
+
+#############################################################
+# Naive decisions are no longer at .5
+print(cross_val_score(most_frequent, digits.data, sevens,
+                      scoring='average_precision'))
+
 
 #############################################################
 # Multiclass and multilabel settings
 # ...................................
+#
+# To simplify the discussion, we have reduced the problem to detecting
+# sevens, but maybe it is more interesting to predict the digit: a
+# 10-class classification problem
+#
+# **Accuracy** The accuracy is naturally defined in such multiclass settings
+print(cross_val_score(classifier, digits.data, digits.target))
+
+#############################################################
+# The most frequent label is no longer a very interesting baseline
+random_choice = DummyClassifier()
+print(cross_val_score(random_choice, digits.data, digits.target))
+
+#############################################################
+# Precision and recall need the notion of specific class to detect
+# (called positive class) and are not that easily defined in these
+# settings, hence ROC AUC cannot be easily computed.
+#
+# These notions are however well defined in a multi-label problem.
+# In such a problem, the goal is to assign one or more labels to each
+# instance, as opposed to a multiclass. A multiclass problem can be
+# turned into a multilabel one, though the prediction will then be
+# slightly different
+from sklearn.preprocessing import LabelBinarizer
+digit_labels = LabelBinarizer().fit_transform(digits.target)
+print(digit_labels[:10])
+
+#############################################################
+# The ROC AUC can then be computed for each label
+print(cross_val_score(classifier, digits.data, digit_labels,
+                      scoring='roc_auc'))
+#############################################################
+# as well as the average precision
+print(cross_val_score(classifier, digits.data, digit_labels,
+                      scoring='average_precision'))
+#############################################################
+# Note that the confusion between classes may not well be captured in
+# Such a measure, as in multiclass predictions are exclusive, and not
+# in multilabel.
+
