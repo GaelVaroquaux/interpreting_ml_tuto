@@ -174,7 +174,7 @@ print(cross_val_score(dummy, digits.data, sevens, scoring='recall'))
 
 #############################################################
 #
-# **Note** Measuring only the precision without the recall makes no
+# **Note**: Measuring only the precision without the recall makes no
 # sense, it is easy to maximize one at the cost of the other. Ideally,
 # classifiers should be compared on a precision at a given recall
 
@@ -190,6 +190,9 @@ print(cross_val_score(dummy, digits.data, sevens, scoring='recall'))
 # Its Area Under the Curve (AUC) is a useful metric where 1 is perfect
 # prediction and .5 is chance, independently of class imbalance
 print(cross_val_score(classifier, digits.data, sevens, scoring='roc_auc'))
+
+#############################################################
+print(cross_val_score(dummy, digits.data, sevens, scoring='roc_auc'))
 
 
 #############################################################

@@ -163,7 +163,7 @@ The default score is explained variance
 
  Out::
 
-    [ 0.80324619  0.84559518  0.81148752]
+    [ 0.80283841  0.8367954   0.83993873]
 
 
 Explained variance is convienent because it has a natural scaling: 1 is
@@ -188,7 +188,7 @@ Not along the Charles river (feature 3)
 
  Out::
 
-    [ 0.80867833  0.89181765  0.84522147]
+    [ 0.80602689  0.89345599  0.8376363 ]
 
 
 Along the Charles river
@@ -208,7 +208,7 @@ Along the Charles river
 
  Out::
 
-    [ 0.56119429 -0.20646537  0.82764294]
+    [ 0.5641373  -0.22390645  0.76227924]
 
 
 So the houses along the Charles are harder to predict?
@@ -237,7 +237,7 @@ Not along the Charles river
 
  Out::
 
-    [-11.95921656  -9.12611465 -14.42800955]
+    [-11.74966879  -9.0364293  -14.75852611]
 
 
 Along the Charles river
@@ -258,7 +258,7 @@ Along the Charles river
 
  Out::
 
-    [-66.25676667 -70.9232     -30.93390909]
+    [-77.14865833 -52.42084167 -20.44624545]
 
 
 So the error is larger along the Charles river
@@ -287,7 +287,7 @@ The Mean Absolute Error is useful for this goal
 
  Out::
 
-    [-2.5352071  -2.30721893 -2.72178571]
+    [-2.6052071  -2.29236686 -2.66791667]
 
 
 Summary
@@ -344,7 +344,7 @@ It takes values between 0 and 1, where 1 is perfect prediction
 
  Out::
 
-    [ 0.975       0.97662771  0.99331104]
+    [ 0.96666667  0.95826377  0.98829431]
 
 
 However, a stupid classifier can each good prediction wit imbalanced
@@ -395,7 +395,7 @@ correct
 
  Out::
 
-    [ 0.95555556  0.9787234   1.        ]
+    [ 1.          1.          0.98076923]
 
 
 Our classifier has a good precision: most of the sevens that it
@@ -438,7 +438,7 @@ defined. Scikit-learn puts it to zero
 
  Out::
 
-    [ 0.71666667  0.8         0.88135593]
+    [ 0.7         0.76666667  0.86440678]
 
 
 Our recall isn't as good: we miss many sevens
@@ -462,7 +462,7 @@ But predicting the most frequent never predicts sevens:
     [ 0.  0.  0.]
 
 
-**Note** Measuring only the precision without the recall makes no
+**Note**: Measuring only the precision without the recall makes no
 sense, it is easy to maximize one at the cost of the other. Ideally,
 classifiers should be compared on a precision at a given recall
 
@@ -488,12 +488,28 @@ prediction and .5 is chance, independently of class imbalance
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.98757716  0.9894094   0.99863212]
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(dummy, digits.data, sevens, scoring='roc_auc'))
+
+
+
+
+
 
 .. rst-class:: sphx-glr-script-out
 
  Out::
 
-    [ 0.99396605  0.99390847  0.98900978]
+    [ 0.5  0.5  0.5]
 
 
 Average precision
@@ -504,7 +520,7 @@ Multiclass and multilabel settings
 ...................................
 
 
-**Total running time of the script:** ( 0 minutes  2.075 seconds)
+**Total running time of the script:** ( 0 minutes  2.144 seconds)
 
 
 
