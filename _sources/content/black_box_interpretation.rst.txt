@@ -10,10 +10,85 @@
 Black-box interpretation of models: LIME
 =========================================
 
+See also skater: a more modern variant relying on heavier dependencies
+https://github.com/datascienceinc/Skater
+
+First we need to install lime with the following shell line::
+
+    $ pip install --user lime
+
+Lime uses the notion of "explainers", for different types of data,
+tabular, image, text.
+
+
+
+Regression on tabular data: factors of prices of houses
+--------------------------------------------------------
+
+Load the data, create and fit a regressor
+
+
+
+.. code-block:: python
+
+    from sklearn import datasets, ensemble, model_selection
+
+    boston = datasets.load_boston()
+    X_train, X_test, y_train, y_test = model_selection.train_test_split(
+        boston.data, boston.target)
+
+    regressor = ensemble.RandomForestRegressor()
+    regressor.fit(X_train, y_train)
 
 
 
 
+
+
+
+Inspect predictions for a few houses
+
+For this, separate out the categorical features:
+
+
+
+.. code-block:: python
+
+    import numpy as np
+    categorical_features = [i for i, col in enumerate(boston.data.T)
+                            if np.unique(col).size < 10]
+
+
+
+
+
+
+
+Now use a lime explainer for tabular data
+
+
+
+.. code-block:: python
+
+    from lime.lime_tabular import LimeTabularExplainer
+    explainer = LimeTabularExplainer(X_train,
+        feature_names=boston.feature_names,
+        class_names=['price'],
+        categorical_features=categorical_features,
+        mode='regression')
+
+    # Now explain a prediction
+    exp = explainer.explain_instance(X_test[25], regressor.predict,
+            num_features=10)
+
+    exp.as_pyplot_figure()
+    from matplotlib import pyplot as plt
+    plt.tight_layout()
+
+
+
+.. image:: /content/images/sphx_glr_black_box_interpretation_001.png
+    :class: sphx-glr-single-img
 
 
 
@@ -21,11 +96,57 @@ Black-box interpretation of models: LIME
 
 .. code-block:: python
 
+    print(exp.as_list())
 
-    # Also investigate skater
 
 
-**Total running time of the script:** ( 0 minutes  0.000 seconds)
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [('LSTAT <= 6.75', 8.7194292414954866), ('RM > 6.63', 6.322250413509515), ('TAX <= 280.00', 0.7077605224964284), ('DIS > 5.27', -0.69456697608892226), ('CRIM <= 0.08', -0.62043533637629689), ('AGE <= 44.70', 0.53893682457558401), ('RAD=4', 0.41052961475175387), ('NOX <= 0.45', 0.34974938058307581), ('372.28 < B <= 390.94', 0.14173575014530143), ('INDUS <= 5.04', -0.10459547169760436)]
+
+
+Explain a few more predictions
+
+
+
+.. code-block:: python
+
+    for i in [7, 50, 66]:
+        exp = explainer.explain_instance(X_test[i], regressor.predict,
+                num_features=10)
+        exp.as_pyplot_figure()
+        plt.tight_layout()
+
+
+
+
+
+.. rst-class:: sphx-glr-horizontal
+
+
+    *
+
+      .. image:: /content/images/sphx_glr_black_box_interpretation_002.png
+            :class: sphx-glr-multi-img
+
+    *
+
+      .. image:: /content/images/sphx_glr_black_box_interpretation_003.png
+            :class: sphx-glr-multi-img
+
+    *
+
+      .. image:: /content/images/sphx_glr_black_box_interpretation_004.png
+            :class: sphx-glr-multi-img
+
+
+
+
+**Total running time of the script:** ( 0 minutes  3.138 seconds)
 
 
 .. _sphx_glr_download_content_black_box_interpretation.py:
