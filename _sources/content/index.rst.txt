@@ -108,7 +108,7 @@ Notebooks
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="">
+    <div class="sphx-glr-thumbcontainer" tooltip="Interpreting linear models">
 
 .. only:: html
 
