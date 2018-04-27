@@ -39,8 +39,7 @@ Let us create a simple artificial data
 
 
 
-Characterizing the uncertainty of cross-validation
-...................................................
+One cross-validation gives spread out measures
 
 
 
@@ -162,6 +161,11 @@ fall more than .5% away of the true rate
 
 **Keep in mind that cross-val is a noisy measure**
 
+Importantly, the variance across folds is not a good measure of this
+error, as the different data folds are not independent. For instance,
+doing many random splits will can reduce the variance arbitrarily, but
+does not provide actually new data points
+
 
 Confounding effects and non independence
 -----------------------------------------
@@ -171,7 +175,7 @@ Permutations to measure chance
 -------------------------------
 
 
-**Total running time of the script:** ( 0 minutes  0.340 seconds)
+**Total running time of the script:** ( 0 minutes  0.322 seconds)
 
 
 .. _sphx_glr_download_content_cross_validation.py:

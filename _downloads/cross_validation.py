@@ -22,8 +22,7 @@ data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)])
 classifier = discriminant_analysis.LinearDiscriminantAnalysis()
 
 ###############################################################
-# Characterizing the uncertainty of cross-validation
-# ...................................................
+# One cross-validation gives spread out measures
 from sklearn.model_selection import cross_val_score
 print(cross_val_score(classifier, data, target))
 
@@ -64,6 +63,11 @@ for n in [100, 1000, 10000, 100000]:
 # fall more than .5% away of the true rate
 #
 # **Keep in mind that cross-val is a noisy measure**
+#
+# Importantly, the variance across folds is not a good measure of this
+# error, as the different data folds are not independent. For instance,
+# doing many random splits will can reduce the variance arbitrarily, but
+# does not provide actually new data points
 
 ###############################################################
 # Confounding effects and non independence

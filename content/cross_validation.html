@@ -184,8 +184,7 @@ cross-validation are noisy estimate of the real prediction accuracy</p>
 <div class="newline"></div><span class="n">classifier</span> <span class="o">=</span> <span class="n">discriminant_analysis</span><span class="o">.</span><span class="n">LinearDiscriminantAnalysis</span><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
-<div class="section" id="characterizing-the-uncertainty-of-cross-validation">
-<h3>2.1.1. Characterizing the uncertainty of cross-validation<a class="headerlink" href="#characterizing-the-uncertainty-of-cross-validation" title="Permalink to this headline">¶</a></h3>
+<p>One cross-validation gives spread out measures</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_val_score</span>
 <div class="newline"></div><span class="k">print</span><span class="p">(</span><span class="n">cross_val_score</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">))</span>
 <div class="newline"></div></pre></div>
@@ -249,14 +248,17 @@ for different sample sizes</p>
 <p>At 100 000 samples, 5% of the observed classification accuracy still
 fall more than .5% away of the true rate</p>
 <p><strong>Keep in mind that cross-val is a noisy measure</strong></p>
-</div>
+<p>Importantly, the variance across folds is not a good measure of this
+error, as the different data folds are not independent. For instance,
+doing many random splits will can reduce the variance arbitrarily, but
+does not provide actually new data points</p>
 </div>
 <div class="section" id="confounding-effects-and-non-independence">
 <h2>2.2. Confounding effects and non independence<a class="headerlink" href="#confounding-effects-and-non-independence" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="permutations-to-measure-chance">
 <h2>2.3. Permutations to measure chance<a class="headerlink" href="#permutations-to-measure-chance" title="Permalink to this headline">¶</a></h2>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.340 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.322 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-cross-validation-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/cross_validation.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>
@@ -281,10 +283,7 @@ fall more than .5% away of the true rate</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">2. Cross-validation: some gotchas</a><ul>
-<li><a class="reference internal" href="#the-uncertainty-of-measured-accuracy">2.1. The uncertainty of measured accuracy</a><ul>
-<li><a class="reference internal" href="#characterizing-the-uncertainty-of-cross-validation">2.1.1. Characterizing the uncertainty of cross-validation</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#the-uncertainty-of-measured-accuracy">2.1. The uncertainty of measured accuracy</a></li>
 <li><a class="reference internal" href="#confounding-effects-and-non-independence">2.2. Confounding effects and non independence</a></li>
 <li><a class="reference internal" href="#permutations-to-measure-chance">2.3. Permutations to measure chance</a></li>
 </ul>
