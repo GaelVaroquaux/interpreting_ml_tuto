@@ -168,7 +168,7 @@ The default score is explained variance
 
  Out::
 
-    [ 0.82931291  0.86444028  0.83677762]
+    [ 0.82694643  0.85253877  0.83741138]
 
 
 Explained variance is convienent because it has a natural scaling: 1 is
@@ -193,7 +193,7 @@ Not along the Charles river (feature 3)
 
  Out::
 
-    [ 0.83035919  0.87916182  0.83339392]
+    [ 0.83322162  0.89980524  0.82376006]
 
 
 Along the Charles river
@@ -213,7 +213,7 @@ Along the Charles river
 
  Out::
 
-    [ 0.58696309 -0.10045637  0.75639362]
+    [ 0.57820147 -0.16637666  0.68166276]
 
 
 So the houses along the Charles are harder to predict?
@@ -242,7 +242,7 @@ Not along the Charles river
 
  Out::
 
-    [-14.9439586   -7.64191274 -14.53927134]
+    [-13.46014076  -7.2695     -13.03670764]
 
 
 Along the Charles river
@@ -263,7 +263,7 @@ Along the Charles river
 
  Out::
 
-    [-83.40058333 -71.73003333 -51.11090909]
+    [ -78.55499167 -109.24950833 -126.26929091]
 
 
 So the error is larger along the Charles river
@@ -292,7 +292,7 @@ The Mean Absolute Error is useful for this goal
 
  Out::
 
-    [-2.41680473 -2.28349112 -2.79029762]
+    [-2.40242604 -2.21615385 -2.75047619]
 
 
 Summary
@@ -349,7 +349,7 @@ It takes values between 0 and 1, where 1 is perfect prediction
 
  Out::
 
-    [ 0.96833333  0.97161937  0.98662207]
+    [ 0.975       0.97161937  0.98996656]
 
 
 However, a stupid classifier can each good prediction wit imbalanced
@@ -400,7 +400,7 @@ correct
 
  Out::
 
-    [ 1.          0.97916667  1.        ]
+    [ 1.  1.  1.]
 
 
 Our classifier has a good precision: most of the sevens that it
@@ -444,7 +444,7 @@ defined. Scikit-learn puts it to zero
 
  Out::
 
-    [ 0.73333333  0.75        0.83050847]
+    [ 0.68333333  0.85        0.89830508]
 
 
 Our recall isn't as good: we miss many sevens
@@ -498,7 +498,7 @@ prediction and .5 is chance, independently of class imbalance
 
  Out::
 
-    [ 0.97891975  0.99952072  0.99938681]
+    [ 0.99441358  0.99868584  0.99885224]
 
 
 
@@ -542,7 +542,7 @@ changes in terms of precision
 
  Out::
 
-    [ 0.95375779  0.98295732  0.98281818]
+    [ 0.9428459   0.97449684  0.97616341]
 
 
 Naive decisions are no longer at .5
@@ -589,7 +589,7 @@ sevens, but maybe it is more interesting to predict the digit: a
 
  Out::
 
-    [ 0.89036545  0.88647746  0.90771812]
+    [ 0.89368771  0.91986644  0.90436242]
 
 
 The most frequent label is no longer a very interesting baseline
@@ -609,7 +609,7 @@ The most frequent label is no longer a very interesting baseline
 
  Out::
 
-    [ 0.10299003  0.10183639  0.12248322]
+    [ 0.10299003  0.0884808   0.08221477]
 
 
 Precision and recall need the notion of specific class to detect
@@ -671,7 +671,7 @@ The ROC AUC can then be computed for each label
 
  Out::
 
-    [ 0.98443392  0.9904604   0.98368181]
+    [ 0.9874304   0.9870478   0.98160379]
 
 
 as well as the average precision
@@ -690,7 +690,7 @@ as well as the average precision
 
  Out::
 
-    [ 0.93893199  0.94508469  0.93109864]
+    [ 0.94547594  0.94510265  0.93917088]
 
 
 Note that the confusion between classes may not well be captured in
@@ -712,7 +712,7 @@ the problem as multiple single-class problems (one-vs-all).
 ____________________
 
 
-**Total running time of the script:** ( 0 minutes  2.388 seconds)
+**Total running time of the script:** ( 0 minutes  2.600 seconds)
 
 
 .. _sphx_glr_download_content_01_how_well_01_metrics.py:

@@ -234,7 +234,7 @@ features on each feature. This is hard when features are correlated.</p>
 <div class="newline"></div><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="s1">&#39;WAGE&#39;</span><span class="p">]</span>
 <div class="newline"></div><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">features</span><span class="p">]</span>
 <div class="newline"></div><span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">]</span>
-<div class="newline"></div><span class="n">ridge</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">RidgeCV</span><span class="p">()</span>
+<div class="newline"></div><span class="n">ridge</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html#sklearn.linear_model.RidgeCV" title="View documentation for sklearn.linear_model.RidgeCV"><span class="n">linear_model</span><span class="o">.</span><span class="n">RidgeCV</span></a><span class="p">()</span>
 <div class="newline"></div><span class="n">ridge</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <div class="newline"></div>
 <div class="newline"></div><span class="c1"># Visualize the coefs</span>
@@ -255,7 +255,7 @@ learning is not needs, and statsmodels is a great tool (see the
 </div>
 <div class="section" id="the-effect-of-regularization">
 <h2>2.1.4. The effect of regularization<a class="headerlink" href="#the-effect-of-regularization" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">lasso</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LassoCV</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">lasso</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LassoCV.html#sklearn.linear_model.LassoCV" title="View documentation for sklearn.linear_model.LassoCV"><span class="n">linear_model</span><span class="o">.</span><span class="n">LassoCV</span></a><span class="p">()</span>
 <div class="newline"></div><span class="n">lasso</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <div class="newline"></div>
 <div class="newline"></div><span class="n">coefs</span> <span class="o">=</span> <span class="n">lasso</span><span class="o">.</span><span class="n">coef_</span>
@@ -282,12 +282,12 @@ detections.</p>
 <p>We can do this in a cross-validation loop, using the argument
 &#8220;return_estimator&#8221; of <a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_validate.html#sklearn.model_selection.cross_validate" title="(in scikit-learn v0.19.1)"><code class="xref py py-func docutils literal"><span class="pre">sklearn.model_selection.cross_validate()</span></code></a>
 which has been added in version 0.20 of scikit-learn:</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_validate</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_validate.html#sklearn.model_selection.cross_validate" title="View documentation for sklearn.model_selection.cross_validate"><span class="n">cross_validate</span></a>
 <div class="newline"></div></pre></div>
 </div>
 <div class="section" id="with-the-lasso-estimator">
 <h3>2.1.5.1. With the lasso estimator<a class="headerlink" href="#with-the-lasso-estimator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cv_lasso</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">lasso</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cv_lasso</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_validate.html#sklearn.model_selection.cross_validate" title="View documentation for sklearn.model_selection.cross_validate"><span class="n">cross_validate</span></a><span class="p">(</span><span class="n">lasso</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 <div class="newline"></div><span class="n">coefs_</span> <span class="o">=</span> <span class="p">[</span><span class="n">estimator</span><span class="o">.</span><span class="n">coef_</span> <span class="k">for</span> <span class="n">estimator</span> <span class="ow">in</span> <span class="n">cv_lasso</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]]</span>
 <div class="newline"></div></pre></div>
 </div>
@@ -303,7 +303,7 @@ which has been added in version 0.20 of scikit-learn:</p>
 </div>
 <div class="section" id="with-the-ridge-estimator">
 <h3>2.1.5.2. With the ridge estimator<a class="headerlink" href="#with-the-ridge-estimator" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cv_ridge</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">ridge</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cv_ridge</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_validate.html#sklearn.model_selection.cross_validate" title="View documentation for sklearn.model_selection.cross_validate"><span class="n">cross_validate</span></a><span class="p">(</span><span class="n">ridge</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
 <div class="newline"></div><span class="n">coefs_</span> <span class="o">=</span> <span class="p">[</span><span class="n">estimator</span><span class="o">.</span><span class="n">coef_</span> <span class="k">for</span> <span class="n">estimator</span> <span class="ow">in</span> <span class="n">cv_ridge</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]]</span>
 <div class="newline"></div>
 <div class="newline"></div><span class="n">coefs_</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="View documentation for pandas.DataFrame"><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span></a><span class="p">(</span><span class="n">coefs_</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">features</span><span class="p">)</span>
@@ -336,7 +336,7 @@ still apply. Ideally, we should use a ShuffleSplit cross-validation
 object to sample many times and have a better estimate of the
 posterior, both for the coefficients and the test scores.</p>
 <hr class="docutils" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  3.208 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  3.232 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-02-why-01-interpreting-linear-models-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/01_interpreting_linear_models.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>

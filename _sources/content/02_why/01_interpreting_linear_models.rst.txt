@@ -300,7 +300,7 @@ posterior, both for the coefficients and the test scores.
 _____________________
 
 
-**Total running time of the script:** ( 0 minutes  3.208 seconds)
+**Total running time of the script:** ( 0 minutes  3.232 seconds)
 
 
 .. _sphx_glr_download_content_02_why_01_interpreting_linear_models.py:
