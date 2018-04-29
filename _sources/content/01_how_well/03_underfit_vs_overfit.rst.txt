@@ -10,7 +10,13 @@
 Underfit vs overfit: do I need more data, or more complex models?
 ==================================================================
 
-This is adapted from the scikit-learn chapter in the scipy lectures
+This is adapted from the `scikit-learn chapter
+<http://www.scipy-lectures.org/packages/scikit-learn/index.html>`_ in the
+`scipy lectures <http://www.scipy-lectures.orgl>`_.
+
+.. contents::
+    :local:
+
 
 
 A toy problem: fitting polynomes
@@ -226,8 +232,8 @@ If we apply it to the unseen data, the test error is
     -97767.6303449
 
 
-Learning curves
---------------------------------
+Validation curve varying model complexity
+---------------------------------------------
 
 Fit polynomes of different degrees to a dataset: for too small a
 degree, the model *underfits*, while for too large a degree, it
@@ -235,6 +241,7 @@ overfits.
 
 
 Generate a larger dataset
+............................
 
 
 
@@ -275,8 +282,8 @@ Show the training and validation sets
 
 
 
-Validation curve varying model complexity
-------------------------------------------
+The validation_curve function
+............................................
 
 
 
@@ -390,7 +397,7 @@ of data, tells us whether the model is:
 _____________________________________
 
 
-**Total running time of the script:** ( 0 minutes  0.899 seconds)
+**Total running time of the script:** ( 0 minutes  1.226 seconds)
 
 
 .. _sphx_glr_download_content_01_how_well_03_underfit_vs_overfit.py:

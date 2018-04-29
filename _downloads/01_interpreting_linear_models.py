@@ -95,7 +95,8 @@ plt.tight_layout()
 # When features are not too correlated and their is plenty, this is the
 # well-known regime of standard statistics in linear models. Machine
 # learning is not needs, and statsmodels is a great tool (see the
-# statistics chapter in scipy-lectures)
+# `statistics chapter in scipy-lectures
+# <http://www.scipy-lectures.org/packages/statistics/index.html>`_)
 
 ########################################################
 # The effect of regularization
@@ -116,6 +117,71 @@ plt.tight_layout()
 # When two variables are very correlated, it will put arbitrary one or
 # the other to zero depending on their SNR. Here we can see that age
 # probably overshadowed experience.
+#
+
+########################################################
+# Stability to gauge significance
+# --------------------------------
+#
+# Stability of coefficients when perturbing the data helps giving an
+# informal evaluation of the significance of the coefficients. Note that
+# this is not significance testing in the sense of p-values, as a model
+# that returns coefficients always at one indepently of the data will
+# appear as very stable though it clearly does not control for false
+# detections.
+#
+# We can do this in a cross-validation loop, using the argument
+# "return_estimator" of :func:`sklearn.model_selection.cross_validate`
+# which has been added in version 0.20 of scikit-learn:
+from sklearn.model_selection import cross_validate
+
+########################################################
+# With the lasso estimator
+# .........................
+cv_lasso = cross_validate(lasso, X, y, return_estimator=True, cv=7)
+coefs_ = [estimator.coef_ for estimator in cv_lasso['estimator']]
+
+########################################################
+# Plot the results with seaborn:
+coefs_ = pandas.DataFrame(coefs_, columns=features)
+seaborn.boxplot(data=coefs_, orient='h')
+seaborn.stripplot(data=coefs_, orient='h')
+plt.axvline(x=0, color='.5')  # Add a vertical line at 0
+plt.tight_layout()
+
+########################################################
+# With the ridge estimator
+# ........................
+cv_ridge = cross_validate(ridge, X, y, return_estimator=True, cv=7)
+coefs_ = [estimator.coef_ for estimator in cv_ridge['estimator']]
+
+coefs_ = pandas.DataFrame(coefs_, columns=features)
+seaborn.boxplot(data=coefs_, orient='h')
+seaborn.stripplot(data=coefs_, orient='h')
+plt.axvline(x=0, color='.5') # Add a vertical line at 0
+plt.tight_layout()
+
+########################################################
+# Which is the truth?
+# ....................
+#
+# Note the difference between the lasso and the ridge estimator: we do
+# not have enough data to perfectly estimate conditional relationships,
+# hence the prior (ie the regularization) makes a difference, and its is
+# hard to tell from the data which is the "truth".
+#
+# One reasonnable model-selection criterion is to believe most the model
+# that predicts best. For this, we can inspect the prediction scores
+# obtained via the cross-validation
+scores = pandas.DataFrame({'lasso': cv_lasso['test_score'],
+                           'ridge': cv_ridge['test_score']})
+seaborn.boxplot(data=scores, orient='h')
+seaborn.stripplot(data=scores, orient='h')
+########################################################
+# Note also that the limitations of cross-validation explained previously
+# still apply. Ideally, we should use a ShuffleSplit cross-validation
+# object to sample many times and have a better estimate of the
+# posterior, both for the coefficients and the test scores.
 #
 # _____________________
 

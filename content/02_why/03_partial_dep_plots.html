@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '',
+        VERSION:     'may 2018',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -206,7 +206,7 @@ and 3</p>
 <div class="newline"></div><span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plot_partial_dependence</span><span class="p">(</span><span class="n">clf</span><span class="p">,</span> <span class="n">X_train</span><span class="p">,</span> <span class="n">target_features</span><span class="p">,</span>
 <div class="newline"></div>                                    <span class="n">feature_names</span><span class="o">=</span><span class="n">boston</span><span class="o">.</span><span class="n">feature_names</span><span class="p">,</span>
 <div class="newline"></div>                                    <span class="n">grid_resolution</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="View documentation for matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
 <img alt="../../_images/sphx_glr_03_partial_dep_plots_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_03_partial_dep_plots_001.png" />
@@ -219,7 +219,7 @@ and 3</p>
 <div class="newline"></div>                                        <span class="n">X</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span> <span class="n">grid_resolution</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
 <div class="newline"></div><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <div class="newline"></div><span class="c1"># The 2D coordinate grid (for plotting)</span>
-<div class="newline"></div><span class="n">XX</span><span class="p">,</span> <span class="n">YY</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<div class="newline"></div><span class="n">XX</span><span class="p">,</span> <span class="n">YY</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.meshgrid.html#numpy.meshgrid" title="View documentation for numpy.meshgrid"><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span></a><span class="p">(</span><span class="n">grid</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">grid</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 <div class="newline"></div>
 <div class="newline"></div><span class="c1"># Reshape the partial deps on the grid</span>
 <div class="newline"></div><span class="n">Z</span> <span class="o">=</span> <span class="n">partial_deps</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">grid</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span>
@@ -228,7 +228,7 @@ and 3</p>
 <p>3D plotting</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
 <div class="newline"></div>
-<div class="newline"></div><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<div class="newline"></div><span class="n">fig</span> <span class="o">=</span> <a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="View documentation for matplotlib.pyplot.figure"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">()</span>
 <div class="newline"></div><span class="n">ax</span> <span class="o">=</span> <span class="n">Axes3D</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 <div class="newline"></div><span class="n">surf</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">XX</span><span class="p">,</span> <span class="n">YY</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">rstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">cstride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
 <div class="newline"></div>                        <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">BuPu</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
@@ -237,11 +237,11 @@ and 3</p>
 <div class="newline"></div><span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Partial dependence&#39;</span><span class="p">)</span>
 <div class="newline"></div><span class="c1">#  pretty init view</span>
 <div class="newline"></div><span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span> <span class="n">azim</span><span class="o">=</span><span class="mi">230</span><span class="p">)</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.colorbar.html#matplotlib.pyplot.colorbar" title="View documentation for matplotlib.pyplot.colorbar"><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span><span class="n">surf</span><span class="p">)</span>
 <div class="newline"></div></pre></div>
 </div>
 <img alt="../../_images/sphx_glr_03_partial_dep_plots_002.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_03_partial_dep_plots_002.png" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.722 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.828 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-02-why-03-partial-dep-plots-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/03_partial_dep_plots.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>

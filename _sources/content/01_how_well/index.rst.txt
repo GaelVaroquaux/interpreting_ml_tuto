@@ -55,7 +55,7 @@ ____
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This is adapted from the scikit-learn chapter in the scipy lectures ">
+    <div class="sphx-glr-thumbcontainer" tooltip="This is adapted from the `scikit-learn chapter &lt;http://www.scipy-lectures.org/packages/scikit-l...">
 
 .. only:: html
 
@@ -86,13 +86,13 @@ ____
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Python source code: _python.zip <//home/varoquau/work/papers/talks/2018_pydata_ldn/notes/content/01_how_well/_python.zip>`
+    :download:`Download all examples in Python source code: 01_how_well_python.zip <//home/varoquau/work/papers/talks/2018_pydata_ldn/notes/content/01_how_well/01_how_well_python.zip>`
 
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Jupyter notebooks: _jupyter.zip <//home/varoquau/work/papers/talks/2018_pydata_ldn/notes/content/01_how_well/_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: 01_how_well_jupyter.zip <//home/varoquau/work/papers/talks/2018_pydata_ldn/notes/content/01_how_well/01_how_well_jupyter.zip>`
 
 
 .. only:: html

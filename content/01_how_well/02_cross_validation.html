@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '',
+        VERSION:     'may 2018',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -180,7 +180,7 @@ cross-validation are noisy estimate of the real prediction accuracy</p>
 <p>Let us create a simple artificial data</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">discriminant_analysis</span>
 <div class="newline"></div><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<div class="newline"></div><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<div class="newline"></div><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.random.seed.html#numpy.random.seed" title="View documentation for numpy.random.seed"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span></a><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <div class="newline"></div><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">make_blobs</span><span class="p">(</span><span class="n">centers</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
 <div class="newline"></div><span class="n">classifier</span> <span class="o">=</span> <span class="n">discriminant_analysis</span><span class="o">.</span><span class="n">LinearDiscriminantAnalysis</span><span class="p">()</span>
 <div class="newline"></div></pre></div>
@@ -219,13 +219,13 @@ observed distribution of correct classifications on a set of size
 follows a binomial distribution</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
 <div class="newline"></div><span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-<div class="newline"></div><span class="n">distrib</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">=.</span><span class="mi">7</span><span class="p">)</span>
+<div class="newline"></div><span class="n">distrib</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html#scipy.stats.binom" title="View documentation for scipy.stats.binom"><span class="n">stats</span><span class="o">.</span><span class="n">binom</span></a><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">=.</span><span class="mi">7</span><span class="p">)</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>We can plot it:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">distrib</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)))</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="View documentation for matplotlib.pyplot.figure"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot" title="View documentation for matplotlib.pyplot.plot"><span class="n">plt</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.linspace.html#numpy.linspace" title="View documentation for numpy.linspace"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">distrib</span><span class="o">.</span><span class="n">pmf</span><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">)))</span>
 <div class="newline"></div></pre></div>
 </div>
 <img alt="../../_images/sphx_glr_02_cross_validation_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_02_cross_validation_001.png" />
@@ -234,7 +234,7 @@ upon: iris is a small dataset</p>
 <p>We can look at the interval in which 95% of the observed accuracy lies
 for different sample sizes</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">]:</span>
-<div class="newline"></div>    <span class="n">distrib</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">binom</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">)</span>
+<div class="newline"></div>    <span class="n">distrib</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html#scipy.stats.binom" title="View documentation for scipy.stats.binom"><span class="n">stats</span><span class="o">.</span><span class="n">binom</span></a><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">)</span>
 <div class="newline"></div>    <span class="n">interval</span> <span class="o">=</span> <span class="p">(</span><span class="n">distrib</span><span class="o">.</span><span class="n">isf</span><span class="p">(</span><span class="o">.</span><span class="mo">025</span><span class="p">)</span> <span class="o">-</span> <span class="n">distrib</span><span class="o">.</span><span class="n">isf</span><span class="p">(</span><span class="o">.</span><span class="mi">975</span><span class="p">))</span> <span class="o">/</span> <span class="n">n</span>
 <div class="newline"></div>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Size: {0: 7}  | interval: {1}%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">interval</span><span class="p">))</span>
 <div class="newline"></div></pre></div>
@@ -306,7 +306,7 @@ as cross_val_score</p>
 <div class="newline"></div>  <span class="mf">0.49080882</span>  <span class="mf">0.4185049</span>   <span class="mf">0.47058824</span>  <span class="mf">0.49019608</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.367 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.395 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-01-how-well-02-cross-validation-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/02_cross_validation.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>

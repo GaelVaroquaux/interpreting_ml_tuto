@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '',
+        VERSION:     'may 2018',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -200,14 +200,14 @@ $(function () {
 <div class="newline"></div>
 <div class="newline"></div><span class="n">short_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
 <div class="newline"></div>
-<div class="newline"></div><span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">skipfooter</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="newline"></div><span class="n">data</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html#pandas.read_csv" title="View documentation for pandas.read_csv"><span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span></a><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">skipfooter</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
 <div class="newline"></div>                       <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 <div class="newline"></div><span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">short_names</span>
 <div class="newline"></div>
 <div class="newline"></div><span class="c1"># Log-transform the wages, as they typically increase with</span>
 <div class="newline"></div><span class="c1"># multiplicative factors</span>
 <div class="newline"></div><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<div class="newline"></div><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">])</span>
+<div class="newline"></div><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.log10.html#numpy.log10" title="View documentation for numpy.log10"><span class="n">np</span><span class="o">.</span><span class="n">log10</span></a><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">])</span>
 <div class="newline"></div>
 <div class="newline"></div>
 <div class="newline"></div><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="s1">&#39;WAGE&#39;</span><span class="p">]</span>
@@ -226,9 +226,9 @@ $(function () {
 <div class="newline"></div><span class="c1"># Visualize the feature importance</span>
 <div class="newline"></div><span class="n">importance</span> <span class="o">=</span> <span class="n">forest</span><span class="o">.</span><span class="n">feature_importances_</span>
 <div class="newline"></div><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">importance</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">importance</span><span class="p">)</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">importance</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.barh.html#matplotlib.pyplot.barh" title="View documentation for matplotlib.pyplot.barh"><span class="n">plt</span><span class="o">.</span><span class="n">barh</span></a><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="n">importance</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">importance</span><span class="p">)</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.yticks.html#matplotlib.pyplot.yticks" title="View documentation for matplotlib.pyplot.yticks"><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span></a><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="n">importance</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="View documentation for matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
 <img alt="../../_images/sphx_glr_02_interpreting_random_forests_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_02_interpreting_random_forests_001.png" />
@@ -241,7 +241,7 @@ conditioning is difficult and not well controlled.</p>
 <p>Higher-cardinality categorical variables will have larger
 feature importances</p>
 <hr class="docutils" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.096 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.117 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-02-why-02-interpreting-random-forests-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/02_interpreting_random_forests.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>

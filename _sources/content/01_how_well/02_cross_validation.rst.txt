@@ -244,7 +244,7 @@ as cross_val_score
       0.49080882  0.4185049   0.47058824  0.49019608]
 
 
-**Total running time of the script:** ( 0 minutes  0.367 seconds)
+**Total running time of the script:** ( 0 minutes  0.395 seconds)
 
 
 .. _sphx_glr_download_content_01_how_well_02_cross_validation.py:

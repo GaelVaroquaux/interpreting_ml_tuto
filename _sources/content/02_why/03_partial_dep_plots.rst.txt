@@ -145,7 +145,7 @@ Lower-level partial_dependence function
 
 
 
-**Total running time of the script:** ( 0 minutes  0.722 seconds)
+**Total running time of the script:** ( 0 minutes  0.828 seconds)
 
 
 .. _sphx_glr_download_content_02_why_03_partial_dep_plots.py:

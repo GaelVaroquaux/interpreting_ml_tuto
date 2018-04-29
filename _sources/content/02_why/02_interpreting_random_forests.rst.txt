@@ -108,7 +108,7 @@ feature importances
 ________________________________________________________
 
 
-**Total running time of the script:** ( 0 minutes  0.096 seconds)
+**Total running time of the script:** ( 0 minutes  0.117 seconds)
 
 
 .. _sphx_glr_download_content_02_why_02_interpreting_random_forests.py:

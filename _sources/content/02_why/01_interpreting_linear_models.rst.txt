@@ -137,7 +137,8 @@ should be normalized to the variance of X.
 When features are not too correlated and their is plenty, this is the
 well-known regime of standard statistics in linear models. Machine
 learning is not needs, and statsmodels is a great tool (see the
-statistics chapter in scipy-lectures)
+`statistics chapter in scipy-lectures
+<http://www.scipy-lectures.org/packages/statistics/index.html>`_)
 
 
 The effect of regularization
@@ -172,10 +173,134 @@ When two variables are very correlated, it will put arbitrary one or
 the other to zero depending on their SNR. Here we can see that age
 probably overshadowed experience.
 
+
+
+Stability to gauge significance
+--------------------------------
+
+Stability of coefficients when perturbing the data helps giving an
+informal evaluation of the significance of the coefficients. Note that
+this is not significance testing in the sense of p-values, as a model
+that returns coefficients always at one indepently of the data will
+appear as very stable though it clearly does not control for false
+detections.
+
+We can do this in a cross-validation loop, using the argument
+"return_estimator" of :func:`sklearn.model_selection.cross_validate`
+which has been added in version 0.20 of scikit-learn:
+
+
+
+.. code-block:: python
+
+    from sklearn.model_selection import cross_validate
+
+
+
+
+
+
+
+With the lasso estimator
+.........................
+
+
+
+.. code-block:: python
+
+    cv_lasso = cross_validate(lasso, X, y, return_estimator=True, cv=7)
+    coefs_ = [estimator.coef_ for estimator in cv_lasso['estimator']]
+
+
+
+
+
+
+
+Plot the results with seaborn:
+
+
+
+.. code-block:: python
+
+    coefs_ = pandas.DataFrame(coefs_, columns=features)
+    seaborn.boxplot(data=coefs_, orient='h')
+    seaborn.stripplot(data=coefs_, orient='h')
+    plt.axvline(x=0, color='.5')  # Add a vertical line at 0
+    plt.tight_layout()
+
+
+
+
+.. image:: /content/02_why/images/sphx_glr_01_interpreting_linear_models_004.png
+    :class: sphx-glr-single-img
+
+
+
+
+With the ridge estimator
+........................
+
+
+
+.. code-block:: python
+
+    cv_ridge = cross_validate(ridge, X, y, return_estimator=True, cv=7)
+    coefs_ = [estimator.coef_ for estimator in cv_ridge['estimator']]
+
+    coefs_ = pandas.DataFrame(coefs_, columns=features)
+    seaborn.boxplot(data=coefs_, orient='h')
+    seaborn.stripplot(data=coefs_, orient='h')
+    plt.axvline(x=0, color='.5') # Add a vertical line at 0
+    plt.tight_layout()
+
+
+
+
+.. image:: /content/02_why/images/sphx_glr_01_interpreting_linear_models_005.png
+    :class: sphx-glr-single-img
+
+
+
+
+Which is the truth?
+....................
+
+Note the difference between the lasso and the ridge estimator: we do
+not have enough data to perfectly estimate conditional relationships,
+hence the prior (ie the regularization) makes a difference, and its is
+hard to tell from the data which is the "truth".
+
+One reasonnable model-selection criterion is to believe most the model
+that predicts best. For this, we can inspect the prediction scores
+obtained via the cross-validation
+
+
+
+.. code-block:: python
+
+    scores = pandas.DataFrame({'lasso': cv_lasso['test_score'],
+                               'ridge': cv_ridge['test_score']})
+    seaborn.boxplot(data=scores, orient='h')
+    seaborn.stripplot(data=scores, orient='h')
+
+
+
+.. image:: /content/02_why/images/sphx_glr_01_interpreting_linear_models_006.png
+    :class: sphx-glr-single-img
+
+
+
+
+Note also that the limitations of cross-validation explained previously
+still apply. Ideally, we should use a ShuffleSplit cross-validation
+object to sample many times and have a better estimate of the
+posterior, both for the coefficients and the test scores.
+
 _____________________
 
 
-**Total running time of the script:** ( 0 minutes  1.624 seconds)
+**Total running time of the script:** ( 0 minutes  3.208 seconds)
 
 
 .. _sphx_glr_download_content_02_why_01_interpreting_linear_models.py:

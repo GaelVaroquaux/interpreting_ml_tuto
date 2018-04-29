@@ -147,7 +147,7 @@ Explain a few more predictions
 
 
 
-**Total running time of the script:** ( 0 minutes  1.455 seconds)
+**Total running time of the script:** ( 0 minutes  1.425 seconds)
 
 
 .. _sphx_glr_download_content_02_why_04_black_box_interpretation.py:

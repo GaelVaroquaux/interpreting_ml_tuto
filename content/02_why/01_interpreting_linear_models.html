@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '',
+        VERSION:     'may 2018',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -203,14 +203,14 @@ correlated.</p>
 <div class="newline"></div>
 <div class="newline"></div><span class="n">short_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
 <div class="newline"></div>
-<div class="newline"></div><span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">skipfooter</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="newline"></div><span class="n">data</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html#pandas.read_csv" title="View documentation for pandas.read_csv"><span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span></a><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">skipfooter</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
 <div class="newline"></div>                       <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 <div class="newline"></div><span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">short_names</span>
 <div class="newline"></div>
 <div class="newline"></div><span class="c1"># Log-transform the wages, as they typically increase with</span>
 <div class="newline"></div><span class="c1"># multiplicative factors</span>
 <div class="newline"></div><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<div class="newline"></div><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">])</span>
+<div class="newline"></div><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.log10.html#numpy.log10" title="View documentation for numpy.log10"><span class="n">np</span><span class="o">.</span><span class="n">log10</span></a><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">])</span>
 <div class="newline"></div></pre></div>
 </div>
 </div>
@@ -218,7 +218,7 @@ correlated.</p>
 <h2>2.1.2. The challenge of correlated features<a class="headerlink" href="#the-challenge-of-correlated-features" title="Permalink to this headline">¶</a></h2>
 <p>Plot scatter matrices highlighting different aspects</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span>
-<div class="newline"></div><span class="n">seaborn</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">,</span> <span class="s1">&#39;AGE&#39;</span><span class="p">,</span> <span class="s1">&#39;EDUCATION&#39;</span><span class="p">,</span> <span class="s1">&#39;EXPERIENCE&#39;</span><span class="p">])</span>
+<div class="newline"></div><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.pairplot" title="View documentation for seaborn.pairplot"><span class="n">seaborn</span><span class="o">.</span><span class="n">pairplot</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">,</span> <span class="s1">&#39;AGE&#39;</span><span class="p">,</span> <span class="s1">&#39;EDUCATION&#39;</span><span class="p">,</span> <span class="s1">&#39;EXPERIENCE&#39;</span><span class="p">])</span>
 <div class="newline"></div></pre></div>
 </div>
 <img alt="../../_images/sphx_glr_01_interpreting_linear_models_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_001.png" />
@@ -240,9 +240,9 @@ features on each feature. This is hard when features are correlated.</p>
 <div class="newline"></div><span class="c1"># Visualize the coefs</span>
 <div class="newline"></div><span class="n">coefs</span> <span class="o">=</span> <span class="n">ridge</span><span class="o">.</span><span class="n">coef_</span>
 <div class="newline"></div><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">coefs</span><span class="p">)</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.barh.html#matplotlib.pyplot.barh" title="View documentation for matplotlib.pyplot.barh"><span class="n">plt</span><span class="o">.</span><span class="n">barh</span></a><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">coefs</span><span class="p">)</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.yticks.html#matplotlib.pyplot.yticks" title="View documentation for matplotlib.pyplot.yticks"><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span></a><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="View documentation for matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
 <img alt="../../_images/sphx_glr_01_interpreting_linear_models_002.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_002.png" />
@@ -251,7 +251,7 @@ should be normalized to the variance of X.</p>
 <p>When features are not too correlated and their is plenty, this is the
 well-known regime of standard statistics in linear models. Machine
 learning is not needs, and statsmodels is a great tool (see the
-statistics chapter in scipy-lectures)</p>
+<a class="reference external" href="http://www.scipy-lectures.org/packages/statistics/index.html">statistics chapter in scipy-lectures</a>)</p>
 </div>
 <div class="section" id="the-effect-of-regularization">
 <h2>2.1.4. The effect of regularization<a class="headerlink" href="#the-effect-of-regularization" title="Permalink to this headline">¶</a></h2>
@@ -260,9 +260,9 @@ statistics chapter in scipy-lectures)</p>
 <div class="newline"></div>
 <div class="newline"></div><span class="n">coefs</span> <span class="o">=</span> <span class="n">lasso</span><span class="o">.</span><span class="n">coef_</span>
 <div class="newline"></div><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">coefs</span><span class="p">)</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
-<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.barh.html#matplotlib.pyplot.barh" title="View documentation for matplotlib.pyplot.barh"><span class="n">plt</span><span class="o">.</span><span class="n">barh</span></a><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">coefs</span><span class="p">)</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.yticks.html#matplotlib.pyplot.yticks" title="View documentation for matplotlib.pyplot.yticks"><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span></a><span class="p">(</span><a href="http://docs.scipy.org/doc/numpy/reference/generated/numpy.arange.html#numpy.arange" title="View documentation for numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="View documentation for matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
 <img alt="../../_images/sphx_glr_01_interpreting_linear_models_003.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_003.png" />
@@ -270,8 +270,73 @@ statistics chapter in scipy-lectures)</p>
 <p>When two variables are very correlated, it will put arbitrary one or
 the other to zero depending on their SNR. Here we can see that age
 probably overshadowed experience.</p>
+</div>
+<div class="section" id="stability-to-gauge-significance">
+<h2>2.1.5. Stability to gauge significance<a class="headerlink" href="#stability-to-gauge-significance" title="Permalink to this headline">¶</a></h2>
+<p>Stability of coefficients when perturbing the data helps giving an
+informal evaluation of the significance of the coefficients. Note that
+this is not significance testing in the sense of p-values, as a model
+that returns coefficients always at one indepently of the data will
+appear as very stable though it clearly does not control for false
+detections.</p>
+<p>We can do this in a cross-validation loop, using the argument
+&#8220;return_estimator&#8221; of <a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_validate.html#sklearn.model_selection.cross_validate" title="(in scikit-learn v0.19.1)"><code class="xref py py-func docutils literal"><span class="pre">sklearn.model_selection.cross_validate()</span></code></a>
+which has been added in version 0.20 of scikit-learn:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">cross_validate</span>
+<div class="newline"></div></pre></div>
+</div>
+<div class="section" id="with-the-lasso-estimator">
+<h3>2.1.5.1. With the lasso estimator<a class="headerlink" href="#with-the-lasso-estimator" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cv_lasso</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">lasso</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<div class="newline"></div><span class="n">coefs_</span> <span class="o">=</span> <span class="p">[</span><span class="n">estimator</span><span class="o">.</span><span class="n">coef_</span> <span class="k">for</span> <span class="n">estimator</span> <span class="ow">in</span> <span class="n">cv_lasso</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>Plot the results with seaborn:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">coefs_</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="View documentation for pandas.DataFrame"><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span></a><span class="p">(</span><span class="n">coefs_</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">features</span><span class="p">)</span>
+<div class="newline"></div><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.boxplot" title="View documentation for seaborn.boxplot"><span class="n">seaborn</span><span class="o">.</span><span class="n">boxplot</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">coefs_</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>
+<div class="newline"></div><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.stripplot" title="View documentation for seaborn.stripplot"><span class="n">seaborn</span><span class="o">.</span><span class="n">stripplot</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">coefs_</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.axvline.html#matplotlib.pyplot.axvline" title="View documentation for matplotlib.pyplot.axvline"><span class="n">plt</span><span class="o">.</span><span class="n">axvline</span></a><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;.5&#39;</span><span class="p">)</span>  <span class="c1"># Add a vertical line at 0</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="View documentation for matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_004.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_004.png" />
+</div>
+<div class="section" id="with-the-ridge-estimator">
+<h3>2.1.5.2. With the ridge estimator<a class="headerlink" href="#with-the-ridge-estimator" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cv_ridge</span> <span class="o">=</span> <span class="n">cross_validate</span><span class="p">(</span><span class="n">ridge</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<div class="newline"></div><span class="n">coefs_</span> <span class="o">=</span> <span class="p">[</span><span class="n">estimator</span><span class="o">.</span><span class="n">coef_</span> <span class="k">for</span> <span class="n">estimator</span> <span class="ow">in</span> <span class="n">cv_ridge</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]]</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">coefs_</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="View documentation for pandas.DataFrame"><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span></a><span class="p">(</span><span class="n">coefs_</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">features</span><span class="p">)</span>
+<div class="newline"></div><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.boxplot" title="View documentation for seaborn.boxplot"><span class="n">seaborn</span><span class="o">.</span><span class="n">boxplot</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">coefs_</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>
+<div class="newline"></div><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.stripplot" title="View documentation for seaborn.stripplot"><span class="n">seaborn</span><span class="o">.</span><span class="n">stripplot</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">coefs_</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.axvline.html#matplotlib.pyplot.axvline" title="View documentation for matplotlib.pyplot.axvline"><span class="n">plt</span><span class="o">.</span><span class="n">axvline</span></a><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;.5&#39;</span><span class="p">)</span> <span class="c1"># Add a vertical line at 0</span>
+<div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="View documentation for matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_005.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_005.png" />
+</div>
+<div class="section" id="which-is-the-truth">
+<h3>2.1.5.3. Which is the truth?<a class="headerlink" href="#which-is-the-truth" title="Permalink to this headline">¶</a></h3>
+<p>Note the difference between the lasso and the ridge estimator: we do
+not have enough data to perfectly estimate conditional relationships,
+hence the prior (ie the regularization) makes a difference, and its is
+hard to tell from the data which is the &#8220;truth&#8221;.</p>
+<p>One reasonnable model-selection criterion is to believe most the model
+that predicts best. For this, we can inspect the prediction scores
+obtained via the cross-validation</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="View documentation for pandas.DataFrame"><span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span></a><span class="p">({</span><span class="s1">&#39;lasso&#39;</span><span class="p">:</span> <span class="n">cv_lasso</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">],</span>
+<div class="newline"></div>                           <span class="s1">&#39;ridge&#39;</span><span class="p">:</span> <span class="n">cv_ridge</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">]})</span>
+<div class="newline"></div><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.boxplot" title="View documentation for seaborn.boxplot"><span class="n">seaborn</span><span class="o">.</span><span class="n">boxplot</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">scores</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>
+<div class="newline"></div><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.stripplot" title="View documentation for seaborn.stripplot"><span class="n">seaborn</span><span class="o">.</span><span class="n">stripplot</span></a><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">scores</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_006.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_006.png" />
+<p>Note also that the limitations of cross-validation explained previously
+still apply. Ideally, we should use a ShuffleSplit cross-validation
+object to sample many times and have a better estimate of the
+posterior, both for the coefficients and the test scores.</p>
 <hr class="docutils" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  1.624 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  3.208 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-02-why-01-interpreting-linear-models-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/01_interpreting_linear_models.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>
@@ -283,6 +348,7 @@ probably overshadowed experience.</p>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 <p><div style="clear: both"></div></p>
+</div>
 </div>
 </div>
 
@@ -300,6 +366,12 @@ probably overshadowed experience.</p>
 <li><a class="reference internal" href="#the-challenge-of-correlated-features">2.1.2. The challenge of correlated features</a></li>
 <li><a class="reference internal" href="#coefficients-of-a-linear-model">2.1.3. Coefficients of a linear model</a></li>
 <li><a class="reference internal" href="#the-effect-of-regularization">2.1.4. The effect of regularization</a></li>
+<li><a class="reference internal" href="#stability-to-gauge-significance">2.1.5. Stability to gauge significance</a><ul>
+<li><a class="reference internal" href="#with-the-lasso-estimator">2.1.5.1. With the lasso estimator</a></li>
+<li><a class="reference internal" href="#with-the-ridge-estimator">2.1.5.2. With the ridge estimator</a></li>
+<li><a class="reference internal" href="#which-is-the-truth">2.1.5.3. Which is the truth?</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

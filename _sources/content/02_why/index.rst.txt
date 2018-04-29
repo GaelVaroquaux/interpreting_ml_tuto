@@ -107,13 +107,13 @@ ____
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Python source code: _python.zip <//home/varoquau/work/papers/talks/2018_pydata_ldn/notes/content/02_why/_python.zip>`
+    :download:`Download all examples in Python source code: 02_why_python.zip <//home/varoquau/work/papers/talks/2018_pydata_ldn/notes/content/02_why/02_why_python.zip>`
 
 
 
   .. container:: sphx-glr-download
 
-    :download:`Download all examples in Jupyter notebooks: _jupyter.zip <//home/varoquau/work/papers/talks/2018_pydata_ldn/notes/content/02_why/_jupyter.zip>`
+    :download:`Download all examples in Jupyter notebooks: 02_why_jupyter.zip <//home/varoquau/work/papers/talks/2018_pydata_ldn/notes/content/02_why/02_why_jupyter.zip>`
 
 
 .. only:: html

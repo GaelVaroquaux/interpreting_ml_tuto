@@ -2,7 +2,13 @@
 Underfit vs overfit: do I need more data, or more complex models?
 ==================================================================
 
-This is adapted from the scikit-learn chapter in the scipy lectures
+This is adapted from the `scikit-learn chapter
+<http://www.scipy-lectures.org/packages/scikit-learn/index.html>`_ in the
+`scipy lectures <http://www.scipy-lectures.orgl>`_.
+
+.. contents::
+    :local:
+
 """
 
 ###############################################################
@@ -103,8 +109,8 @@ print(model.score(x[:, np.newaxis], y))
 print(model.score(x_test[:, np.newaxis], y_test))
 
 ###############################################################
-# Learning curves
-# --------------------------------
+# Validation curve varying model complexity
+# ---------------------------------------------
 #
 # Fit polynomes of different degrees to a dataset: for too small a
 # degree, the model *underfits*, while for too large a degree, it
@@ -112,6 +118,7 @@ print(model.score(x_test[:, np.newaxis], y_test))
 
 ############################################################
 # Generate a larger dataset
+# ............................
 np.random.seed(1)
 x = np.random.random(200)
 y = generating_func(x)
@@ -129,8 +136,8 @@ plt.title('The data')
 plt.legend(loc='best')
 
 ############################################################
-# Validation curve varying model complexity
-# ------------------------------------------
+# The validation_curve function
+# ............................................
 from sklearn.model_selection import validation_curve
 
 degrees = np.arange(1, 21)
