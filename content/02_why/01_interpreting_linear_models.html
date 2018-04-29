@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2.1. Interpreting linear models &#8212; Tutorial</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/copybutton.js"></script>
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="2.2. Interpreting random forests" href="02_interpreting_random_forests.html" />
+    <link rel="prev" title="2. Understanding why a classifier predicts" href="index.html" />
+   
+    <link rel="stylesheet"
+	  href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+
+<script type="text/javascript">
+$(function () {
+    // Highlight the table of content as we scroll
+    sections = {},
+    i        = 0,
+    url	 = document.URL.replace(/#.*$/, ""),
+    current_section = 0;
+
+    // Grab positions of our sections
+    $('.headerlink').each(function(){
+        sections[this.href.replace(url, '')] = $(this).offset().top - 50;
+    });
+
+    $(window).scroll(function(event) {
+	var pos   = $(window).scrollTop();
+
+	// Highlight the current section
+	$('a.internal').parent().removeClass('active');
+        for(i in sections){
+            if(sections[i] > pos){
+		break;
+            };
+	    if($('a.internal[href$="' + i + '"]').is(':visible')){
+		current_section = i;
+	    };
+        }
+	$('a.internal[href$="' + current_section + '"]').parent().addClass('active');
+	$('a.internal[href$="' + current_section + '"]').parent().parent().parent().addClass('active');
+	$('a.internal[href$="' + current_section + '"]').parent().parent().parent().parent().parent().addClass('active');
+    });
+
+});
+</script>
+
+
+  </head>
+  <body role="document">
+   <!-- Use the header to add javascript -->
+    
+
+    <script type="text/javascript">
+    // Function to collapse the tip divs
+    function collapse_tip_div(obj){
+	// Update the representation on the tip div based on whether it
+	// has the 'collapsed' css class or not: we only want to
+	// collapse divs that are not already collapsed
+	if($(obj).hasClass("collapsed")) {
+	} else {
+	    $(obj).find("p.summary").remove();
+	    var content = $(obj).text();
+	    var html = $(obj).html();
+
+	    if(content.length > 40) {
+		if ($.browser.msie) {
+		    // We start at '3' to avoid 'tip', as IE
+		    // does not count whitespace
+		    var content = content.substr(3, 50);
+		} else {
+		    // We start at '5' to avoid 'tip '
+		    var content = content.substr(5, 50);
+		}
+	    }
+	    $(obj).html('<p class="summary"><img src="../../_static/plus.png">' + content + '...</p>' + html);
+	}
+    }
+    </script>
+
+    <script type="text/javascript">
+    $(function () {
+	$(".tip")
+	    .click(function(event){
+		$(this).toggleClass("collapsed");
+		// Change state of the global button
+		$('div.related li.transparent').removeClass('transparent')
+		$(this).find("p.summary").remove();
+		if($(this).hasClass("collapsed")) {
+		    var content = $(this).text();
+		    var html = $(this).html();
+
+		    if(content.length > 40) {
+			if ($.browser.msie) {
+			    // We start at '3' to avoid 'tip', as IE
+			    // does not count whitespace
+			    var content = content.substr(3, 50);
+			} else {
+			    // We start at '5' to avoid 'tip '
+			    var content = content.substr(5, 50);
+			}
+		    }
+		    $(this).html('<p class="summary"><img src="../../_static/plus.png">' + content + '...</p>' + html);
+		}
+		if (event.target.tagName.toLowerCase() != "a") {
+                   return true; //Makes links clickable
+		}
+	});
+    });
+    </script>
+
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="02_interpreting_random_forests.html" title="2.2. Interpreting random forests"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="index.html" title="2. Understanding why a classifier predicts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Tutorial</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">2. Understanding why a classifier predicts</a> &#187;</li>
+     
+    <!-- Insert a menu in the navigation bar -->
+    <li class="left">
+	<!-- On click toggle the 'tip' on or off-->
+	<a onclick="$('.tip').each(function (index, obj) {
+			    collapse_tip_div(obj);
+		    });
+		    $('.tip').addClass('collapsed');
+		    $('.left').addClass('transparent');">
+	<img src="../../_static/minus.png"
+         alt="Collapse to compact view" style="padding: 1ex;"/>
+	<span class="hiddenlink">Collapse document to compact view</span>
+    </a></li>
+
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Click <a class="reference internal" href="#sphx-glr-download-content-02-why-01-interpreting-linear-models-py"><span class="std std-ref">here</span></a> to download the full example code or run this example in your browser via Binder</p>
+</div>
+<div class="sphx-glr-example-title section" id="interpreting-linear-models">
+<span id="sphx-glr-content-02-why-01-interpreting-linear-models-py"></span><h1>2.1. Interpreting linear models<a class="headerlink" href="#interpreting-linear-models" title="Permalink to this headline">¶</a></h1>
+<p>Linear models are not that easy to interpret when variables are
+correlated.</p>
+<p>See also the <a class="reference external" href="http://www.scipy-lectures.org/packages/statistics/index.html">statistics chapter</a> of the
+<a class="reference external" href="http://www.scipy-lectures.org">scipy lecture notes</a></p>
+<div class="section" id="data-on-wages">
+<h2>2.1.1. Data on wages<a class="headerlink" href="#data-on-wages" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib</span>
+<div class="newline"></div><span class="kn">import</span> <span class="nn">os</span>
+<div class="newline"></div><span class="kn">import</span> <span class="nn">pandas</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">):</span>
+<div class="newline"></div>    <span class="c1"># Download the file if it is not present</span>
+<div class="newline"></div>    <span class="n">urllib</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="s1">&#39;http://lib.stat.cmu.edu/datasets/CPS_85_Wages&#39;</span><span class="p">,</span>
+<div class="newline"></div>                       <span class="s1">&#39;wages.txt&#39;</span><span class="p">)</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Give names to the columns</span>
+<div class="newline"></div><span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
+<div class="newline"></div>    <span class="s1">&#39;EDUCATION: Number of years of education&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;SOUTH: 1=Person lives in South, 0=Person lives elsewhere&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;SEX: 1=Female, 0=Male&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;EXPERIENCE: Number of years of work experience&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;UNION: 1=Union member, 0=Not union member&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;WAGE: Wage (dollars per hour)&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;AGE: years&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;RACE: 1=Other, 2=Hispanic, 3=White&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;OCCUPATION: 1=Management, 2=Sales, 3=Clerical, 4=Service, 5=Professional, 6=Other&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;SECTOR: 0=Other, 1=Manufacturing, 2=Construction&#39;</span><span class="p">,</span>
+<div class="newline"></div>    <span class="s1">&#39;MARR: 0=Unmarried,  1=Married&#39;</span><span class="p">,</span>
+<div class="newline"></div><span class="p">]</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">short_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">data</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">skipfooter</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="newline"></div>                       <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<div class="newline"></div><span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">short_names</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Log-transform the wages, as they typically increase with</span>
+<div class="newline"></div><span class="c1"># multiplicative factors</span>
+<div class="newline"></div><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<div class="newline"></div><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">])</span>
+<div class="newline"></div></pre></div>
+</div>
+</div>
+<div class="section" id="the-challenge-of-correlated-features">
+<h2>2.1.2. The challenge of correlated features<a class="headerlink" href="#the-challenge-of-correlated-features" title="Permalink to this headline">¶</a></h2>
+<p>Plot scatter matrices highlighting different aspects</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span>
+<div class="newline"></div><span class="n">seaborn</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">,</span> <span class="s1">&#39;AGE&#39;</span><span class="p">,</span> <span class="s1">&#39;EDUCATION&#39;</span><span class="p">,</span> <span class="s1">&#39;EXPERIENCE&#39;</span><span class="p">])</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_001.png" />
+<p>Note that age and experience are highly correlated</p>
+<p>A link between a single feature and the target is a <em>marginal</em> link.</p>
+<p>Univariate feature selection selects on marginal links.</p>
+<p>Linear model compute <em>conditional</em> links: removing the effects of other
+features on each feature. This is hard when features are correlated.</p>
+</div>
+<div class="section" id="coefficients-of-a-linear-model">
+<h2>2.1.3. Coefficients of a linear model<a class="headerlink" href="#coefficients-of-a-linear-model" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
+<div class="newline"></div><span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">c</span> <span class="o">!=</span> <span class="s1">&#39;WAGE&#39;</span><span class="p">]</span>
+<div class="newline"></div><span class="n">X</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">features</span><span class="p">]</span>
+<div class="newline"></div><span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">]</span>
+<div class="newline"></div><span class="n">ridge</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">RidgeCV</span><span class="p">()</span>
+<div class="newline"></div><span class="n">ridge</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Visualize the coefs</span>
+<div class="newline"></div><span class="n">coefs</span> <span class="o">=</span> <span class="n">ridge</span><span class="o">.</span><span class="n">coef_</span>
+<div class="newline"></div><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">coefs</span><span class="p">)</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_002.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_002.png" />
+<p>Note: coefs cannot easily be compared if X is not standardized: they
+should be normalized to the variance of X.</p>
+<p>When features are not too correlated and their is plenty, this is the
+well-known regime of standard statistics in linear models. Machine
+learning is not needs, and statsmodels is a great tool (see the
+statistics chapter in scipy-lectures)</p>
+</div>
+<div class="section" id="the-effect-of-regularization">
+<h2>2.1.4. The effect of regularization<a class="headerlink" href="#the-effect-of-regularization" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">lasso</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LassoCV</span><span class="p">()</span>
+<div class="newline"></div><span class="n">lasso</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">coefs</span> <span class="o">=</span> <span class="n">lasso</span><span class="o">.</span><span class="n">coef_</span>
+<div class="newline"></div><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">coefs</span><span class="p">)</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">coefs</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">features</span><span class="p">)</span>
+<div class="newline"></div><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_003.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_003.png" />
+<p>l1 regularization (sparse models) puts variables to zero.</p>
+<p>When two variables are very correlated, it will put arbitrary one or
+the other to zero depending on their SNR. Here we can see that age
+probably overshadowed experience.</p>
+<hr class="docutils" />
+<p><strong>Total running time of the script:</strong> ( 0 minutes  1.624 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-02-why-01-interpreting-linear-models-py">
+<div class="binder-badge docutils container">
+<a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/01_interpreting_linear_models.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>
+</div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/01_interpreting_linear_models.py" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">01_interpreting_linear_models.py</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/01_interpreting_linear_models.ipynb" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">01_interpreting_linear_models.ipynb</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<p><div style="clear: both"></div></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+	<div class="sidebartoc">
+  <h3><a href="../../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2.1. Interpreting linear models</a><ul>
+<li><a class="reference internal" href="#data-on-wages">2.1.1. Data on wages</a></li>
+<li><a class="reference internal" href="#the-challenge-of-correlated-features">2.1.2. The challenge of correlated features</a></li>
+<li><a class="reference internal" href="#coefficients-of-a-linear-model">2.1.3. Coefficients of a linear model</a></li>
+<li><a class="reference internal" href="#the-effect-of-regularization">2.1.4. The effect of regularization</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+
+    <div class="script_container">
+    <script>
+    (function() {
+	var cx = '004523248466141510607:hgv2yimrahw';
+	var gcse = document.createElement('script');
+	gcse.type = 'text/javascript';
+	gcse.async = true;
+	gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+	    '//cse.google.com/cse.js?cx=' + cx;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(gcse, s);
+    })();
+    </script>
+    <gcse:search></gcse:search>
+    </div>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="02_interpreting_random_forests.html" title="2.2. Interpreting random forests"
+             >next</a></li>
+        <li class="right" >
+          <a href="index.html" title="2. Understanding why a classifier predicts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Tutorial</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >2. Understanding why a classifier predicts</a> &#187;</li>
+     
+    <!-- Insert a menu in the navigation bar -->
+    <li class="left">
+	<!-- On click toggle the 'tip' on or off-->
+	<a onclick="$('.tip').each(function (index, obj) {
+			    collapse_tip_div(obj);
+		    });
+		    $('.tip').addClass('collapsed');
+		    $('.left').addClass('transparent');">
+	<img src="../../_static/minus.png"
+         alt="Collapse to compact view" style="padding: 1ex;"/>
+	<span class="hiddenlink">Collapse document to compact view</span>
+    </a></li>
+
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

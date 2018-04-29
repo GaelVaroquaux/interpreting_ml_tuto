@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. Understanding why a classifier predicts &#8212; Tutorial</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/copybutton.js"></script>
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="2.1. Interpreting linear models" href="01_interpreting_linear_models.html" />
+    <link rel="prev" title="1.3. Underfit vs overfit: do I need more data, or more complex models?" href="../01_how_well/03_underfit_vs_overfit.html" />
+   
+    <link rel="stylesheet"
+	  href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+
+<script type="text/javascript">
+$(function () {
+    // Highlight the table of content as we scroll
+    sections = {},
+    i        = 0,
+    url	 = document.URL.replace(/#.*$/, ""),
+    current_section = 0;
+
+    // Grab positions of our sections
+    $('.headerlink').each(function(){
+        sections[this.href.replace(url, '')] = $(this).offset().top - 50;
+    });
+
+    $(window).scroll(function(event) {
+	var pos   = $(window).scrollTop();
+
+	// Highlight the current section
+	$('a.internal').parent().removeClass('active');
+        for(i in sections){
+            if(sections[i] > pos){
+		break;
+            };
+	    if($('a.internal[href$="' + i + '"]').is(':visible')){
+		current_section = i;
+	    };
+        }
+	$('a.internal[href$="' + current_section + '"]').parent().addClass('active');
+	$('a.internal[href$="' + current_section + '"]').parent().parent().parent().addClass('active');
+	$('a.internal[href$="' + current_section + '"]').parent().parent().parent().parent().parent().addClass('active');
+    });
+
+});
+</script>
+
+
+  </head>
+  <body role="document">
+   <!-- Use the header to add javascript -->
+    
+
+    <script type="text/javascript">
+    // Function to collapse the tip divs
+    function collapse_tip_div(obj){
+	// Update the representation on the tip div based on whether it
+	// has the 'collapsed' css class or not: we only want to
+	// collapse divs that are not already collapsed
+	if($(obj).hasClass("collapsed")) {
+	} else {
+	    $(obj).find("p.summary").remove();
+	    var content = $(obj).text();
+	    var html = $(obj).html();
+
+	    if(content.length > 40) {
+		if ($.browser.msie) {
+		    // We start at '3' to avoid 'tip', as IE
+		    // does not count whitespace
+		    var content = content.substr(3, 50);
+		} else {
+		    // We start at '5' to avoid 'tip '
+		    var content = content.substr(5, 50);
+		}
+	    }
+	    $(obj).html('<p class="summary"><img src="../../_static/plus.png">' + content + '...</p>' + html);
+	}
+    }
+    </script>
+
+    <script type="text/javascript">
+    $(function () {
+	$(".tip")
+	    .click(function(event){
+		$(this).toggleClass("collapsed");
+		// Change state of the global button
+		$('div.related li.transparent').removeClass('transparent')
+		$(this).find("p.summary").remove();
+		if($(this).hasClass("collapsed")) {
+		    var content = $(this).text();
+		    var html = $(this).html();
+
+		    if(content.length > 40) {
+			if ($.browser.msie) {
+			    // We start at '3' to avoid 'tip', as IE
+			    // does not count whitespace
+			    var content = content.substr(3, 50);
+			} else {
+			    // We start at '5' to avoid 'tip '
+			    var content = content.substr(5, 50);
+			}
+		    }
+		    $(this).html('<p class="summary"><img src="../../_static/plus.png">' + content + '...</p>' + html);
+		}
+		if (event.target.tagName.toLowerCase() != "a") {
+                   return true; //Makes links clickable
+		}
+	});
+    });
+    </script>
+
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="01_interpreting_linear_models.html" title="2.1. Interpreting linear models"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../01_how_well/03_underfit_vs_overfit.html" title="1.3. Underfit vs overfit: do I need more data, or more complex models?"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Tutorial</a> &#187;</li>
+     
+    <!-- Insert a menu in the navigation bar -->
+    <li class="left">
+	<!-- On click toggle the 'tip' on or off-->
+	<a onclick="$('.tip').each(function (index, obj) {
+			    collapse_tip_div(obj);
+		    });
+		    $('.tip').addClass('collapsed');
+		    $('.left').addClass('transparent');">
+	<img src="../../_static/minus.png"
+         alt="Collapse to compact view" style="padding: 1ex;"/>
+	<span class="hiddenlink">Collapse document to compact view</span>
+    </a></li>
+
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="understanding-why-a-classifier-predicts">
+<h1>2. Understanding why a classifier predicts<a class="headerlink" href="#understanding-why-a-classifier-predicts" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="01_interpreting_linear_models.html">2.1. Interpreting linear models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_interpreting_linear_models.html#data-on-wages">2.1.1. Data on wages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_interpreting_linear_models.html#the-challenge-of-correlated-features">2.1.2. The challenge of correlated features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_interpreting_linear_models.html#coefficients-of-a-linear-model">2.1.3. Coefficients of a linear model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01_interpreting_linear_models.html#the-effect-of-regularization">2.1.4. The effect of regularization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02_interpreting_random_forests.html">2.2. Interpreting random forests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_interpreting_random_forests.html#data-on-wages">2.2.1. Data on wages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_interpreting_random_forests.html#feature-importance">2.2.2. Feature importance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_interpreting_random_forests.html#meaning-and-caveats">2.2.3. Meaning and Caveats</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03_partial_dep_plots.html">2.3. Partial dependency plots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_partial_dep_plots.html#all-in-one-plotting-function">2.3.1. All-in-one plotting function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_partial_dep_plots.html#lower-level-partial-dependence-function">2.3.2. Lower-level partial_dependence function</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="04_black_box_interpretation.html">2.4. Black-box interpretation of models: LIME</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="04_black_box_interpretation.html#regression-on-tabular-data-factors-of-prices-of-houses">2.4.1. Regression on tabular data: factors of prices of houses</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="sphx-glr-thumbcontainer" tooltip="Linear models are not that easy to interpret when variables are correlated."><div class="figure" id="id1">
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_thumb.png" src="../../_images/sphx_glr_01_interpreting_linear_models_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="01_interpreting_linear_models.html#sphx-glr-content-02-why-01-interpreting-linear-models-py"><span class="std std-ref">Interpreting linear models</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Interpreting random forests "><div class="figure" id="id2">
+<img alt="../../_images/sphx_glr_02_interpreting_random_forests_thumb.png" src="../../_images/sphx_glr_02_interpreting_random_forests_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="02_interpreting_random_forests.html#sphx-glr-content-02-why-02-interpreting-random-forests-py"><span class="std std-ref">Interpreting random forests</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Partial dependency plots consists in evaluating the model prediction while varying one of more ..."><div class="figure" id="id3">
+<img alt="../../_images/sphx_glr_03_partial_dep_plots_thumb.png" src="../../_images/sphx_glr_03_partial_dep_plots_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="03_partial_dep_plots.html#sphx-glr-content-02-why-03-partial-dep-plots-py"><span class="std std-ref">Partial dependency plots</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="See also skater: a more modern variant relying on heavier dependencies https://github.com/datas..."><div class="figure" id="id4">
+<img alt="../../_images/sphx_glr_04_black_box_interpretation_thumb.png" src="../../_images/sphx_glr_04_black_box_interpretation_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="04_black_box_interpretation.html#sphx-glr-content-02-why-04-black-box-interpretation-py"><span class="std std-ref">Black-box interpretation of models: LIME</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div style='clear:both'></div><div class="sphx-glr-footer class sphx-glr-footer-gallery docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/_python1.zip" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">_python.zip</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/_jupyter1.zip" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Jupyter</span> <span class="pre">notebooks:</span> <span class="pre">_jupyter.zip</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<p><div style="clear: both"></div></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+	<div class="sidebartoc"></div>
+
+
+
+    <div class="script_container">
+    <script>
+    (function() {
+	var cx = '004523248466141510607:hgv2yimrahw';
+	var gcse = document.createElement('script');
+	gcse.type = 'text/javascript';
+	gcse.async = true;
+	gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+	    '//cse.google.com/cse.js?cx=' + cx;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(gcse, s);
+    })();
+    </script>
+    <gcse:search></gcse:search>
+    </div>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="01_interpreting_linear_models.html" title="2.1. Interpreting linear models"
+             >next</a></li>
+        <li class="right" >
+          <a href="../01_how_well/03_underfit_vs_overfit.html" title="1.3. Underfit vs overfit: do I need more data, or more complex models?"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Tutorial</a> &#187;</li>
+     
+    <!-- Insert a menu in the navigation bar -->
+    <li class="left">
+	<!-- On click toggle the 'tip' on or off-->
+	<a onclick="$('.tip').each(function (index, obj) {
+			    collapse_tip_div(obj);
+		    });
+		    $('.tip').addClass('collapsed');
+		    $('.left').addClass('transparent');">
+	<img src="../../_static/minus.png"
+         alt="Collapse to compact view" style="padding: 1ex;"/>
+	<span class="hiddenlink">Collapse document to compact view</span>
+    </a></li>
+
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>

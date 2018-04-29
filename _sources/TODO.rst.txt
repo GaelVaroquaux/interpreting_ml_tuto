@@ -1,0 +1,9 @@
+
+* Links to scipy-lectures
+* With LIME:
+  - Looks at interpretation of samples with correct predictions, verus incorrect
+  predictions
+  - Limitations of LIME (it is often unstable because the estimation of
+  the local linear approximation is hard)
+  - ELI5 as an alternative
+

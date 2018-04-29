@@ -2,31 +2,15 @@
 
 |
 
+.. tune_toc.rst contents javascript to fold the TOC
 
-A. Measuring how well a classifier predicts
-=============================================
+.. include:: tune_toc.rst
+
 
 .. toctree::
    :numbered:
 
-   content/metrics.rst
-   content/cross_validation.rst
-   content/underfit_vs_overfit.rst
+   content/01_how_well/index.rst
+   content/02_why/index.rst
 
-B. Understanding why a classifier predicts
-===========================================
-
-.. toctree::
-   :numbered:
-
-   content/black_box_interpretation.rst
-   content/interpreting_linear_models.rst
-   content/interpreting_random_forests.rst
-   content/partial_dep_plots.rst
-
-_______________________________
-
-
-.. include:: content/index.rst
-   :start-line: 1
 

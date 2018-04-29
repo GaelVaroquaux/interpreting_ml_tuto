@@ -1,0 +1,306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1. Measuring how well a model predicts &#8212; Tutorial</title>
+    
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/copybutton.js"></script>
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="1.1. Metrics to judge the sucess of a model" href="01_metrics.html" />
+    <link rel="prev" title="Understanding and diagnosing your machine-learning models" href="../../index.html" />
+   
+    <link rel="stylesheet"
+	  href="https://unpkg.com/purecss@1.0.0/build/base-min.css">
+
+<script type="text/javascript">
+$(function () {
+    // Highlight the table of content as we scroll
+    sections = {},
+    i        = 0,
+    url	 = document.URL.replace(/#.*$/, ""),
+    current_section = 0;
+
+    // Grab positions of our sections
+    $('.headerlink').each(function(){
+        sections[this.href.replace(url, '')] = $(this).offset().top - 50;
+    });
+
+    $(window).scroll(function(event) {
+	var pos   = $(window).scrollTop();
+
+	// Highlight the current section
+	$('a.internal').parent().removeClass('active');
+        for(i in sections){
+            if(sections[i] > pos){
+		break;
+            };
+	    if($('a.internal[href$="' + i + '"]').is(':visible')){
+		current_section = i;
+	    };
+        }
+	$('a.internal[href$="' + current_section + '"]').parent().addClass('active');
+	$('a.internal[href$="' + current_section + '"]').parent().parent().parent().addClass('active');
+	$('a.internal[href$="' + current_section + '"]').parent().parent().parent().parent().parent().addClass('active');
+    });
+
+});
+</script>
+
+
+  </head>
+  <body role="document">
+   <!-- Use the header to add javascript -->
+    
+
+    <script type="text/javascript">
+    // Function to collapse the tip divs
+    function collapse_tip_div(obj){
+	// Update the representation on the tip div based on whether it
+	// has the 'collapsed' css class or not: we only want to
+	// collapse divs that are not already collapsed
+	if($(obj).hasClass("collapsed")) {
+	} else {
+	    $(obj).find("p.summary").remove();
+	    var content = $(obj).text();
+	    var html = $(obj).html();
+
+	    if(content.length > 40) {
+		if ($.browser.msie) {
+		    // We start at '3' to avoid 'tip', as IE
+		    // does not count whitespace
+		    var content = content.substr(3, 50);
+		} else {
+		    // We start at '5' to avoid 'tip '
+		    var content = content.substr(5, 50);
+		}
+	    }
+	    $(obj).html('<p class="summary"><img src="../../_static/plus.png">' + content + '...</p>' + html);
+	}
+    }
+    </script>
+
+    <script type="text/javascript">
+    $(function () {
+	$(".tip")
+	    .click(function(event){
+		$(this).toggleClass("collapsed");
+		// Change state of the global button
+		$('div.related li.transparent').removeClass('transparent')
+		$(this).find("p.summary").remove();
+		if($(this).hasClass("collapsed")) {
+		    var content = $(this).text();
+		    var html = $(this).html();
+
+		    if(content.length > 40) {
+			if ($.browser.msie) {
+			    // We start at '3' to avoid 'tip', as IE
+			    // does not count whitespace
+			    var content = content.substr(3, 50);
+			} else {
+			    // We start at '5' to avoid 'tip '
+			    var content = content.substr(5, 50);
+			}
+		    }
+		    $(this).html('<p class="summary"><img src="../../_static/plus.png">' + content + '...</p>' + html);
+		}
+		if (event.target.tagName.toLowerCase() != "a") {
+                   return true; //Makes links clickable
+		}
+	});
+    });
+    </script>
+
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="01_metrics.html" title="1.1. Metrics to judge the sucess of a model"
+             accesskey="N">next</a></li>
+        <li class="right" >
+          <a href="../../index.html" title="Understanding and diagnosing your machine-learning models"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Tutorial</a> &#187;</li>
+     
+    <!-- Insert a menu in the navigation bar -->
+    <li class="left">
+	<!-- On click toggle the 'tip' on or off-->
+	<a onclick="$('.tip').each(function (index, obj) {
+			    collapse_tip_div(obj);
+		    });
+		    $('.tip').addClass('collapsed');
+		    $('.left').addClass('transparent');">
+	<img src="../../_static/minus.png"
+         alt="Collapse to compact view" style="padding: 1ex;"/>
+	<span class="hiddenlink">Collapse document to compact view</span>
+    </a></li>
+
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="measuring-how-well-a-model-predicts">
+<h1>1. Measuring how well a model predicts<a class="headerlink" href="#measuring-how-well-a-model-predicts" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="01_metrics.html">1.1. Metrics to judge the sucess of a model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_metrics.html#regression-settings">1.1.1. Regression settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_metrics.html#the-boston-housing-data">1.1.1.1. The Boston housing data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_metrics.html#explained-variance-vs-mean-square-error">1.1.1.2. Explained variance vs Mean Square Error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_metrics.html#mean-squared-error-versus-mean-absolute-error">1.1.1.3. Mean Squared Error versus Mean Absolute Error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_metrics.html#summary">1.1.1.4. Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="01_metrics.html#classification-settings">1.1.2. Classification settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_metrics.html#the-digits-data">1.1.2.1. The digits data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_metrics.html#accuracy-and-its-shortcomings">1.1.2.2. Accuracy and its shortcomings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_metrics.html#precision-recall-and-their-shortcomings">1.1.2.3. Precision, recall, and their shortcomings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_metrics.html#area-under-the-roc-curve">1.1.2.4. Area under the ROC curve</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_metrics.html#average-precision">1.1.2.5. Average precision</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_metrics.html#multiclass-and-multilabel-settings">1.1.2.6. Multiclass and multilabel settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_metrics.html#id1">1.1.2.7. Summary</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02_cross_validation.html">1.2. Cross-validation: some gotchas</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_cross_validation.html#the-uncertainty-of-measured-accuracy">1.2.1. The uncertainty of measured accuracy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_cross_validation.html#confounding-effects-and-non-independence">1.2.2. Confounding effects and non independence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_cross_validation.html#measuring-baselines-and-chance">1.2.3. Measuring baselines and chance</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="03_underfit_vs_overfit.html">1.3. Underfit vs overfit: do I need more data, or more complex models?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="03_underfit_vs_overfit.html#a-toy-problem-fitting-polynomes">1.3.1. A toy problem: fitting polynomes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_underfit_vs_overfit.html#data-generation-model">1.3.1.1. Data generation model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_underfit_vs_overfit.html#polynomial-regression">1.3.1.2. Polynomial regression</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_underfit_vs_overfit.html#train-error-versus-test-error">1.3.2. Train error versus test error</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_underfit_vs_overfit.html#underfit-high-bias">1.3.2.1. Underfit: high bias</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_underfit_vs_overfit.html#overfit-high-variance">1.3.2.2. Overfit: high variance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_underfit_vs_overfit.html#learning-curves">1.3.3. Learning curves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_underfit_vs_overfit.html#validation-curve-varying-model-complexity">1.3.4. Validation curve varying model complexity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_underfit_vs_overfit.html#learning-curves-varying-the-amount-of-data">1.3.5. Learning curves: varying the amount of data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_underfit_vs_overfit.html#summary">1.3.6. Summary</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<hr class="docutils" />
+<div class="sphx-glr-thumbcontainer" tooltip="Pro &amp; cons of various performance metrics."><div class="figure" id="id1">
+<img alt="../../_images/sphx_glr_01_metrics_thumb.png" src="../../_images/sphx_glr_01_metrics_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="01_metrics.html#sphx-glr-content-01-how-well-01-metrics-py"><span class="std std-ref">Metrics to judge the sucess of a model</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Cross-validation is the ubiquitous test of a machine learning model. Yet many things can go wro..."><div class="figure" id="id2">
+<img alt="../../_images/sphx_glr_02_cross_validation_thumb.png" src="../../_images/sphx_glr_02_cross_validation_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="02_cross_validation.html#sphx-glr-content-01-how-well-02-cross-validation-py"><span class="std std-ref">Cross-validation: some gotchas</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="This is adapted from the scikit-learn chapter in the scipy lectures "><div class="figure" id="id3">
+<img alt="../../_images/sphx_glr_03_underfit_vs_overfit_thumb.png" src="../../_images/sphx_glr_03_underfit_vs_overfit_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="03_underfit_vs_overfit.html#sphx-glr-content-01-how-well-03-underfit-vs-overfit-py"><span class="std std-ref">Underfit vs overfit: do I need more data, or more complex models?</span></a></span></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div style='clear:both'></div><div class="sphx-glr-footer class sphx-glr-footer-gallery docutils container">
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/_python.zip" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">_python.zip</span></code></a></div>
+<div class="sphx-glr-download docutils container">
+<a class="reference download internal" href="../../_downloads/_jupyter.zip" download=""><code class="xref download docutils literal"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Jupyter</span> <span class="pre">notebooks:</span> <span class="pre">_jupyter.zip</span></code></a></div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
+<p><div style="clear: both"></div></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+	<div class="sidebartoc"></div>
+
+
+
+    <div class="script_container">
+    <script>
+    (function() {
+	var cx = '004523248466141510607:hgv2yimrahw';
+	var gcse = document.createElement('script');
+	gcse.type = 'text/javascript';
+	gcse.async = true;
+	gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+	    '//cse.google.com/cse.js?cx=' + cx;
+	var s = document.getElementsByTagName('script')[0];
+	s.parentNode.insertBefore(gcse, s);
+    })();
+    </script>
+    <gcse:search></gcse:search>
+    </div>
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="01_metrics.html" title="1.1. Metrics to judge the sucess of a model"
+             >next</a></li>
+        <li class="right" >
+          <a href="../../index.html" title="Understanding and diagnosing your machine-learning models"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Tutorial</a> &#187;</li>
+     
+    <!-- Insert a menu in the navigation bar -->
+    <li class="left">
+	<!-- On click toggle the 'tip' on or off-->
+	<a onclick="$('.tip').each(function (index, obj) {
+			    collapse_tip_div(obj);
+		    });
+		    $('.tip').addClass('collapsed');
+		    $('.left').addClass('transparent');">
+	<img src="../../_static/minus.png"
+         alt="Collapse to compact view" style="padding: 1ex;"/>
+	<span class="hiddenlink">Collapse document to compact view</span>
+    </a></li>
+
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright .
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>
