@@ -5,6 +5,7 @@ Metrics to judge the sucess of a model
 Pro & cons of various performance metrics.
 
 .. contents::
+    :local:
 
 The simple way to use a scoring metric during cross-validation is
 via the `scoring` parameter of
