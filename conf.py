@@ -45,10 +45,15 @@ extensions = [
 
 doctest_test_doctest_blocks = 'true'
 
+
+from sphinx_gallery.sorting import FileNameSortKey
+
 sphinx_gallery_conf = {
-    'examples_dirs': ['src',
+    'examples_dirs': ['src/01_how_well/',
+                      'src/02_why/',
                      ],
-    'gallery_dirs': ['content',
+    'gallery_dirs': ['content/01_how_well/',
+                     'content/02_why/'
                      ],
     'doc_module': 'tutorial',
     'reference_url': {
@@ -63,6 +68,7 @@ sphinx_gallery_conf = {
         },
     'backreferences_dir': False,
     'filename_pattern': '.*',
+    'within_subsection_order': FileNameSortKey,
     'binder': {'org': 'gaelvaroquaux',
                'repo': 'interpreting_ml_tuto',
                'url': 'https://mybinder.org',

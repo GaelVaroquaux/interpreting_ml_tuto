@@ -5,7 +5,9 @@ Interpreting linear models
 Linear models are not that easy to interpret when variables are
 correlated.
 
-See also the statistics chapter of the scipy lecture notes
+See also the `statistics chapter
+<http://www.scipy-lectures.org/packages/statistics/index.html>`_ of the
+`scipy lecture notes <http://www.scipy-lectures.org>`_
 
 """
 
