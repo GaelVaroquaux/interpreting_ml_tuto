@@ -43,9 +43,11 @@ from sphinx_gallery.sorting import FileNameSortKey
 sphinx_gallery_conf = {
     'examples_dirs': ['src/01_how_well',
                       'src/02_why',
+                      'src/03_figures',
                      ],
     'gallery_dirs': ['content/01_how_well',
-                     'content/02_why'
+                     'content/02_why',
+                     'content/03_figures',
                      ],
     'doc_module': 'tutorial',
     'reference_url': {

@@ -12,5 +12,6 @@
 
    content/01_how_well/index.rst
    content/02_why/index.rst
+   content/03_figures/index.rst
 
 
