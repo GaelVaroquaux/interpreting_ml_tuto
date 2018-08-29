@@ -40,6 +40,11 @@ for _ in range(10):
     print(cross_val_score(classifier, data, target))
 
 ###############################################################
+# Clearly there are variations that happen based on the random ordering
+# and split of the data. These variations cannot be interesting
+# properties of the data or of the models. They are noise.
+
+###############################################################
 # A simple probabilistic model
 # .............................
 #
