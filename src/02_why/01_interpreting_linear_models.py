@@ -14,14 +14,20 @@ See also the `statistics chapter
 #######################################################################
 # Data on wages
 # --------------
-import urllib
 import os
 import pandas
 
+# Python 2 vs Python 3:
+try:
+    from urllib.request import urlretrieve
+except ImportError:
+    from urllib import urlretrieve
+
+
 if not os.path.exists('wages.txt'):
     # Download the file if it is not present
-    urllib.urlretrieve('http://lib.stat.cmu.edu/datasets/CPS_85_Wages',
-                       'wages.txt')
+    urlretrieve('http://lib.stat.cmu.edu/datasets/CPS_85_Wages',
+                'wages.txt')
 
 # Give names to the columns
 names = [
