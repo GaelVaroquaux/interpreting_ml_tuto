@@ -7,14 +7,21 @@ Interpreting random forests
 #######################################################################
 # Data on wages
 # --------------
-import urllib
+#
+# We use the same data as in the linear-model notebook
 import os
 import pandas
 
+# Python 2 vs Python 3:
+try:
+    from urllib.request import urlretrieve
+except ImportError:
+    from urllib import urlretrieve
+
 if not os.path.exists('wages.txt'):
     # Download the file if it is not present
-    urllib.urlretrieve('http://lib.stat.cmu.edu/datasets/CPS_85_Wages',
-                       'wages.txt')
+    urlretrieve('http://lib.stat.cmu.edu/datasets/CPS_85_Wages',
+                'wages.txt')
 
 # Give names to the columns
 names = [
@@ -31,10 +38,9 @@ names = [
     'MARR: 0=Unmarried,  1=Married',
 ]
 
-short_names = [n.split(':')[0] for n in names]
-
 data = pandas.read_csv('wages.txt', skiprows=27, skipfooter=6, sep=None,
                        header=None)
+short_names = [n.split(':')[0] for n in names]
 data.columns = short_names
 
 # Log-transform the wages, as they typically increase with

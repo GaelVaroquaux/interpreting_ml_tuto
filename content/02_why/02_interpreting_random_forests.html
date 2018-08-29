@@ -171,14 +171,20 @@ $(function () {
 <p>Interpreting random forests</p>
 <div class="section" id="data-on-wages">
 <h2>2.2.1. Data on wages<a class="headerlink" href="#data-on-wages" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib</span>
-<div class="newline"></div><span class="kn">import</span> <span class="nn">os</span>
+<p>We use the same data as in the linear-model notebook</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <div class="newline"></div><span class="kn">import</span> <span class="nn">pandas</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Python 2 vs Python 3:</span>
+<div class="newline"></div><span class="k">try</span><span class="p">:</span>
+<div class="newline"></div>    <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
+<div class="newline"></div><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<div class="newline"></div>    <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
 <div class="newline"></div>
 <div class="newline"></div><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">):</span>
 <div class="newline"></div>    <span class="c1"># Download the file if it is not present</span>
-<div class="newline"></div>    <span class="n">urllib</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="s1">&#39;http://lib.stat.cmu.edu/datasets/CPS_85_Wages&#39;</span><span class="p">,</span>
-<div class="newline"></div>                       <span class="s1">&#39;wages.txt&#39;</span><span class="p">)</span>
+<div class="newline"></div>    <span class="n">urlretrieve</span><span class="p">(</span><span class="s1">&#39;http://lib.stat.cmu.edu/datasets/CPS_85_Wages&#39;</span><span class="p">,</span>
+<div class="newline"></div>                <span class="s1">&#39;wages.txt&#39;</span><span class="p">)</span>
 <div class="newline"></div>
 <div class="newline"></div><span class="c1"># Give names to the columns</span>
 <div class="newline"></div><span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
@@ -195,10 +201,9 @@ $(function () {
 <div class="newline"></div>    <span class="s1">&#39;MARR: 0=Unmarried,  1=Married&#39;</span><span class="p">,</span>
 <div class="newline"></div><span class="p">]</span>
 <div class="newline"></div>
-<div class="newline"></div><span class="n">short_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
-<div class="newline"></div>
 <div class="newline"></div><span class="n">data</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html#pandas.read_csv" title="View documentation for pandas.read_csv"><span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span></a><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">skipfooter</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
 <div class="newline"></div>                       <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<div class="newline"></div><span class="n">short_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
 <div class="newline"></div><span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">short_names</span>
 <div class="newline"></div>
 <div class="newline"></div><span class="c1"># Log-transform the wages, as they typically increase with</span>
@@ -238,7 +243,7 @@ conditioning is difficult and not well controlled.</p>
 <p>Higher-cardinality categorical variables will have larger
 feature importances</p>
 <hr class="docutils" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.120 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  0.086 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-02-why-02-interpreting-random-forests-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/02_interpreting_random_forests.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>

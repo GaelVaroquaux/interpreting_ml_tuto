@@ -174,6 +174,7 @@ correlated.</p>
 <a class="reference external" href="http://www.scipy-lectures.org">scipy lecture notes</a></p>
 <div class="section" id="data-on-wages">
 <h2>2.1.1. Data on wages<a class="headerlink" href="#data-on-wages" title="Permalink to this headline">¶</a></h2>
+<p>We first download and load some historical data on wages</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <div class="newline"></div><span class="kn">import</span> <span class="nn">pandas</span>
 <div class="newline"></div>
@@ -182,7 +183,6 @@ correlated.</p>
 <div class="newline"></div>    <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
 <div class="newline"></div><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
 <div class="newline"></div>    <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
-<div class="newline"></div>
 <div class="newline"></div>
 <div class="newline"></div><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">):</span>
 <div class="newline"></div>    <span class="c1"># Download the file if it is not present</span>
@@ -205,7 +205,6 @@ correlated.</p>
 <div class="newline"></div><span class="p">]</span>
 <div class="newline"></div>
 <div class="newline"></div><span class="n">short_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
-<div class="newline"></div>
 <div class="newline"></div><span class="n">data</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html#pandas.read_csv" title="View documentation for pandas.read_csv"><span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span></a><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">27</span><span class="p">,</span> <span class="n">skipfooter</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
 <div class="newline"></div>                       <span class="n">header</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
 <div class="newline"></div><span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">short_names</span>
@@ -219,12 +218,26 @@ correlated.</p>
 </div>
 <div class="section" id="the-challenge-of-correlated-features">
 <h2>2.1.2. The challenge of correlated features<a class="headerlink" href="#the-challenge-of-correlated-features" title="Permalink to this headline">¶</a></h2>
-<p>Plot scatter matrices highlighting different aspects</p>
+<p>Plot scatter matrices highlighting the links between different
+variables measured</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span>
-<div class="newline"></div><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.pairplot" title="View documentation for seaborn.pairplot"><span class="n">seaborn</span><span class="o">.</span><span class="n">pairplot</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">,</span> <span class="s1">&#39;AGE&#39;</span><span class="p">,</span> <span class="s1">&#39;EDUCATION&#39;</span><span class="p">,</span> <span class="s1">&#39;EXPERIENCE&#39;</span><span class="p">])</span>
+<div class="newline"></div><span class="c1"># The simplest way to plot a pairplot</span>
+<div class="newline"></div><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.pairplot" title="View documentation for seaborn.pairplot"><span class="n">seaborn</span><span class="o">.</span><span class="n">pairplot</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">,</span> <span class="s1">&#39;AGE&#39;</span><span class="p">,</span> <span class="s1">&#39;EDUCATION&#39;</span><span class="p">,</span> <span class="s1">&#39;EXPERIENCE&#39;</span><span class="p">,</span> <span class="s1">&#39;SEX&#39;</span><span class="p">])</span>
 <div class="newline"></div></pre></div>
 </div>
 <img alt="../../_images/sphx_glr_01_interpreting_linear_models_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_001.png" />
+<p>A fancier pair plot</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">g</span> <span class="o">=</span> <a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.PairGrid" title="View documentation for seaborn.PairGrid"><span class="n">seaborn</span><span class="o">.</span><span class="n">PairGrid</span></a><span class="p">(</span><span class="n">data</span><span class="p">,</span>
+<div class="newline"></div>                     <span class="nb">vars</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;WAGE&#39;</span><span class="p">,</span> <span class="s1">&#39;AGE&#39;</span><span class="p">,</span> <span class="s1">&#39;EDUCATION&#39;</span><span class="p">,</span> <span class="s1">&#39;EXPERIENCE&#39;</span><span class="p">,</span> <span class="s1">&#39;SEX&#39;</span><span class="p">],</span>
+<div class="newline"></div>                     <span class="n">diag_sharey</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_upper</span><span class="p">(</span><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.kdeplot" title="View documentation for seaborn.kdeplot"><span class="n">seaborn</span><span class="o">.</span><span class="n">kdeplot</span></a><span class="p">)</span>
+<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_lower</span><span class="p">(</span><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.scatter.html#matplotlib.pyplot.scatter" title="View documentation for matplotlib.pyplot.scatter"><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span></a><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_diag</span><span class="p">(</span><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.kdeplot" title="View documentation for seaborn.kdeplot"><span class="n">seaborn</span><span class="o">.</span><span class="n">kdeplot</span></a><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_002.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_002.png" />
 <p>Note that age and experience are highly correlated</p>
 <p>A link between a single feature and the target is a <em>marginal</em> link.</p>
 <p>Univariate feature selection selects on marginal links.</p>
@@ -250,7 +263,7 @@ features on each feature. This is hard when features are correlated.</p>
 <div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="View documentation for matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
-<img alt="../../_images/sphx_glr_01_interpreting_linear_models_002.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_002.png" />
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_003.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_003.png" />
 <p><strong>Scaling coefficients</strong>: coefs cannot easily be compared if X is not
 standardized: they should be normalized to the variance of X: the
 greater the variance of a feature, the large the impact of the
@@ -266,7 +279,7 @@ interpretation.</p>
 <div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="View documentation for matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
-<img alt="../../_images/sphx_glr_01_interpreting_linear_models_003.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_003.png" />
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_004.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_004.png" />
 <p>Now the age and experience can be better compared: and experience does
 appear as more important than age.</p>
 <p>When features are not too correlated and there is plenty of samples,
@@ -288,7 +301,7 @@ zero. This can often help interpretation</p>
 <div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="View documentation for matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
-<img alt="../../_images/sphx_glr_01_interpreting_linear_models_004.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_004.png" />
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_005.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_005.png" />
 <p>When two variables are very correlated (such as age and experience), it
 will put arbitrarily one or the other to zero depending on their SNR.</p>
 <p>Here we can see that age probably overshadowed experience.</p>
@@ -323,7 +336,7 @@ which has been added in version 0.20 of scikit-learn:</p>
 <div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="View documentation for matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
-<img alt="../../_images/sphx_glr_01_interpreting_linear_models_005.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_005.png" />
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_006.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_006.png" />
 </div>
 <div class="section" id="with-the-ridge-estimator">
 <h3>2.1.5.2. With the ridge estimator<a class="headerlink" href="#with-the-ridge-estimator" title="Permalink to this headline">¶</a></h3>
@@ -339,7 +352,7 @@ which has been added in version 0.20 of scikit-learn:</p>
 <div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="View documentation for matplotlib.pyplot.tight_layout"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <div class="newline"></div></pre></div>
 </div>
-<img alt="../../_images/sphx_glr_01_interpreting_linear_models_006.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_006.png" />
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_007.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_007.png" />
 <p>The story is different. Note also that lasso coefficients are much more
 instable than the ridge. It is often the case that sparse models are
 unstable.</p>
@@ -361,7 +374,7 @@ obtained via the cross-validation</p>
 <div class="newline"></div><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.title.html#matplotlib.pyplot.title" title="View documentation for matplotlib.pyplot.title"><span class="n">plt</span><span class="o">.</span><span class="n">title</span></a><span class="p">(</span><span class="s2">&quot;Model comparison&quot;</span><span class="p">)</span>
 <div class="newline"></div></pre></div>
 </div>
-<img alt="../../_images/sphx_glr_01_interpreting_linear_models_007.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_007.png" />
+<img alt="../../_images/sphx_glr_01_interpreting_linear_models_008.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_01_interpreting_linear_models_008.png" />
 <p>Note also that the limitations of cross-validation explained previously
 still apply. Ideally, we should use a ShuffleSplit cross-validation
 object to sample many times and have a better estimate of the
@@ -376,7 +389,7 @@ females earn less than males. Note that this last statement is a
 statement about the link between wage and sex, conditional on education
 and experience.</p>
 <hr class="docutils" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  1.680 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  9.505 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-02-why-01-interpreting-linear-models-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/01_interpreting_linear_models.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>

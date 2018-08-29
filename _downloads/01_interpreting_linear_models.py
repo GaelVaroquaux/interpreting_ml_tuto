@@ -14,6 +14,8 @@ See also the `statistics chapter
 #######################################################################
 # Data on wages
 # --------------
+#
+# We first download and load some historical data on wages
 import os
 import pandas
 
@@ -22,7 +24,6 @@ try:
     from urllib.request import urlretrieve
 except ImportError:
     from urllib import urlretrieve
-
 
 if not os.path.exists('wages.txt'):
     # Download the file if it is not present
@@ -45,7 +46,6 @@ names = [
 ]
 
 short_names = [n.split(':')[0] for n in names]
-
 data = pandas.read_csv('wages.txt', skiprows=27, skipfooter=6, sep=None,
                        header=None)
 data.columns = short_names
@@ -59,10 +59,23 @@ data['WAGE'] = np.log10(data['WAGE'])
 # The challenge of correlated features
 # --------------------------------------------
 #
-# Plot scatter matrices highlighting different aspects
+# Plot scatter matrices highlighting the links between different
+# variables measured
 
 import seaborn
-seaborn.pairplot(data, vars=['WAGE', 'AGE', 'EDUCATION', 'EXPERIENCE'])
+# The simplest way to plot a pairplot
+seaborn.pairplot(data, vars=['WAGE', 'AGE', 'EDUCATION', 'EXPERIENCE', 'SEX'])
+
+########################################################
+# A fancier pair plot
+from matplotlib import pyplot as plt
+
+g = seaborn.PairGrid(data,
+                     vars=['WAGE', 'AGE', 'EDUCATION', 'EXPERIENCE', 'SEX'],
+                     diag_sharey=False)
+g.map_upper(seaborn.kdeplot)
+g.map_lower(plt.scatter, s=2)
+g.map_diag(seaborn.kdeplot, lw=3)
 
 ########################################################################
 # Note that age and experience are highly correlated
