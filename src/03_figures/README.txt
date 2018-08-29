@@ -1,5 +1,5 @@
-Appendix: didactic figures
+Appendix: auxiliary figures
 ===========================
 
-Here are notebooks to create didactic figures used in this course.
+Here are notebooks to create figures used in this course.
 

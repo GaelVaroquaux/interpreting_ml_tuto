@@ -100,8 +100,8 @@ print("Classifier score: {0},\np value: {1}\nPermutation scores {2}"
 
 
 ###############################################################
-# Cross-validation with non iid 
-# ------------------------------
+# Cross-validation with non iid data
+# -----------------------------------
 #
 # Stock market: time series
 # ...........................
@@ -163,6 +163,18 @@ quotes_with_dates.plot()
 # If the goal is to do forecasting, than prediction should be done in the
 # future, for instance using
 # :class:`sklearn.model_selection.TimeSeriesSplit`
+#
+# Can we do forecasting: predict the future?
+
+cv = model_selection.TimeSeriesSplit(n_splits=quarters.nunique())
+
+print(cross_val_score(linear_model.RidgeCV(),
+                      quotes.drop(columns=['Chevron']),
+                      quotes['Chevron'],
+                      cv=cv, groups=quarters).mean())
+
+###############################################################
+# No. This prediction is abysmal
 
 ###############################################################
 # School grades: repeated measures
@@ -250,3 +262,18 @@ print(cross_val_score(ensemble.GradientBoostingRegressor(), X, y,
 #
 # The classifier learns better to generalize, probably by learning
 # stronger invariances from the repeated measures on the students
+#
+# Summary
+# .......
+#
+# Samples often have a dependency structure, such a with time-series, or
+# with repeated measures. To have a meaningful measure of prediction
+# error, the link between the train and the test set must match the
+# important one for the application. In time-series prediction, it must
+# be in the future. To learn a predictor of the success of an individual
+# from demographics, it might be more relevant to predict across
+# individuals. If the variance across individuals is much larger than the
+# variance across repeated measurement, as in many biomedical
+# applications, the choice of cross-validation strategy may make a huge
+# difference.
+
