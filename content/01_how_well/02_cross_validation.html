@@ -374,6 +374,20 @@ data: these datasets are <strong>time-series</strong>.</p>
 <p>If the goal is to do forecasting, than prediction should be done in the
 future, for instance using
 <a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html#sklearn.model_selection.TimeSeriesSplit" title="(in scikit-learn v0.19.2)"><code class="xref py py-class docutils literal"><span class="pre">sklearn.model_selection.TimeSeriesSplit</span></code></a></p>
+<p>Can we do forecasting: predict the future?</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">cv</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html#sklearn.model_selection.TimeSeriesSplit" title="View documentation for sklearn.model_selection.TimeSeriesSplit"><span class="n">model_selection</span><span class="o">.</span><span class="n">TimeSeriesSplit</span></a><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="n">quarters</span><span class="o">.</span><span class="n">nunique</span><span class="p">())</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="k">print</span><span class="p">(</span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="View documentation for sklearn.model_selection.cross_val_score"><span class="n">cross_val_score</span></a><span class="p">(</span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html#sklearn.linear_model.RidgeCV" title="View documentation for sklearn.linear_model.RidgeCV"><span class="n">linear_model</span><span class="o">.</span><span class="n">RidgeCV</span></a><span class="p">(),</span>
+<div class="newline"></div>                      <span class="n">quotes</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Chevron&#39;</span><span class="p">]),</span>
+<div class="newline"></div>                      <span class="n">quotes</span><span class="p">[</span><span class="s1">&#39;Chevron&#39;</span><span class="p">],</span>
+<div class="newline"></div>                      <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">quarters</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mf">177.720872861</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>No. This prediction is abysmal</p>
 </div>
 </div>
 <div class="section" id="school-grades-repeated-measures">
@@ -411,15 +425,6 @@ school, …</p>
 <div class="newline"></div></pre></div>
 </div>
 <img alt="../../_images/sphx_glr_02_cross_validation_003.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_02_cross_validation_003.png" />
-<p>A zoomed view on the factors that seem most interpretable</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.PairGrid" title="View documentation for seaborn.PairGrid"><span class="n">sns</span><span class="o">.</span><span class="n">PairGrid</span></a><span class="p">(</span><span class="n">exams</span><span class="p">[[</span><span class="s1">&#39;Ravens&#39;</span><span class="p">,</span> <span class="s1">&#39;Maths&#39;</span><span class="p">,</span> <span class="s1">&#39;English&#39;</span><span class="p">,</span> <span class="s1">&#39;SocialClass&#39;</span><span class="p">,</span> <span class="s1">&#39;Year&#39;</span><span class="p">]],</span>
-<div class="newline"></div>                 <span class="n">diag_sharey</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_lower</span><span class="p">(</span><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.kdeplot" title="View documentation for seaborn.kdeplot"><span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span></a><span class="p">)</span>
-<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_upper</span><span class="p">(</span><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.scatter.html#matplotlib.pyplot.scatter" title="View documentation for matplotlib.pyplot.scatter"><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span></a><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_diag</span><span class="p">(</span><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.kdeplot" title="View documentation for seaborn.kdeplot"><span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span></a><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<div class="newline"></div></pre></div>
-</div>
-<img alt="../../_images/sphx_glr_02_cross_validation_004.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_02_cross_validation_004.png" />
 </div>
 <div class="section" id="predicting-grades-in-maths">
 <h4>1.2.3.2.3. Predicting grades in maths<a class="headerlink" href="#predicting-grades-in-maths" title="Permalink to this headline">¶</a></h4>
@@ -463,7 +468,21 @@ the train and the test set</p>
 <p>It works better!</p>
 <p>The classifier learns better to generalize, probably by learning
 stronger invariances from the repeated measures on the students</p>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  37.986 seconds)</p>
+</div>
+</div>
+<div class="section" id="summary">
+<h3>1.2.3.3. Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
+<p>Samples often have a dependency structure, such a with time-series, or
+with repeated measures. To have a meaningful measure of prediction
+error, the link between the train and the test set must match the
+important one for the application. In time-series prediction, it must
+be in the future. To learn a predictor of the success of an individual
+from demographics, it might be more relevant to predict across
+individuals. If the variance across individuals is much larger than the
+variance across repeated measurement, as in many biomedical
+applications, the choice of cross-validation strategy may make a huge
+difference.</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  26.384 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-01-how-well-02-cross-validation-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/02_cross_validation.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>
@@ -475,7 +494,6 @@ stronger invariances from the repeated measures on the students</p>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 <p><div style="clear: both"></div></p>
-</div>
 </div>
 </div>
 </div>
@@ -503,6 +521,7 @@ stronger invariances from the repeated measures on the students</p>
 <li><a class="reference internal" href="#predicting-grades-in-maths">1.2.3.2.3. Predicting grades in maths</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#summary">1.2.3.3. Summary</a></li>
 </ul>
 </li>
 </ul>
