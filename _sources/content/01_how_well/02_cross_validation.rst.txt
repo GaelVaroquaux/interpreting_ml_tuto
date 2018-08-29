@@ -13,13 +13,16 @@ Cross-validation: some gotchas
 Cross-validation is the ubiquitous test of a machine learning model. Yet
 many things can go wrong.
 
+.. contents::
+    :local:
+
 
 
 Uncertainty of measured accuracy
 --------------------------------
 
-Simple experiments reveal variations in cross_val_score
-........................................................
+Variations in cross_val_score: simple experiments
+..................................................
 
 The first thing to have in mind is that the results of a
 cross-validation are noisy estimate of the real prediction accuracy
@@ -264,24 +267,11 @@ arbitrarily, but does not provide actually new data points
 
 
 Measuring baselines and chance
--------------------------------
+...............................
 
 Because of class imbalances, or confounding effects, it is easy to get
 it wrong it terms of what constitutes chances. There are two approaches
 to measure peformances of baselines or chance:
-
-Let's go back to simple generated data:
-
-
-
-.. code-block:: python
-
-    data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)])
-
-
-
-
-
 
 
 **DummyClassifier** The dummy classifier:
@@ -294,7 +284,8 @@ provide simple baselines
 
     from sklearn.dummy import DummyClassifier
     dummy = DummyClassifier(strategy="stratified")
-    print(cross_val_score(dummy, data, target))
+    dummy_scores = cross_val_score(dummy, data, target)
+    print(dummy_scores)
 
 
 
@@ -304,7 +295,7 @@ provide simple baselines
 
  Out::
 
-    [ 0.47058824  0.5         0.40625   ]
+    [ 0.46407186  0.5         0.52409639]
 
 
 **Chance level** To measure actual chance, the most robust approach is
@@ -317,10 +308,10 @@ as cross_val_score
 .. code-block:: python
 
     from sklearn.model_selection import permutation_test_score
-    score, permuted_scores, p_value = permutation_test_score(classifier, data, target)
+    score, permuted_scores, p_value = permutation_test_score(classifier,
+                                                             data, target)
     print("Classifier score: {0},\np value: {1}\nPermutation scores {2}"
             .format(score, p_value, permuted_scores))
-
 
 
 
@@ -330,34 +321,64 @@ as cross_val_score
 
  Out::
 
-    Classifier score: 0.660539215686,
-    p value: 0.019801980198
-    Permutation scores [ 0.57965686  0.58088235  0.58884804  0.49203431  0.51041667  0.59129902
-      0.45036765  0.44914216  0.46078431  0.59129902  0.37928922  0.53982843
-      0.48039216  0.5189951   0.5189951   0.53982843  0.62009804  0.56066176
-      0.50122549  0.50796569  0.58026961  0.50980392  0.57781863  0.52941176
-      0.51838235  0.59007353  0.49019608  0.44852941  0.36887255  0.53125
-      0.48958333  0.46078431  0.53553922  0.55698529  0.43014706  0.60968137
-      0.61090686  0.40073529  0.46752451  0.45833333  0.41973039  0.55821078
-      0.48958333  0.50796569  0.68198529  0.57904412  0.4877451   0.44791667
-      0.40992647  0.46813725  0.49080882  0.47916667  0.56985294  0.48958333
-      0.56066176  0.52941176  0.55147059  0.53125     0.52144608  0.59068627
-      0.43933824  0.41973039  0.53063725  0.35110294  0.63112745  0.57107843
-      0.4620098   0.54963235  0.53002451  0.47794118  0.48223039  0.49938725
-      0.53982843  0.54227941  0.47120098  0.46936275  0.43995098  0.48161765
-      0.56985294  0.37867647  0.46017157  0.55943627  0.53982843  0.60906863
-      0.53860294  0.48161765  0.43014706  0.55882353  0.44914216  0.58210784
-      0.42095588  0.57965686  0.56066176  0.46139706  0.61090686  0.5502451
-      0.47977941  0.49080882  0.41973039  0.52941176]
+    Classifier score: 0.688021547267,
+    p value: 0.00990099009901
+    Permutation scores [ 0.50095592  0.51507227  0.52098814  0.48998389  0.4679797   0.50700406
+      0.51100209  0.52801626  0.52193805  0.51599211  0.48692975  0.5420304
+      0.48302792  0.49500998  0.51605824  0.49100594  0.48499988  0.51793401
+      0.51800014  0.50495996  0.53599428  0.50098598  0.51700815  0.48302191
+      0.51301614  0.53803237  0.51294399  0.50394392  0.46502176  0.48797586
+      0.49000192  0.50402809  0.49799798  0.51706827  0.4680278   0.49699998
+      0.52394007  0.50892793  0.52202222  0.49301998  0.4809778   0.51200611
+      0.48095977  0.49797393  0.51700214  0.49796792  0.52795614  0.50200202
+      0.47405791  0.49904408  0.51194599  0.49001395  0.50799004  0.49093981
+      0.50598201  0.48697785  0.53200827  0.49102398  0.48497583  0.50303008
+      0.51102013  0.46201573  0.5200202   0.50103408  0.52005026  0.481074
+      0.48202992  0.52198014  0.53108241  0.50101604  0.50400404  0.53400428
+      0.48401991  0.5320203   0.47397975  0.46098766  0.49798596  0.50091985
+      0.4769437   0.49303802  0.51002814  0.4929779   0.50993796  0.51700214
+      0.53998629  0.51301614  0.49906212  0.47192963  0.52991006  0.51099608
+      0.48801193  0.48895582  0.48404396  0.50301806  0.50304211  0.5189741
+      0.51494     0.48407402  0.49101796  0.50002405]
+
+
+We can plot all the scores
+
+
+
+.. code-block:: python
+
+    plt.figure(figsize=(6, 3))
+    sns.distplot(dummy_scores, color="g", label="Dummy scores")
+    sns.distplot(permuted_scores, color="r", label="Permuted scores")
+    sns.distplot(scores, label="Cross validation scores")
+    plt.legend(loc='best')
+    plt.xlim(0, 1)
+
+
+
+
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_005.png
+    :class: sphx-glr-single-img
+
+
+
+
+Permutation and performing many cross-validation splits are
+computationally expensive, but they give trust-worthy answers
 
 
 Cross-validation with non iid data
 -----------------------------------
 
+Another common caveat for cross-validation are dependencies in the
+observations that can easily creep in between the train and the test
+sets. Let us explore these problems in two settings.
+
 Stock market: time series
 ...........................
 
-Download and load the data
+**Download**: Download and load the data:
 
 
 
@@ -391,7 +412,7 @@ Download and load the data
 
 
 
-Predict 'Chevron' from the others
+**Prediction**: Predict 'Chevron' from the others
 
 
 
@@ -418,6 +439,9 @@ Predict 'Chevron' from the others
 Is this a robust prediction?
 
 Does it cary over across quarters?
+
+**Stratification**: To thest this we need to stratify cross-validation
+using a :class:`sklearn.model_selection.LeaveOneGroupOut`
 
 
 
@@ -456,14 +480,14 @@ data: these datasets are **time-series**.
 
 
 
-.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_005.png
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_006.png
     :class: sphx-glr-single-img
 
 
 
 
-If the goal is to do forecasting, than prediction should be done in the
-future, for instance using
+**Testing for forecasting**: If the goal is to do forecasting, than
+prediction should be done in the future, for instance using
 :class:`sklearn.model_selection.TimeSeriesSplit`
 
 Can we do forecasting: predict the future?
@@ -491,7 +515,7 @@ Can we do forecasting: predict the future?
     -177.720872861
 
 
-No. This prediction is abysmal
+No. This prediction is abysmal.
 
 
 School grades: repeated measures
@@ -501,10 +525,8 @@ Let us look at another dependency structure across samples: repeated
 measures. This is often often in longitudinal data. Here we are looking
 at grades of school students, across the years.
 
-Download and load the data
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Download some data on grades across several schools (centers)
+**Download** First we download some data on grades across several
+schools (centers)
 
 The junior school data, originally from http://www.bristol.ac.uk/cmm/learning/support/datasets/
 
@@ -529,17 +551,35 @@ The junior school data, originally from http://www.bristol.ac.uk/cmm/learning/su
 
 
 
-Visualizing factor of grades
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Visualization**: Grade at tests in in exams depend on socio-economic
+status, year at school, ...
 
-Grade at tests in in exams depend on socio-economic status, year at
-school, ...
+The simplest way to do this is using seaborn's pairplot function.
 
 
 
 .. code-block:: python
 
+
     import seaborn as sns
+    sns.pairplot(exams.drop(columns=['StudentID']))
+
+
+
+
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_007.png
+    :class: sphx-glr-single-img
+
+
+
+
+A more elaborate plot using density estimation gives better
+understanding of the dense regions:
+
+
+
+.. code-block:: python
+
     g = sns.PairGrid(exams.drop(columns=['StudentID']),
                      diag_sharey=False)
     g.map_lower(sns.kdeplot)
@@ -550,17 +590,14 @@ school, ...
 
 
 
-.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_006.png
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_008.png
     :class: sphx-glr-single-img
 
 
 
 
-Predicting grades in maths
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Can we predict test grades in maths from demographics (ie, not from
-other grades)?
+**Prediction**: Can we predict test grades in maths from demographics
+(ie, not from other grades)?
 
 
 
@@ -588,7 +625,7 @@ other grades)?
 
  Out::
 
-    0.0725511722169
+    0.0704221342991
 
 
 We can predict!
@@ -597,8 +634,8 @@ But there is one caveat: are we simply learning to recognive students
 across the years? There is many implicit informations about students:
 notably in the school ID and the class ID.
 
-To test for this, we can make sure that we have different students in
-the train and the test set
+**Stratification** To test for this, we can make sure that we have
+different students in the train and the test set.
 
 
 
@@ -641,7 +678,7 @@ applications, the choice of cross-validation strategy may make a huge
 difference.
 
 
-**Total running time of the script:** ( 0 minutes  27.177 seconds)
+**Total running time of the script:** ( 0 minutes  29.565 seconds)
 
 
 .. _sphx_glr_download_content_01_how_well_02_cross_validation.py:
