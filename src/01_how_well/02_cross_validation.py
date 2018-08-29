@@ -100,18 +100,15 @@ print("Classifier score: {0},\np value: {1}\nPermutation scores {2}"
 
 
 ###############################################################
-# Non iid data and confounding effects
-# -----------------------------------------
+# Cross-validation with non iid 
+# ------------------------------
 #
-# Shool grading data
-# ..................
+# Stock market: time series
+# ...........................
 #
 # Download and load the data
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Download some data on grades across several schools (centers)
-#
-# The junior school data, originally from http://www.bristol.ac.uk/cmm/learning/support/datasets/
 import pandas as pd
 import os
 # Python 2 vs Python 3:
@@ -120,10 +117,71 @@ try:
 except ImportError:
     from urllib import urlretrieve
 
+symbols = {'TOT': 'Total', 'XOM': 'Exxon', 'CVX': 'Chevron',
+           'COP': 'ConocoPhillips', 'VLO': 'Valero Energy'}
+
+quotes = pd.DataFrame()
+
+for symbol, name in symbols.items():
+    url = ('https://raw.githubusercontent.com/scikit-learn/examples-data/'
+           'master/financial-data/{}.csv')
+    filename = "{}.csv".format(symbol)
+    if not os.path.exists(filename):
+        urlretrieve(url.format(symbol), filename)
+    this_quote = pd.read_csv(filename)
+    quotes[name] = this_quote['open']
+
+###############################################################
+# Predict 'Chevron' from the others
+from sklearn import linear_model, model_selection, ensemble
+cv = model_selection.ShuffleSplit(random_state=0)
+print(cross_val_score(linear_model.RidgeCV(),
+                      quotes.drop(columns=['Chevron']),
+                      quotes['Chevron'],
+                      cv=cv).mean())
+
+###############################################################
+# Is this a robust prediction?
+#
+# Does it cary over across quarters?
+quarters = pd.to_datetime(this_quote['date']).dt.to_period('Q')
+cv = model_selection.LeaveOneGroupOut()
+
+print(cross_val_score(linear_model.RidgeCV(),
+                      quotes.drop(columns=['Chevron']),
+                      quotes['Chevron'],
+                      cv=cv, groups=quarters).mean())
+
+###############################################################
+# The problem that we are facing here is the auto-correlation in the
+# data: these datasets are **time-series**.
+quotes_with_dates = pd.concat((quotes, this_quote['date']),
+                              axis=1).set_index('date')
+quotes_with_dates.plot()
+
+###############################################################
+# If the goal is to do forecasting, than prediction should be done in the
+# future, for instance using
+# :class:`sklearn.model_selection.TimeSeriesSplit`
+
+###############################################################
+# School grades: repeated measures
+# .................................
+#
+# Let us look at another dependency structure across samples: repeated
+# measures. This is often often in longitudinal data. Here we are looking
+# at grades of school students, across the years.
+#
+# Download and load the data
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# Download some data on grades across several schools (centers)
+#
+# The junior school data, originally from http://www.bristol.ac.uk/cmm/learning/support/datasets/
 if not os.path.exists('exams.csv.gz'):
     # Download the file if it is not present
-    urlretrieve('http://lib.stat.cmu.edu/datasets/CPS_85_Wages',
-                'exams.csv.gz')
+    urlretrieve('https://raw.githubusercontent.com/GaelVaroquaux/interpreting_ml_tuto/blob/master/src/01_how_well/exams.csv.gz',
+                filename)
 exams = pd.read_csv('exams.csv.gz')
 
 # Select data for students present all three years
