@@ -90,40 +90,60 @@ ridge.fit(X, y)
 # Visualize the coefs
 coefs = ridge.coef_
 from matplotlib import pyplot as plt
+plt.figure(figsize=(6, 4))
 plt.barh(np.arange(coefs.size), coefs)
 plt.yticks(np.arange(coefs.size), features)
+plt.title("Coefficients")
 plt.tight_layout()
 
 ########################################################
-# Note: coefs cannot easily be compared if X is not standardized: they
-# should be normalized to the variance of X.
+# **Scaling coefficients**: coefs cannot easily be compared if X is not
+# standardized: they should be normalized to the variance of X: the
+# greater the variance of a feature, the large the impact of the
+# corresponding coefficent on the output.
 #
-# When features are not too correlated and their is plenty, this is the
-# well-known regime of standard statistics in linear models. Machine
-# learning is not needs, and statsmodels is a great tool (see the
+# If the different features have differing, possibly arbitrary, scales,
+# then scaling the coefficients by the feature scale often helps
+# interpretation.
+
+X_std = X.std()
+plt.figure(figsize=(6, 4))
+plt.barh(np.arange(coefs.size), coefs * X_std)
+plt.yticks(np.arange(coefs.size), features)
+plt.title("Scaled coefficients")
+plt.tight_layout()
+
+########################################################
+# Now the age and experience can be better compared: and experience does
+# appear as more important than age.
+
+########################################################
+# When features are not too correlated and there is plenty of samples,
+# this is the well-known regime of standard statistics in linear models.
+# Machine learning is not needed, and statsmodels is a great tool (see the
 # `statistics chapter in scipy-lectures
 # <http://www.scipy-lectures.org/packages/statistics/index.html>`_)
 
 ########################################################
 # The effect of regularization
 # --------------------------------------------
-
+#
+# Sparse models use l1 regularization to puts some variables to
+# zero. This can often help interpretation
 lasso = linear_model.LassoCV()
 lasso.fit(X, y)
 
 coefs = lasso.coef_
-from matplotlib import pyplot as plt
-plt.barh(np.arange(coefs.size), coefs)
+plt.barh(np.arange(coefs.size), coefs * X_std)
 plt.yticks(np.arange(coefs.size), features)
+plt.title("Sparse coefficients")
 plt.tight_layout()
 
 ########################################################
-# l1 regularization (sparse models) puts variables to zero.
+# When two variables are very correlated (such as age and experience), it
+# will put arbitrarily one or the other to zero depending on their SNR.
 #
-# When two variables are very correlated, it will put arbitrary one or
-# the other to zero depending on their SNR. Here we can see that age
-# probably overshadowed experience.
-#
+# Here we can see that age probably overshadowed experience.
 
 ########################################################
 # Stability to gauge significance
@@ -144,28 +164,37 @@ from sklearn.model_selection import cross_validate
 ########################################################
 # With the lasso estimator
 # .........................
-cv_lasso = cross_validate(lasso, X, y, return_estimator=True, cv=7)
+cv_lasso = cross_validate(lasso, X, y, return_estimator=True, cv=10)
 coefs_ = [estimator.coef_ for estimator in cv_lasso['estimator']]
 
 ########################################################
 # Plot the results with seaborn:
-coefs_ = pandas.DataFrame(coefs_, columns=features)
+coefs_ = pandas.DataFrame(coefs_, columns=features) * X_std
+plt.figure(figsize=(6, 4))
 seaborn.boxplot(data=coefs_, orient='h')
-seaborn.stripplot(data=coefs_, orient='h')
+seaborn.stripplot(data=coefs_, orient='h', color='k')
 plt.axvline(x=0, color='.5')  # Add a vertical line at 0
+plt.title('Sparse coefficients')
 plt.tight_layout()
 
 ########################################################
 # With the ridge estimator
 # ........................
-cv_ridge = cross_validate(ridge, X, y, return_estimator=True, cv=7)
+cv_ridge = cross_validate(ridge, X, y, return_estimator=True, cv=10)
 coefs_ = [estimator.coef_ for estimator in cv_ridge['estimator']]
 
-coefs_ = pandas.DataFrame(coefs_, columns=features)
+coefs_ = pandas.DataFrame(coefs_, columns=features) * X_std
+plt.figure(figsize=(6, 4))
 seaborn.boxplot(data=coefs_, orient='h')
-seaborn.stripplot(data=coefs_, orient='h')
+seaborn.stripplot(data=coefs_, orient='h', color='k')
 plt.axvline(x=0, color='.5') # Add a vertical line at 0
+plt.title('Non-sparse coefficients (ridge)')
 plt.tight_layout()
+
+########################################################
+# The story is different. Note also that lasso coefficients are much more
+# instable than the ridge. It is often the case that sparse models are
+# unstable.
 
 ########################################################
 # Which is the truth?
@@ -181,13 +210,28 @@ plt.tight_layout()
 # obtained via the cross-validation
 scores = pandas.DataFrame({'lasso': cv_lasso['test_score'],
                            'ridge': cv_ridge['test_score']})
+plt.figure(figsize=(6, 2))
 seaborn.boxplot(data=scores, orient='h')
-seaborn.stripplot(data=scores, orient='h')
+seaborn.stripplot(data=scores, orient='h', color='k')
+plt.title("Model comparison")
+
 ########################################################
 # Note also that the limitations of cross-validation explained previously
 # still apply. Ideally, we should use a ShuffleSplit cross-validation
 # object to sample many times and have a better estimate of the
 # posterior, both for the coefficients and the test scores.
+#
+# Conclusion on factors of wages?
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# As always, concluding is hard. That said, it seems that we should
+# prefer the scaled ridge coefficients.
+#
+# Hence, the most important factors of wage are eduction and
+# experience, followed by sex: at the same education and experience
+# females earn less than males. Note that this last statement is a
+# statement about the link between wage and sex, conditional on education
+# and experience.
 #
 # _____________________
 
