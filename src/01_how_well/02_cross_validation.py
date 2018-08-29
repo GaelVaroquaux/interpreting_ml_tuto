@@ -5,11 +5,17 @@ Cross-validation: some gotchas
 Cross-validation is the ubiquitous test of a machine learning model. Yet
 many things can go wrong.
 
+.. contents::
+    :local:
+
 """
 
 ###############################################################
-# The uncertainty of measured accuracy
-# ------------------------------------
+# Uncertainty of measured accuracy
+# --------------------------------
+#
+# Variations in cross_val_score: simple experiments
+# ..................................................
 #
 # The first thing to have in mind is that the results of a
 # cross-validation are noisy estimate of the real prediction accuracy
@@ -18,7 +24,7 @@ many things can go wrong.
 from sklearn import datasets, discriminant_analysis
 import numpy as np
 np.random.seed(0)
-data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)])
+data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)], n_samples=100)
 classifier = discriminant_analysis.LinearDiscriminantAnalysis()
 
 ###############################################################
@@ -34,9 +40,12 @@ for _ in range(10):
     print(cross_val_score(classifier, data, target))
 
 ###############################################################
-# This should not be surprising: if the classification rate is p, the
-# observed distribution of correct classifications on a set of size
-# follows a binomial distribution
+# A simple probabilistic model
+# .............................
+#
+# A sample probabilistic model gives the distribution of observed error:
+# if the classification rate is p, the observed distribution of correct
+# classifications on a set of size follows a binomial distribution
 from scipy import stats
 n = len(data)
 distrib = stats.binom(n=n, p=.7)
@@ -63,22 +72,69 @@ for n in [100, 1000, 10000, 100000, 1000000]:
 # fall more than .5% away of the true rate.
 #
 # **Keep in mind that cross-val is a noisy measure**
+
+###############################################################
+# Empirical distribution of cross-validation scores
+# .....................................................
 #
-# Importantly, the variance across folds is not a good measure of this
-# error, as the different data folds are not independent. For instance,
-# doing many random splits will can reduce the variance arbitrarily, but
-# does not provide actually new data points
+# We can sample the distribution of scores using cross-validation
+# iterators based on subsampling, such as
+# :class:`sklearn.model_selection.ShuffleSplit`, with many many splits
+from sklearn import model_selection
+cv = model_selection.ShuffleSplit(n_splits=200)
+scores = cross_val_score(classifier, data, target, cv=cv)
+
+import seaborn as sns
+plt.figure(figsize=(6, 3))
+sns.distplot(scores)
+plt.xlim(0, 1)
+
+###############################################################
+# The empirical distribution is broader than the theoretical one. This
+# can be explained by the fact that as we are retraining the model on
+# each fold, it actually fluctuates due the sampling noise in the
+# training data, while the model above only accounts for sampling noise
+# in the test data.
+#
+# The situation does get better with more data:
+data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)], n_samples=1000)
+
+scores = cross_val_score(classifier, data, target, cv=cv)
+
+plt.figure(figsize=(6, 3))
+sns.distplot(scores)
+plt.xlim(0, 1)
+plt.title("Distribution with 1000 data points")
+
+###############################################################
+# The distribution is still very broader
+#
+# **Testing the observed scores**
+#
+# Importantly, the standard error of the mean across folds is not a good
+# measure of this error, as the different data folds are not independent.
+# For instance, doing many random splits will can reduce the variance
+# arbitrarily, but does not provide actually new data points
+from scipy import stats
+
+plt.figure(figsize=(6, 3))
+sns.distplot(scores)
+plt.axvline(np.mean(scores), color='k')
+plt.axvline(np.mean(scores) + np.std(scores), color='b', label='std')
+plt.axvline(np.mean(scores) - np.std(scores), color='b')
+plt.axvline(np.mean(scores) + stats.sem(scores), color='r', label='SEM')
+plt.axvline(np.mean(scores) - stats.sem(scores), color='r')
+plt.legend(loc='best')
+plt.xlim(0, 1)
+plt.title("Distribution with 1000 data points")
 
 ###############################################################
 # Measuring baselines and chance
-# -------------------------------
+# ...............................
 #
 # Because of class imbalances, or confounding effects, it is easy to get
 # it wrong it terms of what constitutes chances. There are two approaches
 # to measure peformances of baselines or chance:
-#
-# Let's go back to simple generated data:
-data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)])
 
 ###############################################################
 # **DummyClassifier** The dummy classifier:
@@ -86,7 +142,8 @@ data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)])
 # provide simple baselines
 from sklearn.dummy import DummyClassifier
 dummy = DummyClassifier(strategy="stratified")
-print(cross_val_score(dummy, data, target))
+dummy_scores = cross_val_score(dummy, data, target)
+print(dummy_scores)
 
 ###############################################################
 # **Chance level** To measure actual chance, the most robust approach is
@@ -94,21 +151,36 @@ print(cross_val_score(dummy, data, target))
 # :func:`sklearn.model_selection.permutation_test_score`, which is used
 # as cross_val_score
 from sklearn.model_selection import permutation_test_score
-score, permuted_scores, p_value = permutation_test_score(classifier, data, target)
+score, permuted_scores, p_value = permutation_test_score(classifier,
+                                                         data, target)
 print("Classifier score: {0},\np value: {1}\nPermutation scores {2}"
         .format(score, p_value, permuted_scores))
 
+###############################################################
+# We can plot all the scores
+plt.figure(figsize=(6, 3))
+sns.distplot(dummy_scores, color="g", label="Dummy scores")
+sns.distplot(permuted_scores, color="r", label="Permuted scores")
+sns.distplot(scores, label="Cross validation scores")
+plt.legend(loc='best')
+plt.xlim(0, 1)
+
+###############################################################
+# Permutation and performing many cross-validation splits are
+# computationally expensive, but they give trust-worthy answers
 
 ###############################################################
 # Cross-validation with non iid data
 # -----------------------------------
 #
+# Another common caveat for cross-validation are dependencies in the
+# observations that can easily creep in between the train and the test
+# sets. Let us explore these problems in two settings.
+#
 # Stock market: time series
 # ...........................
 #
-# Download and load the data
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
+# **Download**: Download and load the data:
 import pandas as pd
 import os
 # Python 2 vs Python 3:
@@ -132,7 +204,7 @@ for symbol, name in symbols.items():
     quotes[name] = this_quote['open']
 
 ###############################################################
-# Predict 'Chevron' from the others
+# **Prediction**: Predict 'Chevron' from the others
 from sklearn import linear_model, model_selection, ensemble
 cv = model_selection.ShuffleSplit(random_state=0)
 print(cross_val_score(linear_model.RidgeCV(),
@@ -144,6 +216,9 @@ print(cross_val_score(linear_model.RidgeCV(),
 # Is this a robust prediction?
 #
 # Does it cary over across quarters?
+#
+# **Stratification**: To thest this we need to stratify cross-validation
+# using a :class:`sklearn.model_selection.LeaveOneGroupOut`
 quarters = pd.to_datetime(this_quote['date']).dt.to_period('Q')
 cv = model_selection.LeaveOneGroupOut()
 
@@ -160,8 +235,8 @@ quotes_with_dates = pd.concat((quotes, this_quote['date']),
 quotes_with_dates.plot()
 
 ###############################################################
-# If the goal is to do forecasting, than prediction should be done in the
-# future, for instance using
+# **Testing for forecasting**: If the goal is to do forecasting, than
+# prediction should be done in the future, for instance using
 # :class:`sklearn.model_selection.TimeSeriesSplit`
 #
 # Can we do forecasting: predict the future?
@@ -174,7 +249,7 @@ print(cross_val_score(linear_model.RidgeCV(),
                       cv=cv, groups=quarters).mean())
 
 ###############################################################
-# No. This prediction is abysmal
+# No. This prediction is abysmal.
 
 ###############################################################
 # School grades: repeated measures
@@ -184,10 +259,8 @@ print(cross_val_score(linear_model.RidgeCV(),
 # measures. This is often often in longitudinal data. Here we are looking
 # at grades of school students, across the years.
 #
-# Download and load the data
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# Download some data on grades across several schools (centers)
+# **Download** First we download some data on grades across several
+# schools (centers)
 #
 # The junior school data, originally from http://www.bristol.ac.uk/cmm/learning/support/datasets/
 if not os.path.exists('exams.csv.gz'):
@@ -202,12 +275,17 @@ continuing_students = continuing_students[continuing_students > 2].index
 exams = exams[exams.StudentID.isin(continuing_students)]
 
 ###############################################################
-# Visualized factor of grades
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# **Visualization**: Grade at tests in in exams depend on socio-economic
+# status, year at school, ...
 #
-# Grade at tests in in exams depend on socio-economic status, year at
-# school, ...
+# The simplest way to do this is using seaborn's pairplot function.
+
 import seaborn as sns
+sns.pairplot(exams.drop(columns=['StudentID']))
+
+###############################################################
+# A more elaborate plot using density estimation gives better
+# understanding of the dense regions:
 g = sns.PairGrid(exams.drop(columns=['StudentID']),
                  diag_sharey=False)
 g.map_lower(sns.kdeplot)
@@ -216,11 +294,8 @@ g.map_diag(sns.kdeplot, lw=3)
 
 
 ###############################################################
-# Predicting grades in maths
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
-# Can we predict test grades in maths from demographics (ie, not from
-# other grades)?
+# **Prediction**: Can we predict test grades in maths from demographics
+# (ie, not from other grades)?
 
 # A bit of feature engineering to get a numerical matrix (easily done
 # with the ColumnTransformer in scikit-learn >= 0.20)
@@ -236,14 +311,14 @@ print(cross_val_score(ensemble.GradientBoostingRegressor(), X, y,
                       cv=10).mean())
 
 ###############################################################
-# We get can predict!
+# We can predict!
 #
 # But there is one caveat: are we simply learning to recognive students
 # across the years? There is many implicit informations about students:
 # notably in the school ID and the class ID.
 #
-# To test for this, we can make sure that we have different students in
-# the train and the test set
+# **Stratification** To test for this, we can make sure that we have
+# different students in the train and the test set.
 from sklearn import model_selection
 cv = model_selection.GroupKFold(10)
 
