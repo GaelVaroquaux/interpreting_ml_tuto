@@ -214,13 +214,6 @@ g.map_lower(sns.kdeplot)
 g.map_upper(plt.scatter, s=2)
 g.map_diag(sns.kdeplot, lw=3)
 
-###############################################################
-# A zoomed view on the factors that seem most interpretable
-g = sns.PairGrid(exams[['Ravens', 'Maths', 'English', 'SocialClass', 'Year']],
-                 diag_sharey=False)
-g.map_lower(sns.kdeplot)
-g.map_upper(plt.scatter, s=2)
-g.map_diag(sns.kdeplot, lw=3)
 
 ###############################################################
 # Predicting grades in maths
