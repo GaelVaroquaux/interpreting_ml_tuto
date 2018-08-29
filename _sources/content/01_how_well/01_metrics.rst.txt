@@ -168,7 +168,7 @@ The default score is explained variance
 
  Out::
 
-    [ 0.82694643  0.85253877  0.83741138]
+    [ 0.7998972   0.8410145   0.79320275]
 
 
 Explained variance is convienent because it has a natural scaling: 1 is
@@ -193,7 +193,7 @@ Not along the Charles river (feature 3)
 
  Out::
 
-    [ 0.83322162  0.89980524  0.82376006]
+    [ 0.83009248  0.90030842  0.83204317]
 
 
 Along the Charles river
@@ -213,12 +213,12 @@ Along the Charles river
 
  Out::
 
-    [ 0.57820147 -0.16637666  0.68166276]
+    [ 0.67640959 -0.14952158  0.77737806]
 
 
 So the houses along the Charles are harder to predict?
 
-It's not so easy to conclude this from the explained variance: in two
+It is not so easy to conclude this from the explained variance: in two
 different sets of observations, the variance of the target differs, and
 the explained variance is a relative measure
 
@@ -242,7 +242,7 @@ Not along the Charles river
 
  Out::
 
-    [-13.46014076  -7.2695     -13.03670764]
+    [-14.91942229  -9.30497261 -14.12331083]
 
 
 Along the Charles river
@@ -263,7 +263,7 @@ Along the Charles river
 
  Out::
 
-    [ -78.55499167 -109.24950833 -126.26929091]
+    [ -83.05688333 -104.24485833  -47.54961818]
 
 
 So the error is larger along the Charles river
@@ -292,7 +292,7 @@ The Mean Absolute Error is useful for this goal
 
  Out::
 
-    [-2.40242604 -2.21615385 -2.75047619]
+    [-2.49491124 -2.22118343 -2.71839286]
 
 
 Summary
@@ -349,7 +349,7 @@ It takes values between 0 and 1, where 1 is perfect prediction
 
  Out::
 
-    [ 0.975       0.97161937  0.98996656]
+    [ 0.96833333  0.97662771  0.97491639]
 
 
 However, a stupid classifier can each good prediction wit imbalanced
@@ -374,8 +374,26 @@ classes
     [ 0.9         0.89983306  0.90133779]
 
 
-Balanced accuracy (available in development scikit-learn versions)
-fixes this, but can have surprising behaviors, such as being negative
+Balanced accuracy (available in scikit-learn 0.20)
+fixes this, but can have surprising behaviors, such as being negative,
+and can only be used for binary classification.
+
+
+
+.. code-block:: python
+
+    print(cross_val_score(classifier, digits.data, sevens,
+                          scoring='balanced_accuracy'))
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    [ 0.87407407  0.875       0.88983051]
 
 
 Precision, recall, and their shortcomings
@@ -444,7 +462,7 @@ defined. Scikit-learn puts it to zero
 
  Out::
 
-    [ 0.68333333  0.85        0.89830508]
+    [ 0.66666667  0.76666667  0.83050847]
 
 
 Our recall isn't as good: we miss many sevens
@@ -476,6 +494,11 @@ classifiers should be compared on a precision at a given recall
 Area under the ROC curve
 ..........................
 
+.. figure:: ../03_figures/images/sphx_glr_roc_curve_001.png
+  :align: right
+  :target: ../03_figures/roc_curve.html
+
+
 If the classifier provides a decision function that can be thresholded
 to control false positives versus false negatives, the ROC curve
 summarise the different tradeoffs that can be achieved by varying this
@@ -498,7 +521,7 @@ prediction and .5 is chance, independently of class imbalance
 
  Out::
 
-    [ 0.99441358  0.99868584  0.99885224]
+    [ 0.98777778  0.99516079  0.99871073]
 
 
 
@@ -542,7 +565,7 @@ changes in terms of precision
 
  Out::
 
-    [ 0.9428459   0.97449684  0.97616341]
+    [ 0.96132921  0.94239218  0.98758793]
 
 
 Naive decisions are no longer at .5
@@ -589,7 +612,7 @@ sevens, but maybe it is more interesting to predict the digit: a
 
  Out::
 
-    [ 0.89368771  0.91986644  0.90436242]
+    [ 0.88538206  0.91819699  0.88926174]
 
 
 The most frequent label is no longer a very interesting baseline
@@ -609,7 +632,7 @@ The most frequent label is no longer a very interesting baseline
 
  Out::
 
-    [ 0.10299003  0.0884808   0.08221477]
+    [ 0.09468439  0.11018364  0.12416107]
 
 
 Precision and recall need the notion of specific class to detect
@@ -655,7 +678,8 @@ slightly different
      [0 0 0 0 1 0 0 0 0 0]]
 
 
-The ROC AUC can then be computed for each label
+The ROC AUC can then be computed for each label, and the mean is
+reported
 
 
 
@@ -671,7 +695,7 @@ The ROC AUC can then be computed for each label
 
  Out::
 
-    [ 0.9874304   0.9870478   0.98160379]
+    [ 0.98939378  0.99108954  0.98166972]
 
 
 as well as the average precision
@@ -690,7 +714,7 @@ as well as the average precision
 
  Out::
 
-    [ 0.94547594  0.94510265  0.93917088]
+    [ 0.92053636  0.94531451  0.93708004]
 
 
 Note that the confusion between classes may not well be captured in
@@ -712,7 +736,7 @@ the problem as multiple single-class problems (one-vs-all).
 ____________________
 
 
-**Total running time of the script:** ( 0 minutes  2.600 seconds)
+**Total running time of the script:** ( 0 minutes  1.998 seconds)
 
 
 .. _sphx_glr_download_content_01_how_well_01_metrics.py:

@@ -69,7 +69,7 @@ print(cross_val_score(regressor, data[data[:, 3] == 1],
 #############################################################
 # So the houses along the Charles are harder to predict?
 #
-# It's not so easy to conclude this from the explained variance: in two
+# It is not so easy to conclude this from the explained variance: in two
 # different sets of observations, the variance of the target differs, and
 # the explained variance is a relative measure
 #
@@ -141,8 +141,11 @@ most_frequent = DummyClassifier(strategy='most_frequent')
 print(cross_val_score(most_frequent, digits.data, sevens))
 
 #############################################################
-# Balanced accuracy (available in development scikit-learn versions)
-# fixes this, but can have surprising behaviors, such as being negative
+# Balanced accuracy (available in scikit-learn 0.20)
+# fixes this, but can have surprising behaviors, such as being negative,
+# and can only be used for binary classification.
+print(cross_val_score(classifier, digits.data, sevens,
+                      scoring='balanced_accuracy'))
 
 #############################################################
 # Precision, recall, and their shortcomings
@@ -183,6 +186,11 @@ print(cross_val_score(most_frequent, digits.data, sevens, scoring='recall'))
 #############################################################
 # Area under the ROC curve
 # ..........................
+#
+# .. figure:: ../03_figures/images/sphx_glr_roc_curve_001.png
+#   :align: right
+#   :target: ../03_figures/roc_curve.html
+#
 #
 # If the classifier provides a decision function that can be thresholded
 # to control false positives versus false negatives, the ROC curve
@@ -246,7 +254,8 @@ digit_labels = LabelBinarizer().fit_transform(digits.target)
 print(digit_labels[:15])
 
 #############################################################
-# The ROC AUC can then be computed for each label
+# The ROC AUC can then be computed for each label, and the mean is
+# reported
 print(cross_val_score(classifier, digits.data, digit_labels,
                       scoring='roc_auc'))
 #############################################################

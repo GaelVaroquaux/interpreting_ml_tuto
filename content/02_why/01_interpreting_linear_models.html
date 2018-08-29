@@ -1,17 +1,14 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>2.1. Interpreting linear models &#8212; Tutorial</title>
-    
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -69,7 +66,7 @@ $(function () {
 
 
   </head>
-  <body role="document">
+  <body>
    <!-- Use the header to add javascript -->
     
 
@@ -177,14 +174,20 @@ correlated.</p>
 <a class="reference external" href="http://www.scipy-lectures.org">scipy lecture notes</a></p>
 <div class="section" id="data-on-wages">
 <h2>2.1.1. Data on wages<a class="headerlink" href="#data-on-wages" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">urllib</span>
-<div class="newline"></div><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <div class="newline"></div><span class="kn">import</span> <span class="nn">pandas</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Python 2 vs Python 3:</span>
+<div class="newline"></div><span class="k">try</span><span class="p">:</span>
+<div class="newline"></div>    <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
+<div class="newline"></div><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<div class="newline"></div>    <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
+<div class="newline"></div>
 <div class="newline"></div>
 <div class="newline"></div><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;wages.txt&#39;</span><span class="p">):</span>
 <div class="newline"></div>    <span class="c1"># Download the file if it is not present</span>
-<div class="newline"></div>    <span class="n">urllib</span><span class="o">.</span><span class="n">urlretrieve</span><span class="p">(</span><span class="s1">&#39;http://lib.stat.cmu.edu/datasets/CPS_85_Wages&#39;</span><span class="p">,</span>
-<div class="newline"></div>                       <span class="s1">&#39;wages.txt&#39;</span><span class="p">)</span>
+<div class="newline"></div>    <span class="n">urlretrieve</span><span class="p">(</span><span class="s1">&#39;http://lib.stat.cmu.edu/datasets/CPS_85_Wages&#39;</span><span class="p">,</span>
+<div class="newline"></div>                <span class="s1">&#39;wages.txt&#39;</span><span class="p">)</span>
 <div class="newline"></div>
 <div class="newline"></div><span class="c1"># Give names to the columns</span>
 <div class="newline"></div><span class="n">names</span> <span class="o">=</span> <span class="p">[</span>
@@ -280,7 +283,7 @@ that returns coefficients always at one indepently of the data will
 appear as very stable though it clearly does not control for false
 detections.</p>
 <p>We can do this in a cross-validation loop, using the argument
-&#8220;return_estimator&#8221; of <a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_validate.html#sklearn.model_selection.cross_validate" title="(in scikit-learn v0.19.1)"><code class="xref py py-func docutils literal"><span class="pre">sklearn.model_selection.cross_validate()</span></code></a>
+“return_estimator” of <a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_validate.html#sklearn.model_selection.cross_validate" title="(in scikit-learn v0.19.2)"><code class="xref py py-func docutils literal"><span class="pre">sklearn.model_selection.cross_validate()</span></code></a>
 which has been added in version 0.20 of scikit-learn:</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_validate.html#sklearn.model_selection.cross_validate" title="View documentation for sklearn.model_selection.cross_validate"><span class="n">cross_validate</span></a>
 <div class="newline"></div></pre></div>
@@ -320,7 +323,7 @@ which has been added in version 0.20 of scikit-learn:</p>
 <p>Note the difference between the lasso and the ridge estimator: we do
 not have enough data to perfectly estimate conditional relationships,
 hence the prior (ie the regularization) makes a difference, and its is
-hard to tell from the data which is the &#8220;truth&#8221;.</p>
+hard to tell from the data which is the “truth”.</p>
 <p>One reasonnable model-selection criterion is to believe most the model
 that predicts best. For this, we can inspect the prediction scores
 obtained via the cross-validation</p>
@@ -336,7 +339,7 @@ still apply. Ideally, we should use a ShuffleSplit cross-validation
 object to sample many times and have a better estimate of the
 posterior, both for the coefficients and the test scores.</p>
 <hr class="docutils" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  3.232 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  1.424 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-02-why-01-interpreting-linear-models-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/01_interpreting_linear_models.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>
@@ -428,7 +431,7 @@ posterior, both for the coefficients and the test scores.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright .
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
     </div>
   </body>
 </html>

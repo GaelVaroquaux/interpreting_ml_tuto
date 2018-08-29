@@ -90,7 +90,7 @@ What if we try different random shuffles of the data?
     [ 0.76470588  0.61764706  0.625     ]
 
 
-This should not be surprising: if the lassification rate is p, the
+This should not be surprising: if the classification rate is p, the
 observed distribution of correct classifications on a set of size
 follows a binomial distribution
 
@@ -128,7 +128,7 @@ We can plot it:
 
 
 It is wide, because there are not that many samples to mesure the error
-upon: iris is a small dataset
+upon: this is a small dataset.
 
 We can look at the interval in which 95% of the observed accuracy lies
 for different sample sizes
@@ -137,10 +137,10 @@ for different sample sizes
 
 .. code-block:: python
 
-    for n in [100, 1000, 10000, 100000]:
+    for n in [100, 1000, 10000, 100000, 1000000]:
         distrib = stats.binom(n, .7)
         interval = (distrib.isf(.025) - distrib.isf(.975)) / n
-        print("Size: {0: 7}  | interval: {1}%".format(n, 100 * interval))
+        print("Size: {0: 8}  | interval: {1}%".format(n, 100 * interval))
 
 
 
@@ -150,14 +150,15 @@ for different sample sizes
 
  Out::
 
-    Size:     100  | interval: 18.0%
-    Size:    1000  | interval: 5.7%
-    Size:   10000  | interval: 1.8%
-    Size:  100000  | interval: 0.568%
+    Size:      100  | interval: 18.0%
+    Size:     1000  | interval: 5.7%
+    Size:    10000  | interval: 1.8%
+    Size:   100000  | interval: 0.568%
+    Size:  1000000  | interval: 0.1796%
 
 
 At 100 000 samples, 5% of the observed classification accuracy still
-fall more than .5% away of the true rate
+fall more than .5% away of the true rate.
 
 **Keep in mind that cross-val is a noisy measure**
 
@@ -167,16 +168,26 @@ doing many random splits will can reduce the variance arbitrarily, but
 does not provide actually new data points
 
 
-Confounding effects and non independence
------------------------------------------
-
-
 Measuring baselines and chance
 -------------------------------
 
 Because of class imbalances, or confounding effects, it is easy to get
 it wrong it terms of what constitutes chances. There are two approaches
 to measure peformances of baselines or chance:
+
+Let's go back to simple generated data:
+
+
+
+.. code-block:: python
+
+    data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)])
+
+
+
+
+
+
 
 **DummyClassifier** The dummy classifier:
 :class:`sklearn.dummy.DummyClassifier`, with different strategies to
@@ -198,7 +209,7 @@ provide simple baselines
 
  Out::
 
-    [ 0.44117647  0.61764706  0.40625   ]
+    [ 0.58823529  0.55882353  0.46875   ]
 
 
 **Chance level** To measure actual chance, the most robust approach is
@@ -219,32 +230,306 @@ as cross_val_score
 
 
 
+
 .. rst-class:: sphx-glr-script-out
 
  Out::
 
-    Classifier score: 0.669117647059,
+    Classifier score: 0.742034313725,
     p value: 0.00990099009901
-    Permutation scores [ 0.54963235  0.47120098  0.51041667  0.59926471  0.45036765  0.44852941
-      0.52941176  0.59865196  0.47855392  0.39031863  0.45955882  0.56066176
-      0.60110294  0.38112745  0.45159314  0.46017157  0.58026961  0.57904412
-      0.59191176  0.58026961  0.51041667  0.53921569  0.41176471  0.37806373
-      0.62193627  0.52022059  0.41789216  0.50980392  0.4497549   0.59987745
-      0.47855392  0.53921569  0.44056373  0.60784314  0.47120098  0.47916667
-      0.48958333  0.5814951   0.50857843  0.43014706  0.53002451  0.48039216
-      0.48835784  0.43872549  0.43872549  0.59987745  0.45894608  0.40931373
-      0.52022059  0.45955882  0.44914216  0.52022059  0.55147059  0.47120098
-      0.49080882  0.49203431  0.47794118  0.5379902   0.62990196  0.51041667
-      0.46997549  0.44056373  0.56127451  0.60968137  0.47120098  0.54963235
-      0.54718137  0.56066176  0.47977941  0.42953431  0.43872549  0.38051471
-      0.43872549  0.41115196  0.48897059  0.48039216  0.60968137  0.60906863
-      0.57169118  0.52757353  0.5122549   0.52022059  0.46017157  0.62009804
-      0.47058824  0.59987745  0.55085784  0.46813725  0.53737745  0.54105392
-      0.48897059  0.51102941  0.48039216  0.50122549  0.47058824  0.59926471
-      0.49080882  0.4185049   0.47058824  0.49019608]
+    Permutation scores [ 0.57107843  0.42034314  0.53921569  0.47058824  0.59987745  0.47977941
+      0.49080882  0.60110294  0.55943627  0.54044118  0.47855392  0.43137255
+      0.50061275  0.60171569  0.60110294  0.50919118  0.51041667  0.39828431
+      0.55085784  0.62071078  0.44852941  0.5692402   0.3995098   0.46139706
+      0.51776961  0.49877451  0.45159314  0.53063725  0.50796569  0.54901961
+      0.60232843  0.57965686  0.52941176  0.45955882  0.51041667  0.6004902
+      0.55943627  0.5         0.5502451   0.54840686  0.56004902  0.57046569
+      0.51960784  0.52144608  0.50122549  0.54963235  0.47181373  0.50857843
+      0.42830882  0.53002451  0.54166667  0.42892157  0.50122549  0.47120098
+      0.47058824  0.44117647  0.45894608  0.4810049   0.50857843  0.61213235
+      0.56311275  0.49877451  0.6004902   0.52205882  0.59926471  0.48039216
+      0.45343137  0.50183824  0.5189951   0.59191176  0.56004902  0.56066176
+      0.47058824  0.64154412  0.48958333  0.4497549   0.51041667  0.55821078
+      0.43811275  0.45894608  0.43014706  0.43811275  0.45159314  0.4877451
+      0.40931373  0.56004902  0.53737745  0.50919118  0.40012255  0.47181373
+      0.45955882  0.56004902  0.5379902   0.5379902   0.37990196  0.42095588
+      0.32843137  0.44914216  0.49938725  0.53125   ]
 
 
-**Total running time of the script:** ( 0 minutes  0.368 seconds)
+Cross-validation with non iid data
+-----------------------------------
+
+Stock market: time series
+...........................
+
+Download and load the data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+.. code-block:: python
+
+    import pandas as pd
+    import os
+    # Python 2 vs Python 3:
+    try:
+        from urllib.request import urlretrieve
+    except ImportError:
+        from urllib import urlretrieve
+
+    symbols = {'TOT': 'Total', 'XOM': 'Exxon', 'CVX': 'Chevron',
+               'COP': 'ConocoPhillips', 'VLO': 'Valero Energy'}
+
+    quotes = pd.DataFrame()
+
+    for symbol, name in symbols.items():
+        url = ('https://raw.githubusercontent.com/scikit-learn/examples-data/'
+               'master/financial-data/{}.csv')
+        filename = "{}.csv".format(symbol)
+        if not os.path.exists(filename):
+            urlretrieve(url.format(symbol), filename)
+        this_quote = pd.read_csv(filename)
+        quotes[name] = this_quote['open']
+
+
+
+
+
+
+
+Predict 'Chevron' from the others
+
+
+
+.. code-block:: python
+
+    from sklearn import linear_model, model_selection, ensemble
+    cv = model_selection.ShuffleSplit(random_state=0)
+    print(cross_val_score(linear_model.RidgeCV(),
+                          quotes.drop(columns=['Chevron']),
+                          quotes['Chevron'],
+                          cv=cv).mean())
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    0.255791000942
+
+
+Is this a robust prediction?
+
+Does it cary over across quarters?
+
+
+
+.. code-block:: python
+
+    quarters = pd.to_datetime(this_quote['date']).dt.to_period('Q')
+    cv = model_selection.LeaveOneGroupOut()
+
+    print(cross_val_score(linear_model.RidgeCV(),
+                          quotes.drop(columns=['Chevron']),
+                          quotes['Chevron'],
+                          cv=cv, groups=quarters).mean())
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    -55.0821056887
+
+
+The problem that we are facing here is the auto-correlation in the
+data: these datasets are **time-series**.
+
+
+
+.. code-block:: python
+
+    quotes_with_dates = pd.concat((quotes, this_quote['date']),
+                                  axis=1).set_index('date')
+    quotes_with_dates.plot()
+
+
+
+
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_002.png
+    :class: sphx-glr-single-img
+
+
+
+
+If the goal is to do forecasting, than prediction should be done in the
+future, for instance using
+:class:`sklearn.model_selection.TimeSeriesSplit`
+
+
+School grades: repeated measures
+.................................
+
+Let us look at another dependency structure across samples: repeated
+measures. This is often often in longitudinal data. Here we are looking
+at grades of school students, across the years.
+
+Download and load the data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Download some data on grades across several schools (centers)
+
+The junior school data, originally from http://www.bristol.ac.uk/cmm/learning/support/datasets/
+
+
+
+.. code-block:: python
+
+    if not os.path.exists('exams.csv.gz'):
+        # Download the file if it is not present
+        urlretrieve('https://raw.githubusercontent.com/GaelVaroquaux/interpreting_ml_tuto/blob/master/src/01_how_well/exams.csv.gz',
+                    filename)
+    exams = pd.read_csv('exams.csv.gz')
+
+    # Select data for students present all three years
+    continuing_students = exams.StudentID.value_counts()
+    continuing_students = continuing_students[continuing_students > 2].index
+    exams = exams[exams.StudentID.isin(continuing_students)]
+
+
+
+
+
+
+
+Visualized factor of grades
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Grade at tests in in exams depend on socio-economic status, year at
+school, ...
+
+
+
+.. code-block:: python
+
+    import seaborn as sns
+    g = sns.PairGrid(exams.drop(columns=['StudentID']),
+                     diag_sharey=False)
+    g.map_lower(sns.kdeplot)
+    g.map_upper(plt.scatter, s=2)
+    g.map_diag(sns.kdeplot, lw=3)
+
+
+
+
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_003.png
+    :class: sphx-glr-single-img
+
+
+
+
+A zoomed view on the factors that seem most interpretable
+
+
+
+.. code-block:: python
+
+    g = sns.PairGrid(exams[['Ravens', 'Maths', 'English', 'SocialClass', 'Year']],
+                     diag_sharey=False)
+    g.map_lower(sns.kdeplot)
+    g.map_upper(plt.scatter, s=2)
+    g.map_diag(sns.kdeplot, lw=3)
+
+
+
+
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_004.png
+    :class: sphx-glr-single-img
+
+
+
+
+Predicting grades in maths
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Can we predict test grades in maths from demographics (ie, not from
+other grades)?
+
+
+
+.. code-block:: python
+
+
+    # A bit of feature engineering to get a numerical matrix (easily done
+    # with the ColumnTransformer in scikit-learn >= 0.20)
+    X = exams.drop(columns=['StudentID', 'Maths', 'Ravens', 'English'])
+    # Encode gender as an integer variables
+    X['Gender'] = X['Gender'] == 'Girl'
+    # One-hot encode social class
+    X = pd.get_dummies(X, drop_first=True)
+    y = exams['Maths']
+
+    from sklearn import ensemble
+    print(cross_val_score(ensemble.GradientBoostingRegressor(), X, y,
+                          cv=10).mean())
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    0.0699623196419
+
+
+We get can predict!
+
+But there is one caveat: are we simply learning to recognive students
+across the years? There is many implicit informations about students:
+notably in the school ID and the class ID.
+
+To test for this, we can make sure that we have different students in
+the train and the test set
+
+
+
+.. code-block:: python
+
+    from sklearn import model_selection
+    cv = model_selection.GroupKFold(10)
+
+    print(cross_val_score(ensemble.GradientBoostingRegressor(), X, y,
+                          cv=cv, groups=exams['StudentID']).mean())
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out::
+
+    0.142224153494
+
+
+It works better!
+
+The classifier learns better to generalize, probably by learning
+stronger invariances from the repeated measures on the students
+
+
+
+
+**Total running time of the script:** ( 0 minutes  37.986 seconds)
 
 
 .. _sphx_glr_download_content_01_how_well_02_cross_validation.py:

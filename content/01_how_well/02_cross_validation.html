@@ -1,17 +1,14 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>1.2. Cross-validation: some gotchas &#8212; Tutorial</title>
-    
     <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -69,7 +66,7 @@ $(function () {
 
 
   </head>
-  <body role="document">
+  <body>
    <!-- Use the header to add javascript -->
     
 
@@ -214,7 +211,7 @@ cross-validation are noisy estimate of the real prediction accuracy</p>
 <div class="newline"></div><span class="p">[</span> <span class="mf">0.76470588</span>  <span class="mf">0.61764706</span>  <span class="mf">0.625</span>     <span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
-<p>This should not be surprising: if the lassification rate is p, the
+<p>This should not be surprising: if the classification rate is p, the
 observed distribution of correct classifications on a set of size
 follows a binomial distribution</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
@@ -230,40 +227,42 @@ follows a binomial distribution</p>
 </div>
 <img alt="../../_images/sphx_glr_02_cross_validation_001.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_02_cross_validation_001.png" />
 <p>It is wide, because there are not that many samples to mesure the error
-upon: iris is a small dataset</p>
+upon: this is a small dataset.</p>
 <p>We can look at the interval in which 95% of the observed accuracy lies
 for different sample sizes</p>
-<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">]:</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="mi">1000000</span><span class="p">]:</span>
 <div class="newline"></div>    <span class="n">distrib</span> <span class="o">=</span> <a href="http://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.binom.html#scipy.stats.binom" title="View documentation for scipy.stats.binom"><span class="n">stats</span><span class="o">.</span><span class="n">binom</span></a><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="o">.</span><span class="mi">7</span><span class="p">)</span>
 <div class="newline"></div>    <span class="n">interval</span> <span class="o">=</span> <span class="p">(</span><span class="n">distrib</span><span class="o">.</span><span class="n">isf</span><span class="p">(</span><span class="o">.</span><span class="mo">025</span><span class="p">)</span> <span class="o">-</span> <span class="n">distrib</span><span class="o">.</span><span class="n">isf</span><span class="p">(</span><span class="o">.</span><span class="mi">975</span><span class="p">))</span> <span class="o">/</span> <span class="n">n</span>
-<div class="newline"></div>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Size: {0: 7}  | interval: {1}%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">interval</span><span class="p">))</span>
+<div class="newline"></div>    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Size: {0: 8}  | interval: {1}%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">interval</span><span class="p">))</span>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="n">Size</span><span class="p">:</span>     <span class="mi">100</span>  <span class="o">|</span> <span class="n">interval</span><span class="p">:</span> <span class="mf">18.0</span><span class="o">%</span>
-<div class="newline"></div><span class="n">Size</span><span class="p">:</span>    <span class="mi">1000</span>  <span class="o">|</span> <span class="n">interval</span><span class="p">:</span> <span class="mf">5.7</span><span class="o">%</span>
-<div class="newline"></div><span class="n">Size</span><span class="p">:</span>   <span class="mi">10000</span>  <span class="o">|</span> <span class="n">interval</span><span class="p">:</span> <span class="mf">1.8</span><span class="o">%</span>
-<div class="newline"></div><span class="n">Size</span><span class="p">:</span>  <span class="mi">100000</span>  <span class="o">|</span> <span class="n">interval</span><span class="p">:</span> <span class="mf">0.568</span><span class="o">%</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="n">Size</span><span class="p">:</span>      <span class="mi">100</span>  <span class="o">|</span> <span class="n">interval</span><span class="p">:</span> <span class="mf">18.0</span><span class="o">%</span>
+<div class="newline"></div><span class="n">Size</span><span class="p">:</span>     <span class="mi">1000</span>  <span class="o">|</span> <span class="n">interval</span><span class="p">:</span> <span class="mf">5.7</span><span class="o">%</span>
+<div class="newline"></div><span class="n">Size</span><span class="p">:</span>    <span class="mi">10000</span>  <span class="o">|</span> <span class="n">interval</span><span class="p">:</span> <span class="mf">1.8</span><span class="o">%</span>
+<div class="newline"></div><span class="n">Size</span><span class="p">:</span>   <span class="mi">100000</span>  <span class="o">|</span> <span class="n">interval</span><span class="p">:</span> <span class="mf">0.568</span><span class="o">%</span>
+<div class="newline"></div><span class="n">Size</span><span class="p">:</span>  <span class="mi">1000000</span>  <span class="o">|</span> <span class="n">interval</span><span class="p">:</span> <span class="mf">0.1796</span><span class="o">%</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>At 100 000 samples, 5% of the observed classification accuracy still
-fall more than .5% away of the true rate</p>
+fall more than .5% away of the true rate.</p>
 <p><strong>Keep in mind that cross-val is a noisy measure</strong></p>
 <p>Importantly, the variance across folds is not a good measure of this
 error, as the different data folds are not independent. For instance,
 doing many random splits will can reduce the variance arbitrarily, but
 does not provide actually new data points</p>
 </div>
-<div class="section" id="confounding-effects-and-non-independence">
-<h2>1.2.2. Confounding effects and non independence<a class="headerlink" href="#confounding-effects-and-non-independence" title="Permalink to this headline">¶</a></h2>
-</div>
 <div class="section" id="measuring-baselines-and-chance">
-<h2>1.2.3. Measuring baselines and chance<a class="headerlink" href="#measuring-baselines-and-chance" title="Permalink to this headline">¶</a></h2>
+<h2>1.2.2. Measuring baselines and chance<a class="headerlink" href="#measuring-baselines-and-chance" title="Permalink to this headline">¶</a></h2>
 <p>Because of class imbalances, or confounding effects, it is easy to get
 it wrong it terms of what constitutes chances. There are two approaches
 to measure peformances of baselines or chance:</p>
+<p>Let’s go back to simple generated data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_blobs.html#sklearn.datasets.make_blobs" title="View documentation for sklearn.datasets.make_blobs"><span class="n">datasets</span><span class="o">.</span><span class="n">make_blobs</span></a><span class="p">(</span><span class="n">centers</span><span class="o">=</span><span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)])</span>
+<div class="newline"></div></pre></div>
+</div>
 <p><strong>DummyClassifier</strong> The dummy classifier:
-<a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyClassifier.html#sklearn.dummy.DummyClassifier" title="(in scikit-learn v0.19.1)"><code class="xref py py-class docutils literal"><span class="pre">sklearn.dummy.DummyClassifier</span></code></a>, with different strategies to
+<a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyClassifier.html#sklearn.dummy.DummyClassifier" title="(in scikit-learn v0.19.2)"><code class="xref py py-class docutils literal"><span class="pre">sklearn.dummy.DummyClassifier</span></code></a>, with different strategies to
 provide simple baselines</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.dummy</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyClassifier.html#sklearn.dummy.DummyClassifier" title="View documentation for sklearn.dummy.DummyClassifier"><span class="n">DummyClassifier</span></a>
 <div class="newline"></div><span class="n">dummy</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyClassifier.html#sklearn.dummy.DummyClassifier" title="View documentation for sklearn.dummy.DummyClassifier"><span class="n">DummyClassifier</span></a><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s2">&quot;stratified&quot;</span><span class="p">)</span>
@@ -271,12 +270,12 @@ provide simple baselines</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.44117647</span>  <span class="mf">0.61764706</span>  <span class="mf">0.40625</span>   <span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.58823529</span>  <span class="mf">0.55882353</span>  <span class="mf">0.46875</span>   <span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p><strong>Chance level</strong> To measure actual chance, the most robust approach is
 to use permutations:
-<a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.permutation_test_score.html#sklearn.model_selection.permutation_test_score" title="(in scikit-learn v0.19.1)"><code class="xref py py-func docutils literal"><span class="pre">sklearn.model_selection.permutation_test_score()</span></code></a>, which is used
+<a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.permutation_test_score.html#sklearn.model_selection.permutation_test_score" title="(in scikit-learn v0.19.2)"><code class="xref py py-func docutils literal"><span class="pre">sklearn.model_selection.permutation_test_score()</span></code></a>, which is used
 as cross_val_score</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.permutation_test_score.html#sklearn.model_selection.permutation_test_score" title="View documentation for sklearn.model_selection.permutation_test_score"><span class="n">permutation_test_score</span></a>
 <div class="newline"></div><span class="n">score</span><span class="p">,</span> <span class="n">permuted_scores</span><span class="p">,</span> <span class="n">p_value</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.permutation_test_score.html#sklearn.model_selection.permutation_test_score" title="View documentation for sklearn.model_selection.permutation_test_score"><span class="n">permutation_test_score</span></a><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
@@ -285,28 +284,186 @@ as cross_val_score</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="n">Classifier</span> <span class="n">score</span><span class="p">:</span> <span class="mf">0.669117647059</span><span class="p">,</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="n">Classifier</span> <span class="n">score</span><span class="p">:</span> <span class="mf">0.742034313725</span><span class="p">,</span>
 <div class="newline"></div><span class="n">p</span> <span class="n">value</span><span class="p">:</span> <span class="mf">0.00990099009901</span>
-<div class="newline"></div><span class="n">Permutation</span> <span class="n">scores</span> <span class="p">[</span> <span class="mf">0.54963235</span>  <span class="mf">0.47120098</span>  <span class="mf">0.51041667</span>  <span class="mf">0.59926471</span>  <span class="mf">0.45036765</span>  <span class="mf">0.44852941</span>
-<div class="newline"></div>  <span class="mf">0.52941176</span>  <span class="mf">0.59865196</span>  <span class="mf">0.47855392</span>  <span class="mf">0.39031863</span>  <span class="mf">0.45955882</span>  <span class="mf">0.56066176</span>
-<div class="newline"></div>  <span class="mf">0.60110294</span>  <span class="mf">0.38112745</span>  <span class="mf">0.45159314</span>  <span class="mf">0.46017157</span>  <span class="mf">0.58026961</span>  <span class="mf">0.57904412</span>
-<div class="newline"></div>  <span class="mf">0.59191176</span>  <span class="mf">0.58026961</span>  <span class="mf">0.51041667</span>  <span class="mf">0.53921569</span>  <span class="mf">0.41176471</span>  <span class="mf">0.37806373</span>
-<div class="newline"></div>  <span class="mf">0.62193627</span>  <span class="mf">0.52022059</span>  <span class="mf">0.41789216</span>  <span class="mf">0.50980392</span>  <span class="mf">0.4497549</span>   <span class="mf">0.59987745</span>
-<div class="newline"></div>  <span class="mf">0.47855392</span>  <span class="mf">0.53921569</span>  <span class="mf">0.44056373</span>  <span class="mf">0.60784314</span>  <span class="mf">0.47120098</span>  <span class="mf">0.47916667</span>
-<div class="newline"></div>  <span class="mf">0.48958333</span>  <span class="mf">0.5814951</span>   <span class="mf">0.50857843</span>  <span class="mf">0.43014706</span>  <span class="mf">0.53002451</span>  <span class="mf">0.48039216</span>
-<div class="newline"></div>  <span class="mf">0.48835784</span>  <span class="mf">0.43872549</span>  <span class="mf">0.43872549</span>  <span class="mf">0.59987745</span>  <span class="mf">0.45894608</span>  <span class="mf">0.40931373</span>
-<div class="newline"></div>  <span class="mf">0.52022059</span>  <span class="mf">0.45955882</span>  <span class="mf">0.44914216</span>  <span class="mf">0.52022059</span>  <span class="mf">0.55147059</span>  <span class="mf">0.47120098</span>
-<div class="newline"></div>  <span class="mf">0.49080882</span>  <span class="mf">0.49203431</span>  <span class="mf">0.47794118</span>  <span class="mf">0.5379902</span>   <span class="mf">0.62990196</span>  <span class="mf">0.51041667</span>
-<div class="newline"></div>  <span class="mf">0.46997549</span>  <span class="mf">0.44056373</span>  <span class="mf">0.56127451</span>  <span class="mf">0.60968137</span>  <span class="mf">0.47120098</span>  <span class="mf">0.54963235</span>
-<div class="newline"></div>  <span class="mf">0.54718137</span>  <span class="mf">0.56066176</span>  <span class="mf">0.47977941</span>  <span class="mf">0.42953431</span>  <span class="mf">0.43872549</span>  <span class="mf">0.38051471</span>
-<div class="newline"></div>  <span class="mf">0.43872549</span>  <span class="mf">0.41115196</span>  <span class="mf">0.48897059</span>  <span class="mf">0.48039216</span>  <span class="mf">0.60968137</span>  <span class="mf">0.60906863</span>
-<div class="newline"></div>  <span class="mf">0.57169118</span>  <span class="mf">0.52757353</span>  <span class="mf">0.5122549</span>   <span class="mf">0.52022059</span>  <span class="mf">0.46017157</span>  <span class="mf">0.62009804</span>
-<div class="newline"></div>  <span class="mf">0.47058824</span>  <span class="mf">0.59987745</span>  <span class="mf">0.55085784</span>  <span class="mf">0.46813725</span>  <span class="mf">0.53737745</span>  <span class="mf">0.54105392</span>
-<div class="newline"></div>  <span class="mf">0.48897059</span>  <span class="mf">0.51102941</span>  <span class="mf">0.48039216</span>  <span class="mf">0.50122549</span>  <span class="mf">0.47058824</span>  <span class="mf">0.59926471</span>
-<div class="newline"></div>  <span class="mf">0.49080882</span>  <span class="mf">0.4185049</span>   <span class="mf">0.47058824</span>  <span class="mf">0.49019608</span><span class="p">]</span>
+<div class="newline"></div><span class="n">Permutation</span> <span class="n">scores</span> <span class="p">[</span> <span class="mf">0.57107843</span>  <span class="mf">0.42034314</span>  <span class="mf">0.53921569</span>  <span class="mf">0.47058824</span>  <span class="mf">0.59987745</span>  <span class="mf">0.47977941</span>
+<div class="newline"></div>  <span class="mf">0.49080882</span>  <span class="mf">0.60110294</span>  <span class="mf">0.55943627</span>  <span class="mf">0.54044118</span>  <span class="mf">0.47855392</span>  <span class="mf">0.43137255</span>
+<div class="newline"></div>  <span class="mf">0.50061275</span>  <span class="mf">0.60171569</span>  <span class="mf">0.60110294</span>  <span class="mf">0.50919118</span>  <span class="mf">0.51041667</span>  <span class="mf">0.39828431</span>
+<div class="newline"></div>  <span class="mf">0.55085784</span>  <span class="mf">0.62071078</span>  <span class="mf">0.44852941</span>  <span class="mf">0.5692402</span>   <span class="mf">0.3995098</span>   <span class="mf">0.46139706</span>
+<div class="newline"></div>  <span class="mf">0.51776961</span>  <span class="mf">0.49877451</span>  <span class="mf">0.45159314</span>  <span class="mf">0.53063725</span>  <span class="mf">0.50796569</span>  <span class="mf">0.54901961</span>
+<div class="newline"></div>  <span class="mf">0.60232843</span>  <span class="mf">0.57965686</span>  <span class="mf">0.52941176</span>  <span class="mf">0.45955882</span>  <span class="mf">0.51041667</span>  <span class="mf">0.6004902</span>
+<div class="newline"></div>  <span class="mf">0.55943627</span>  <span class="mf">0.5</span>         <span class="mf">0.5502451</span>   <span class="mf">0.54840686</span>  <span class="mf">0.56004902</span>  <span class="mf">0.57046569</span>
+<div class="newline"></div>  <span class="mf">0.51960784</span>  <span class="mf">0.52144608</span>  <span class="mf">0.50122549</span>  <span class="mf">0.54963235</span>  <span class="mf">0.47181373</span>  <span class="mf">0.50857843</span>
+<div class="newline"></div>  <span class="mf">0.42830882</span>  <span class="mf">0.53002451</span>  <span class="mf">0.54166667</span>  <span class="mf">0.42892157</span>  <span class="mf">0.50122549</span>  <span class="mf">0.47120098</span>
+<div class="newline"></div>  <span class="mf">0.47058824</span>  <span class="mf">0.44117647</span>  <span class="mf">0.45894608</span>  <span class="mf">0.4810049</span>   <span class="mf">0.50857843</span>  <span class="mf">0.61213235</span>
+<div class="newline"></div>  <span class="mf">0.56311275</span>  <span class="mf">0.49877451</span>  <span class="mf">0.6004902</span>   <span class="mf">0.52205882</span>  <span class="mf">0.59926471</span>  <span class="mf">0.48039216</span>
+<div class="newline"></div>  <span class="mf">0.45343137</span>  <span class="mf">0.50183824</span>  <span class="mf">0.5189951</span>   <span class="mf">0.59191176</span>  <span class="mf">0.56004902</span>  <span class="mf">0.56066176</span>
+<div class="newline"></div>  <span class="mf">0.47058824</span>  <span class="mf">0.64154412</span>  <span class="mf">0.48958333</span>  <span class="mf">0.4497549</span>   <span class="mf">0.51041667</span>  <span class="mf">0.55821078</span>
+<div class="newline"></div>  <span class="mf">0.43811275</span>  <span class="mf">0.45894608</span>  <span class="mf">0.43014706</span>  <span class="mf">0.43811275</span>  <span class="mf">0.45159314</span>  <span class="mf">0.4877451</span>
+<div class="newline"></div>  <span class="mf">0.40931373</span>  <span class="mf">0.56004902</span>  <span class="mf">0.53737745</span>  <span class="mf">0.50919118</span>  <span class="mf">0.40012255</span>  <span class="mf">0.47181373</span>
+<div class="newline"></div>  <span class="mf">0.45955882</span>  <span class="mf">0.56004902</span>  <span class="mf">0.5379902</span>   <span class="mf">0.5379902</span>   <span class="mf">0.37990196</span>  <span class="mf">0.42095588</span>
+<div class="newline"></div>  <span class="mf">0.32843137</span>  <span class="mf">0.44914216</span>  <span class="mf">0.49938725</span>  <span class="mf">0.53125</span>   <span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
-<p><strong>Total running time of the script:</strong> ( 0 minutes  0.368 seconds)</p>
+</div>
+<div class="section" id="cross-validation-with-non-iid-data">
+<h2>1.2.3. Cross-validation with non iid data<a class="headerlink" href="#cross-validation-with-non-iid-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="stock-market-time-series">
+<h3>1.2.3.1. Stock market: time series<a class="headerlink" href="#stock-market-time-series" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="download-and-load-the-data">
+<h4>1.2.3.1.1. Download and load the data<a class="headerlink" href="#download-and-load-the-data" title="Permalink to this headline">¶</a></h4>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<div class="newline"></div><span class="kn">import</span> <span class="nn">os</span>
+<div class="newline"></div><span class="c1"># Python 2 vs Python 3:</span>
+<div class="newline"></div><span class="k">try</span><span class="p">:</span>
+<div class="newline"></div>    <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
+<div class="newline"></div><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<div class="newline"></div>    <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">symbols</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;TOT&#39;</span><span class="p">:</span> <span class="s1">&#39;Total&#39;</span><span class="p">,</span> <span class="s1">&#39;XOM&#39;</span><span class="p">:</span> <span class="s1">&#39;Exxon&#39;</span><span class="p">,</span> <span class="s1">&#39;CVX&#39;</span><span class="p">:</span> <span class="s1">&#39;Chevron&#39;</span><span class="p">,</span>
+<div class="newline"></div>           <span class="s1">&#39;COP&#39;</span><span class="p">:</span> <span class="s1">&#39;ConocoPhillips&#39;</span><span class="p">,</span> <span class="s1">&#39;VLO&#39;</span><span class="p">:</span> <span class="s1">&#39;Valero Energy&#39;</span><span class="p">}</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="n">quotes</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html#pandas.DataFrame" title="View documentation for pandas.DataFrame"><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></a><span class="p">()</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="k">for</span> <span class="n">symbol</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">symbols</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<div class="newline"></div>    <span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;https://raw.githubusercontent.com/scikit-learn/examples-data/&#39;</span>
+<div class="newline"></div>           <span class="s1">&#39;master/financial-data/{}.csv&#39;</span><span class="p">)</span>
+<div class="newline"></div>    <span class="n">filename</span> <span class="o">=</span> <span class="s2">&quot;{}.csv&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">symbol</span><span class="p">)</span>
+<div class="newline"></div>    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<div class="newline"></div>        <span class="n">urlretrieve</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">symbol</span><span class="p">),</span> <span class="n">filename</span><span class="p">)</span>
+<div class="newline"></div>    <span class="n">this_quote</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html#pandas.read_csv" title="View documentation for pandas.read_csv"><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span></a><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+<div class="newline"></div>    <span class="n">quotes</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">this_quote</span><span class="p">[</span><span class="s1">&#39;open&#39;</span><span class="p">]</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>Predict ‘Chevron’ from the others</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span><span class="p">,</span> <span class="n">model_selection</span><span class="p">,</span> <span class="n">ensemble</span>
+<div class="newline"></div><span class="n">cv</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.ShuffleSplit.html#sklearn.model_selection.ShuffleSplit" title="View documentation for sklearn.model_selection.ShuffleSplit"><span class="n">model_selection</span><span class="o">.</span><span class="n">ShuffleSplit</span></a><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<div class="newline"></div><span class="k">print</span><span class="p">(</span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="View documentation for sklearn.model_selection.cross_val_score"><span class="n">cross_val_score</span></a><span class="p">(</span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html#sklearn.linear_model.RidgeCV" title="View documentation for sklearn.linear_model.RidgeCV"><span class="n">linear_model</span><span class="o">.</span><span class="n">RidgeCV</span></a><span class="p">(),</span>
+<div class="newline"></div>                      <span class="n">quotes</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Chevron&#39;</span><span class="p">]),</span>
+<div class="newline"></div>                      <span class="n">quotes</span><span class="p">[</span><span class="s1">&#39;Chevron&#39;</span><span class="p">],</span>
+<div class="newline"></div>                      <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="mf">0.255791000942</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>Is this a robust prediction?</p>
+<p>Does it cary over across quarters?</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">quarters</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.to_datetime.html#pandas.to_datetime" title="View documentation for pandas.to_datetime"><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span></a><span class="p">(</span><span class="n">this_quote</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="s1">&#39;Q&#39;</span><span class="p">)</span>
+<div class="newline"></div><span class="n">cv</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.LeaveOneGroupOut.html#sklearn.model_selection.LeaveOneGroupOut" title="View documentation for sklearn.model_selection.LeaveOneGroupOut"><span class="n">model_selection</span><span class="o">.</span><span class="n">LeaveOneGroupOut</span></a><span class="p">()</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="k">print</span><span class="p">(</span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="View documentation for sklearn.model_selection.cross_val_score"><span class="n">cross_val_score</span></a><span class="p">(</span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html#sklearn.linear_model.RidgeCV" title="View documentation for sklearn.linear_model.RidgeCV"><span class="n">linear_model</span><span class="o">.</span><span class="n">RidgeCV</span></a><span class="p">(),</span>
+<div class="newline"></div>                      <span class="n">quotes</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Chevron&#39;</span><span class="p">]),</span>
+<div class="newline"></div>                      <span class="n">quotes</span><span class="p">[</span><span class="s1">&#39;Chevron&#39;</span><span class="p">],</span>
+<div class="newline"></div>                      <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">quarters</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="o">-</span><span class="mf">55.0821056887</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>The problem that we are facing here is the auto-correlation in the
+data: these datasets are <strong>time-series</strong>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">quotes_with_dates</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.concat.html#pandas.concat" title="View documentation for pandas.concat"><span class="n">pd</span><span class="o">.</span><span class="n">concat</span></a><span class="p">((</span><span class="n">quotes</span><span class="p">,</span> <span class="n">this_quote</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]),</span>
+<div class="newline"></div>                              <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
+<div class="newline"></div><span class="n">quotes_with_dates</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../../_images/sphx_glr_02_cross_validation_002.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_02_cross_validation_002.png" />
+<p>If the goal is to do forecasting, than prediction should be done in the
+future, for instance using
+<a class="reference external" href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.TimeSeriesSplit.html#sklearn.model_selection.TimeSeriesSplit" title="(in scikit-learn v0.19.2)"><code class="xref py py-class docutils literal"><span class="pre">sklearn.model_selection.TimeSeriesSplit</span></code></a></p>
+</div>
+</div>
+<div class="section" id="school-grades-repeated-measures">
+<h3>1.2.3.2. School grades: repeated measures<a class="headerlink" href="#school-grades-repeated-measures" title="Permalink to this headline">¶</a></h3>
+<p>Let us look at another dependency structure across samples: repeated
+measures. This is often often in longitudinal data. Here we are looking
+at grades of school students, across the years.</p>
+<div class="section" id="id1">
+<h4>1.2.3.2.1. Download and load the data<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p>Download some data on grades across several schools (centers)</p>
+<p>The junior school data, originally from <a class="reference external" href="http://www.bristol.ac.uk/cmm/learning/support/datasets/">http://www.bristol.ac.uk/cmm/learning/support/datasets/</a></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;exams.csv.gz&#39;</span><span class="p">):</span>
+<div class="newline"></div>    <span class="c1"># Download the file if it is not present</span>
+<div class="newline"></div>    <span class="n">urlretrieve</span><span class="p">(</span><span class="s1">&#39;https://raw.githubusercontent.com/GaelVaroquaux/interpreting_ml_tuto/blob/master/src/01_how_well/exams.csv.gz&#39;</span><span class="p">,</span>
+<div class="newline"></div>                <span class="n">filename</span><span class="p">)</span>
+<div class="newline"></div><span class="n">exams</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.read_csv.html#pandas.read_csv" title="View documentation for pandas.read_csv"><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span></a><span class="p">(</span><span class="s1">&#39;exams.csv.gz&#39;</span><span class="p">)</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="c1"># Select data for students present all three years</span>
+<div class="newline"></div><span class="n">continuing_students</span> <span class="o">=</span> <span class="n">exams</span><span class="o">.</span><span class="n">StudentID</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<div class="newline"></div><span class="n">continuing_students</span> <span class="o">=</span> <span class="n">continuing_students</span><span class="p">[</span><span class="n">continuing_students</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">index</span>
+<div class="newline"></div><span class="n">exams</span> <span class="o">=</span> <span class="n">exams</span><span class="p">[</span><span class="n">exams</span><span class="o">.</span><span class="n">StudentID</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">continuing_students</span><span class="p">)]</span>
+<div class="newline"></div></pre></div>
+</div>
+</div>
+<div class="section" id="visualized-factor-of-grades">
+<h4>1.2.3.2.2. Visualized factor of grades<a class="headerlink" href="#visualized-factor-of-grades" title="Permalink to this headline">¶</a></h4>
+<p>Grade at tests in in exams depend on socio-economic status, year at
+school, …</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="kn">as</span> <span class="nn">sns</span>
+<div class="newline"></div><span class="n">g</span> <span class="o">=</span> <a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.PairGrid" title="View documentation for seaborn.PairGrid"><span class="n">sns</span><span class="o">.</span><span class="n">PairGrid</span></a><span class="p">(</span><span class="n">exams</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;StudentID&#39;</span><span class="p">]),</span>
+<div class="newline"></div>                 <span class="n">diag_sharey</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_lower</span><span class="p">(</span><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.kdeplot" title="View documentation for seaborn.kdeplot"><span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span></a><span class="p">)</span>
+<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_upper</span><span class="p">(</span><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.scatter.html#matplotlib.pyplot.scatter" title="View documentation for matplotlib.pyplot.scatter"><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span></a><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_diag</span><span class="p">(</span><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.kdeplot" title="View documentation for seaborn.kdeplot"><span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span></a><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../../_images/sphx_glr_02_cross_validation_003.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_02_cross_validation_003.png" />
+<p>A zoomed view on the factors that seem most interpretable</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.PairGrid" title="View documentation for seaborn.PairGrid"><span class="n">sns</span><span class="o">.</span><span class="n">PairGrid</span></a><span class="p">(</span><span class="n">exams</span><span class="p">[[</span><span class="s1">&#39;Ravens&#39;</span><span class="p">,</span> <span class="s1">&#39;Maths&#39;</span><span class="p">,</span> <span class="s1">&#39;English&#39;</span><span class="p">,</span> <span class="s1">&#39;SocialClass&#39;</span><span class="p">,</span> <span class="s1">&#39;Year&#39;</span><span class="p">]],</span>
+<div class="newline"></div>                 <span class="n">diag_sharey</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_lower</span><span class="p">(</span><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.kdeplot" title="View documentation for seaborn.kdeplot"><span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span></a><span class="p">)</span>
+<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_upper</span><span class="p">(</span><a href="http://matplotlib.org/api/_as_gen/matplotlib.pyplot.scatter.html#matplotlib.pyplot.scatter" title="View documentation for matplotlib.pyplot.scatter"><span class="n">plt</span><span class="o">.</span><span class="n">scatter</span></a><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="newline"></div><span class="n">g</span><span class="o">.</span><span class="n">map_diag</span><span class="p">(</span><a href="http://seaborn.pydata.org/generated/seaborn.html#seaborn.kdeplot" title="View documentation for seaborn.kdeplot"><span class="n">sns</span><span class="o">.</span><span class="n">kdeplot</span></a><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<div class="newline"></div></pre></div>
+</div>
+<img alt="../../_images/sphx_glr_02_cross_validation_004.png" class="sphx-glr-single-img" src="../../_images/sphx_glr_02_cross_validation_004.png" />
+</div>
+<div class="section" id="predicting-grades-in-maths">
+<h4>1.2.3.2.3. Predicting grades in maths<a class="headerlink" href="#predicting-grades-in-maths" title="Permalink to this headline">¶</a></h4>
+<p>Can we predict test grades in maths from demographics (ie, not from
+other grades)?</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="c1"># A bit of feature engineering to get a numerical matrix (easily done</span>
+<div class="newline"></div><span class="c1"># with the ColumnTransformer in scikit-learn &gt;= 0.20)</span>
+<div class="newline"></div><span class="n">X</span> <span class="o">=</span> <span class="n">exams</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;StudentID&#39;</span><span class="p">,</span> <span class="s1">&#39;Maths&#39;</span><span class="p">,</span> <span class="s1">&#39;Ravens&#39;</span><span class="p">,</span> <span class="s1">&#39;English&#39;</span><span class="p">])</span>
+<div class="newline"></div><span class="c1"># Encode gender as an integer variables</span>
+<div class="newline"></div><span class="n">X</span><span class="p">[</span><span class="s1">&#39;Gender&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="s1">&#39;Gender&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;Girl&#39;</span>
+<div class="newline"></div><span class="c1"># One-hot encode social class</span>
+<div class="newline"></div><span class="n">X</span> <span class="o">=</span> <a href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.get_dummies.html#pandas.get_dummies" title="View documentation for pandas.get_dummies"><span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span></a><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">drop_first</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="newline"></div><span class="n">y</span> <span class="o">=</span> <span class="n">exams</span><span class="p">[</span><span class="s1">&#39;Maths&#39;</span><span class="p">]</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">ensemble</span>
+<div class="newline"></div><span class="k">print</span><span class="p">(</span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="View documentation for sklearn.model_selection.cross_val_score"><span class="n">cross_val_score</span></a><span class="p">(</span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingRegressor.html#sklearn.ensemble.GradientBoostingRegressor" title="View documentation for sklearn.ensemble.GradientBoostingRegressor"><span class="n">ensemble</span><span class="o">.</span><span class="n">GradientBoostingRegressor</span></a><span class="p">(),</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+<div class="newline"></div>                      <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="mf">0.0699623196419</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>We get can predict!</p>
+<p>But there is one caveat: are we simply learning to recognive students
+across the years? There is many implicit informations about students:
+notably in the school ID and the class ID.</p>
+<p>To test for this, we can make sure that we have different students in
+the train and the test set</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">model_selection</span>
+<div class="newline"></div><span class="n">cv</span> <span class="o">=</span> <a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="View documentation for sklearn.model_selection.GroupKFold"><span class="n">model_selection</span><span class="o">.</span><span class="n">GroupKFold</span></a><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class="newline"></div>
+<div class="newline"></div><span class="k">print</span><span class="p">(</span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="View documentation for sklearn.model_selection.cross_val_score"><span class="n">cross_val_score</span></a><span class="p">(</span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingRegressor.html#sklearn.ensemble.GradientBoostingRegressor" title="View documentation for sklearn.ensemble.GradientBoostingRegressor"><span class="n">ensemble</span><span class="o">.</span><span class="n">GradientBoostingRegressor</span></a><span class="p">(),</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
+<div class="newline"></div>                      <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">groups</span><span class="o">=</span><span class="n">exams</span><span class="p">[</span><span class="s1">&#39;StudentID&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<div class="newline"></div></pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="mf">0.142224153494</span>
+<div class="newline"></div></pre></div>
+</div>
+<p>It works better!</p>
+<p>The classifier learns better to generalize, probably by learning
+stronger invariances from the repeated measures on the students</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  37.986 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-01-how-well-02-cross-validation-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/02_cross_validation.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>
@@ -318,6 +475,8 @@ as cross_val_score</p>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.readthedocs.io">Gallery generated by Sphinx-Gallery</a></p>
 <p><div style="clear: both"></div></p>
+</div>
+</div>
 </div>
 </div>
 
@@ -332,8 +491,20 @@ as cross_val_score</p>
   <ul>
 <li><a class="reference internal" href="#">1.2. Cross-validation: some gotchas</a><ul>
 <li><a class="reference internal" href="#the-uncertainty-of-measured-accuracy">1.2.1. The uncertainty of measured accuracy</a></li>
-<li><a class="reference internal" href="#confounding-effects-and-non-independence">1.2.2. Confounding effects and non independence</a></li>
-<li><a class="reference internal" href="#measuring-baselines-and-chance">1.2.3. Measuring baselines and chance</a></li>
+<li><a class="reference internal" href="#measuring-baselines-and-chance">1.2.2. Measuring baselines and chance</a></li>
+<li><a class="reference internal" href="#cross-validation-with-non-iid-data">1.2.3. Cross-validation with non iid data</a><ul>
+<li><a class="reference internal" href="#stock-market-time-series">1.2.3.1. Stock market: time series</a><ul>
+<li><a class="reference internal" href="#download-and-load-the-data">1.2.3.1.1. Download and load the data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#school-grades-repeated-measures">1.2.3.2. School grades: repeated measures</a><ul>
+<li><a class="reference internal" href="#id1">1.2.3.2.1. Download and load the data</a></li>
+<li><a class="reference internal" href="#visualized-factor-of-grades">1.2.3.2.2. Visualized factor of grades</a></li>
+<li><a class="reference internal" href="#predicting-grades-in-maths">1.2.3.2.3. Predicting grades in maths</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -390,7 +561,7 @@ as cross_val_score</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright .
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.7.
     </div>
   </body>
 </html>
