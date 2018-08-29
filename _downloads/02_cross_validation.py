@@ -8,8 +8,11 @@ many things can go wrong.
 """
 
 ###############################################################
-# The uncertainty of measured accuracy
-# ------------------------------------
+# Uncertainty of measured accuracy
+# --------------------------------
+#
+# Simple experiments reveal variations in cross_val_score
+# ........................................................
 #
 # The first thing to have in mind is that the results of a
 # cross-validation are noisy estimate of the real prediction accuracy
@@ -18,7 +21,7 @@ many things can go wrong.
 from sklearn import datasets, discriminant_analysis
 import numpy as np
 np.random.seed(0)
-data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)])
+data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)], n_samples=100)
 classifier = discriminant_analysis.LinearDiscriminantAnalysis()
 
 ###############################################################
@@ -34,9 +37,12 @@ for _ in range(10):
     print(cross_val_score(classifier, data, target))
 
 ###############################################################
-# This should not be surprising: if the classification rate is p, the
-# observed distribution of correct classifications on a set of size
-# follows a binomial distribution
+# A simple probabilistic model
+# .............................
+#
+# A sample probabilistic model gives the distribution of observed error:
+# if the classification rate is p, the observed distribution of correct
+# classifications on a set of size follows a binomial distribution
 from scipy import stats
 n = len(data)
 distrib = stats.binom(n=n, p=.7)
@@ -63,11 +69,61 @@ for n in [100, 1000, 10000, 100000, 1000000]:
 # fall more than .5% away of the true rate.
 #
 # **Keep in mind that cross-val is a noisy measure**
+
+###############################################################
+# Empirical distribution of cross-validation scores
+# .....................................................
 #
-# Importantly, the variance across folds is not a good measure of this
-# error, as the different data folds are not independent. For instance,
-# doing many random splits will can reduce the variance arbitrarily, but
-# does not provide actually new data points
+# We can sample the distribution of scores using cross-validation
+# iterators based on subsampling, such as
+# :class:`sklearn.model_selection.ShuffleSplit`, with many many splits
+from sklearn import model_selection
+cv = model_selection.ShuffleSplit(n_splits=200)
+scores = cross_val_score(classifier, data, target, cv=cv)
+
+import seaborn as sns
+plt.figure(figsize=(6, 3))
+sns.distplot(scores)
+plt.xlim(0, 1)
+
+###############################################################
+# The empirical distribution is broader than the theoretical one. This
+# can be explained by the fact that as we are retraining the model on
+# each fold, it actually fluctuates due the sampling noise in the
+# training data, while the model above only accounts for sampling noise
+# in the test data.
+#
+# The situation does get better with more data:
+data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)], n_samples=1000)
+
+scores = cross_val_score(classifier, data, target, cv=cv)
+
+plt.figure(figsize=(6, 3))
+sns.distplot(scores)
+plt.xlim(0, 1)
+plt.title("Distribution with 1000 data points")
+
+###############################################################
+# The distribution is still very broader
+#
+# **Testing the observed scores**
+#
+# Importantly, the standard error of the mean across folds is not a good
+# measure of this error, as the different data folds are not independent.
+# For instance, doing many random splits will can reduce the variance
+# arbitrarily, but does not provide actually new data points
+from scipy import stats
+
+plt.figure(figsize=(6, 3))
+sns.distplot(scores)
+plt.axvline(np.mean(scores), color='k')
+plt.axvline(np.mean(scores) + np.std(scores), color='b', label='std')
+plt.axvline(np.mean(scores) - np.std(scores), color='b')
+plt.axvline(np.mean(scores) + stats.sem(scores), color='r', label='SEM')
+plt.axvline(np.mean(scores) - stats.sem(scores), color='r')
+plt.legend(loc='best')
+plt.xlim(0, 1)
+plt.title("Distribution with 1000 data points")
 
 ###############################################################
 # Measuring baselines and chance
@@ -107,8 +163,6 @@ print("Classifier score: {0},\np value: {1}\nPermutation scores {2}"
 # ...........................
 #
 # Download and load the data
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
 import pandas as pd
 import os
 # Python 2 vs Python 3:
@@ -202,8 +256,8 @@ continuing_students = continuing_students[continuing_students > 2].index
 exams = exams[exams.StudentID.isin(continuing_students)]
 
 ###############################################################
-# Visualized factor of grades
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Visualizing factor of grades
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # Grade at tests in in exams depend on socio-economic status, year at
 # school, ...
@@ -236,7 +290,7 @@ print(cross_val_score(ensemble.GradientBoostingRegressor(), X, y,
                       cv=10).mean())
 
 ###############################################################
-# We get can predict!
+# We can predict!
 #
 # But there is one caveat: are we simply learning to recognive students
 # across the years? There is many implicit informations about students:

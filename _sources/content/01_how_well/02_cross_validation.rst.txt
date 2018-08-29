@@ -15,8 +15,11 @@ many things can go wrong.
 
 
 
-The uncertainty of measured accuracy
-------------------------------------
+Uncertainty of measured accuracy
+--------------------------------
+
+Simple experiments reveal variations in cross_val_score
+........................................................
 
 The first thing to have in mind is that the results of a
 cross-validation are noisy estimate of the real prediction accuracy
@@ -30,7 +33,7 @@ Let us create a simple artificial data
     from sklearn import datasets, discriminant_analysis
     import numpy as np
     np.random.seed(0)
-    data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)])
+    data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)], n_samples=100)
     classifier = discriminant_analysis.LinearDiscriminantAnalysis()
 
 
@@ -90,9 +93,12 @@ What if we try different random shuffles of the data?
     [ 0.76470588  0.61764706  0.625     ]
 
 
-This should not be surprising: if the classification rate is p, the
-observed distribution of correct classifications on a set of size
-follows a binomial distribution
+A simple probabilistic model
+.............................
+
+A sample probabilistic model gives the distribution of observed error:
+if the classification rate is p, the observed distribution of correct
+classifications on a set of size follows a binomial distribution
 
 
 
@@ -162,10 +168,99 @@ fall more than .5% away of the true rate.
 
 **Keep in mind that cross-val is a noisy measure**
 
-Importantly, the variance across folds is not a good measure of this
-error, as the different data folds are not independent. For instance,
-doing many random splits will can reduce the variance arbitrarily, but
-does not provide actually new data points
+
+Empirical distribution of cross-validation scores
+.....................................................
+
+We can sample the distribution of scores using cross-validation
+iterators based on subsampling, such as
+:class:`sklearn.model_selection.ShuffleSplit`, with many many splits
+
+
+
+.. code-block:: python
+
+    from sklearn import model_selection
+    cv = model_selection.ShuffleSplit(n_splits=200)
+    scores = cross_val_score(classifier, data, target, cv=cv)
+
+    import seaborn as sns
+    plt.figure(figsize=(6, 3))
+    sns.distplot(scores)
+    plt.xlim(0, 1)
+
+
+
+
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_002.png
+    :class: sphx-glr-single-img
+
+
+
+
+The empirical distribution is broader than the theoretical one. This
+can be explained by the fact that as we are retraining the model on
+each fold, it actually fluctuates due the sampling noise in the
+training data, while the model above only accounts for sampling noise
+in the test data.
+
+The situation does get better with more data:
+
+
+
+.. code-block:: python
+
+    data, target = datasets.make_blobs(centers=[(0, 0), (0, 1)], n_samples=1000)
+
+    scores = cross_val_score(classifier, data, target, cv=cv)
+
+    plt.figure(figsize=(6, 3))
+    sns.distplot(scores)
+    plt.xlim(0, 1)
+    plt.title("Distribution with 1000 data points")
+
+
+
+
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_003.png
+    :class: sphx-glr-single-img
+
+
+
+
+The distribution is still very broader
+
+**Testing the observed scores**
+
+Importantly, the standard error of the mean across folds is not a good
+measure of this error, as the different data folds are not independent.
+For instance, doing many random splits will can reduce the variance
+arbitrarily, but does not provide actually new data points
+
+
+
+.. code-block:: python
+
+    from scipy import stats
+
+    plt.figure(figsize=(6, 3))
+    sns.distplot(scores)
+    plt.axvline(np.mean(scores), color='k')
+    plt.axvline(np.mean(scores) + np.std(scores), color='b', label='std')
+    plt.axvline(np.mean(scores) - np.std(scores), color='b')
+    plt.axvline(np.mean(scores) + stats.sem(scores), color='r', label='SEM')
+    plt.axvline(np.mean(scores) - stats.sem(scores), color='r')
+    plt.legend(loc='best')
+    plt.xlim(0, 1)
+    plt.title("Distribution with 1000 data points")
+
+
+
+
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_004.png
+    :class: sphx-glr-single-img
+
+
 
 
 Measuring baselines and chance
@@ -209,7 +304,7 @@ provide simple baselines
 
  Out::
 
-    [ 0.58823529  0.55882353  0.46875   ]
+    [ 0.47058824  0.5         0.40625   ]
 
 
 **Chance level** To measure actual chance, the most robust approach is
@@ -235,25 +330,25 @@ as cross_val_score
 
  Out::
 
-    Classifier score: 0.742034313725,
-    p value: 0.00990099009901
-    Permutation scores [ 0.57107843  0.42034314  0.53921569  0.47058824  0.59987745  0.47977941
-      0.49080882  0.60110294  0.55943627  0.54044118  0.47855392  0.43137255
-      0.50061275  0.60171569  0.60110294  0.50919118  0.51041667  0.39828431
-      0.55085784  0.62071078  0.44852941  0.5692402   0.3995098   0.46139706
-      0.51776961  0.49877451  0.45159314  0.53063725  0.50796569  0.54901961
-      0.60232843  0.57965686  0.52941176  0.45955882  0.51041667  0.6004902
-      0.55943627  0.5         0.5502451   0.54840686  0.56004902  0.57046569
-      0.51960784  0.52144608  0.50122549  0.54963235  0.47181373  0.50857843
-      0.42830882  0.53002451  0.54166667  0.42892157  0.50122549  0.47120098
-      0.47058824  0.44117647  0.45894608  0.4810049   0.50857843  0.61213235
-      0.56311275  0.49877451  0.6004902   0.52205882  0.59926471  0.48039216
-      0.45343137  0.50183824  0.5189951   0.59191176  0.56004902  0.56066176
-      0.47058824  0.64154412  0.48958333  0.4497549   0.51041667  0.55821078
-      0.43811275  0.45894608  0.43014706  0.43811275  0.45159314  0.4877451
-      0.40931373  0.56004902  0.53737745  0.50919118  0.40012255  0.47181373
-      0.45955882  0.56004902  0.5379902   0.5379902   0.37990196  0.42095588
-      0.32843137  0.44914216  0.49938725  0.53125   ]
+    Classifier score: 0.660539215686,
+    p value: 0.019801980198
+    Permutation scores [ 0.57965686  0.58088235  0.58884804  0.49203431  0.51041667  0.59129902
+      0.45036765  0.44914216  0.46078431  0.59129902  0.37928922  0.53982843
+      0.48039216  0.5189951   0.5189951   0.53982843  0.62009804  0.56066176
+      0.50122549  0.50796569  0.58026961  0.50980392  0.57781863  0.52941176
+      0.51838235  0.59007353  0.49019608  0.44852941  0.36887255  0.53125
+      0.48958333  0.46078431  0.53553922  0.55698529  0.43014706  0.60968137
+      0.61090686  0.40073529  0.46752451  0.45833333  0.41973039  0.55821078
+      0.48958333  0.50796569  0.68198529  0.57904412  0.4877451   0.44791667
+      0.40992647  0.46813725  0.49080882  0.47916667  0.56985294  0.48958333
+      0.56066176  0.52941176  0.55147059  0.53125     0.52144608  0.59068627
+      0.43933824  0.41973039  0.53063725  0.35110294  0.63112745  0.57107843
+      0.4620098   0.54963235  0.53002451  0.47794118  0.48223039  0.49938725
+      0.53982843  0.54227941  0.47120098  0.46936275  0.43995098  0.48161765
+      0.56985294  0.37867647  0.46017157  0.55943627  0.53982843  0.60906863
+      0.53860294  0.48161765  0.43014706  0.55882353  0.44914216  0.58210784
+      0.42095588  0.57965686  0.56066176  0.46139706  0.61090686  0.5502451
+      0.47977941  0.49080882  0.41973039  0.52941176]
 
 
 Cross-validation with non iid data
@@ -263,8 +358,6 @@ Stock market: time series
 ...........................
 
 Download and load the data
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 
 
@@ -363,7 +456,7 @@ data: these datasets are **time-series**.
 
 
 
-.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_002.png
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_005.png
     :class: sphx-glr-single-img
 
 
@@ -436,8 +529,8 @@ The junior school data, originally from http://www.bristol.ac.uk/cmm/learning/su
 
 
 
-Visualized factor of grades
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Visualizing factor of grades
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Grade at tests in in exams depend on socio-economic status, year at
 school, ...
@@ -457,7 +550,7 @@ school, ...
 
 
 
-.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_003.png
+.. image:: /content/01_how_well/images/sphx_glr_02_cross_validation_006.png
     :class: sphx-glr-single-img
 
 
@@ -495,10 +588,10 @@ other grades)?
 
  Out::
 
-    0.0699623196419
+    0.0725511722169
 
 
-We get can predict!
+We can predict!
 
 But there is one caveat: are we simply learning to recognive students
 across the years? There is many implicit informations about students:
@@ -525,7 +618,7 @@ the train and the test set
 
  Out::
 
-    0.142224153494
+    0.14218996362
 
 
 It works better!
@@ -548,7 +641,7 @@ applications, the choice of cross-validation strategy may make a huge
 difference.
 
 
-**Total running time of the script:** ( 0 minutes  26.384 seconds)
+**Total running time of the script:** ( 0 minutes  27.177 seconds)
 
 
 .. _sphx_glr_download_content_01_how_well_02_cross_validation.py:

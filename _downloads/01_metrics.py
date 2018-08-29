@@ -207,7 +207,7 @@ print(cross_val_score(most_frequent, digits.data, sevens, scoring='roc_auc'))
 
 #############################################################
 # Average precision
-# ..................
+# ~~~~~~~~~~~~~~~~~
 #
 # When the classifier exposes its unthresholded decision, another
 # interesting metric is the average precision for all recall. Compared to

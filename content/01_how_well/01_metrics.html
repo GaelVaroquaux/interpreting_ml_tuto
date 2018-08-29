@@ -182,8 +182,10 @@ $(function () {
 <li><a class="reference internal" href="#the-digits-data" id="id8">The digits data</a></li>
 <li><a class="reference internal" href="#accuracy-and-its-shortcomings" id="id9">Accuracy and its shortcomings</a></li>
 <li><a class="reference internal" href="#precision-recall-and-their-shortcomings" id="id10">Precision, recall, and their shortcomings</a></li>
-<li><a class="reference internal" href="#area-under-the-roc-curve" id="id11">Area under the ROC curve</a></li>
+<li><a class="reference internal" href="#area-under-the-roc-curve" id="id11">Area under the ROC curve</a><ul>
 <li><a class="reference internal" href="#average-precision" id="id12">Average precision</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#multiclass-and-multilabel-settings" id="id13">Multiclass and multilabel settings</a></li>
 <li><a class="reference internal" href="#id1" id="id14">Summary</a></li>
 </ul>
@@ -258,7 +260,7 @@ via the <cite>scoring</cite> parameter of
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.7998972</span>   <span class="mf">0.8410145</span>   <span class="mf">0.79320275</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.80185876</span>  <span class="mf">0.83501125</span>  <span class="mf">0.83122505</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>Explained variance is convienent because it has a natural scaling: 1 is
@@ -270,7 +272,7 @@ perfect prediction, and 0 is around chance</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.83009248</span>  <span class="mf">0.90030842</span>  <span class="mf">0.83204317</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.78068719</span>  <span class="mf">0.87449332</span>  <span class="mf">0.82714336</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>Along the Charles river</p>
@@ -279,7 +281,7 @@ perfect prediction, and 0 is around chance</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.67640959</span> <span class="o">-</span><span class="mf">0.14952158</span>  <span class="mf">0.77737806</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.47939268</span> <span class="o">-</span><span class="mf">0.23091137</span>  <span class="mf">0.83871587</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>So the houses along the Charles are harder to predict?</p>
@@ -294,7 +296,7 @@ the explained variance is a relative measure</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">14.91942229</span>  <span class="o">-</span><span class="mf">9.30497261</span> <span class="o">-</span><span class="mf">14.12331083</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">14.84768471</span>  <span class="o">-</span><span class="mf">8.53250191</span> <span class="o">-</span><span class="mf">16.77990573</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>Along the Charles river</p>
@@ -304,7 +306,7 @@ the explained variance is a relative measure</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="o">-</span><span class="mf">83.05688333</span> <span class="o">-</span><span class="mf">104.24485833</span>  <span class="o">-</span><span class="mf">47.54961818</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">80.363225</span>   <span class="o">-</span><span class="mf">62.05679167</span> <span class="o">-</span><span class="mf">28.57741818</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>So the error is larger along the Charles river</p>
@@ -319,7 +321,7 @@ application?</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">2.49491124</span> <span class="o">-</span><span class="mf">2.22118343</span> <span class="o">-</span><span class="mf">2.71839286</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span><span class="o">-</span><span class="mf">2.51940828</span> <span class="o">-</span><span class="mf">2.26195266</span> <span class="o">-</span><span class="mf">2.52642857</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 </div>
@@ -355,7 +357,7 @@ It takes values between 0 and 1, where 1 is perfect prediction</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.96833333</span>  <span class="mf">0.97662771</span>  <span class="mf">0.97491639</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.97333333</span>  <span class="mf">0.97662771</span>  <span class="mf">0.98160535</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>However, a stupid classifier can each good prediction wit imbalanced
@@ -377,7 +379,7 @@ and can only be used for binary classification.</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.87407407</span>  <span class="mf">0.875</span>       <span class="mf">0.88983051</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.85833333</span>  <span class="mf">0.93240569</span>  <span class="mf">0.93882268</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 </div>
@@ -391,7 +393,7 @@ correct</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">1.</span>  <span class="mf">1.</span>  <span class="mf">1.</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">1.</span>          <span class="mf">1.</span>          <span class="mf">0.98039216</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>Our classifier has a good precision: most of the sevens that it
@@ -411,7 +413,7 @@ defined. Scikit-learn puts it to zero</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.66666667</span>  <span class="mf">0.76666667</span>  <span class="mf">0.83050847</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.73333333</span>  <span class="mf">0.8</span>         <span class="mf">0.84745763</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>Our recall isn’t as good: we miss many sevens</p>
@@ -442,7 +444,7 @@ prediction and .5 is chance, independently of class imbalance</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.98777778</span>  <span class="mf">0.99516079</span>  <span class="mf">0.99871073</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.98606481</span>  <span class="mf">0.99795918</span>  <span class="mf">0.99927675</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><a href="http://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html#sklearn.model_selection.cross_val_score" title="View documentation for sklearn.model_selection.cross_val_score"><span class="n">cross_val_score</span></a><span class="p">(</span><span class="n">most_frequent</span><span class="p">,</span> <span class="n">digits</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">sevens</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">))</span>
@@ -452,9 +454,8 @@ prediction and .5 is chance, independently of class imbalance</p>
 <div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.5</span>  <span class="mf">0.5</span>  <span class="mf">0.5</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
-</div>
 <div class="section" id="average-precision">
-<h3><a class="toc-backref" href="#id12">1.1.2.5. Average precision</a><a class="headerlink" href="#average-precision" title="Permalink to this headline">¶</a></h3>
+<h4><a class="toc-backref" href="#id12">1.1.2.4.1. Average precision</a><a class="headerlink" href="#average-precision" title="Permalink to this headline">¶</a></h4>
 <p>When the classifier exposes its unthresholded decision, another
 interesting metric is the average precision for all recall. Compared to
 ROC AUC it has a more linear behavior for very rare classes. Indeed,
@@ -465,7 +466,7 @@ changes in terms of precision</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.96132921</span>  <span class="mf">0.94239218</span>  <span class="mf">0.98758793</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.93169079</span>  <span class="mf">0.98168713</span>  <span class="mf">0.98500183</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>Naive decisions are no longer at .5</p>
@@ -478,8 +479,9 @@ changes in terms of precision</p>
 <div class="newline"></div></pre></div>
 </div>
 </div>
+</div>
 <div class="section" id="multiclass-and-multilabel-settings">
-<h3><a class="toc-backref" href="#id13">1.1.2.6. Multiclass and multilabel settings</a><a class="headerlink" href="#multiclass-and-multilabel-settings" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id13">1.1.2.5. Multiclass and multilabel settings</a><a class="headerlink" href="#multiclass-and-multilabel-settings" title="Permalink to this headline">¶</a></h3>
 <p>To simplify the discussion, we have reduced the problem to detecting
 sevens, but maybe it is more interesting to predict the digit: a
 10-class classification problem</p>
@@ -488,7 +490,7 @@ sevens, but maybe it is more interesting to predict the digit: a
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.88538206</span>  <span class="mf">0.91819699</span>  <span class="mf">0.88926174</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.87873754</span>  <span class="mf">0.91318865</span>  <span class="mf">0.90100671</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>The most frequent label is no longer a very interesting baseline</p>
@@ -497,7 +499,7 @@ sevens, but maybe it is more interesting to predict the digit: a
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.09468439</span>  <span class="mf">0.11018364</span>  <span class="mf">0.12416107</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.11295681</span>  <span class="mf">0.08013356</span>  <span class="mf">0.08892617</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>Precision and recall need the notion of specific class to detect
@@ -538,7 +540,7 @@ reported</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.98939378</span>  <span class="mf">0.99108954</span>  <span class="mf">0.98166972</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.98369166</span>  <span class="mf">0.9886015</span>   <span class="mf">0.98884622</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>as well as the average precision</p>
@@ -547,7 +549,7 @@ reported</p>
 <div class="newline"></div></pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.92053636</span>  <span class="mf">0.94531451</span>  <span class="mf">0.93708004</span><span class="p">]</span>
+<div class="sphx-glr-script-out highlight-default"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="mf">0.93498163</span>  <span class="mf">0.94880999</span>  <span class="mf">0.93500118</span><span class="p">]</span>
 <div class="newline"></div></pre></div>
 </div>
 <p>Note that the confusion between classes may not well be captured in
@@ -555,7 +557,7 @@ Such a measure, as in multiclass predictions are exclusive, and not
 in multilabel.</p>
 </div>
 <div class="section" id="id1">
-<h3><a class="toc-backref" href="#id14">1.1.2.7. Summary</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3><a class="toc-backref" href="#id14">1.1.2.6. Summary</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>Class imbalance and the tradeoffs between accepting many misses or many
 false detections are the things to keep in mind in classification.</p>
 <p>In single-class settings, ROC AUC and average precision give nice
@@ -563,7 +565,7 @@ summaries to compare classifiers when the threshold can be varied. In
 multiclass settings, this is harder, unless we are willing to consider
 the problem as multiple single-class problems (one-vs-all).</p>
 <hr class="docutils" />
-<p><strong>Total running time of the script:</strong> ( 0 minutes  1.998 seconds)</p>
+<p><strong>Total running time of the script:</strong> ( 0 minutes  2.456 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-content-01-how-well-01-metrics-py">
 <div class="binder-badge docutils container">
 <a class="reference external image-reference" href="https://mybinder.org/v2/gh/gaelvaroquaux/interpreting_ml_tuto/master?filepath=_downloads/01_metrics.ipynb"><img alt="https://static.mybinder.org/badge.svg" src="https://static.mybinder.org/badge.svg" width="150px" /></a>
@@ -600,10 +602,12 @@ the problem as multiple single-class problems (one-vs-all).</p>
 <li><a class="reference internal" href="#the-digits-data">1.1.2.1. The digits data</a></li>
 <li><a class="reference internal" href="#accuracy-and-its-shortcomings">1.1.2.2. Accuracy and its shortcomings</a></li>
 <li><a class="reference internal" href="#precision-recall-and-their-shortcomings">1.1.2.3. Precision, recall, and their shortcomings</a></li>
-<li><a class="reference internal" href="#area-under-the-roc-curve">1.1.2.4. Area under the ROC curve</a></li>
-<li><a class="reference internal" href="#average-precision">1.1.2.5. Average precision</a></li>
-<li><a class="reference internal" href="#multiclass-and-multilabel-settings">1.1.2.6. Multiclass and multilabel settings</a></li>
-<li><a class="reference internal" href="#id1">1.1.2.7. Summary</a></li>
+<li><a class="reference internal" href="#area-under-the-roc-curve">1.1.2.4. Area under the ROC curve</a><ul>
+<li><a class="reference internal" href="#average-precision">1.1.2.4.1. Average precision</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#multiclass-and-multilabel-settings">1.1.2.5. Multiclass and multilabel settings</a></li>
+<li><a class="reference internal" href="#id1">1.1.2.6. Summary</a></li>
 </ul>
 </li>
 </ul>
