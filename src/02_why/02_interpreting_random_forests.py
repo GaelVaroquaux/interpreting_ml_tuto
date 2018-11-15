@@ -77,8 +77,9 @@ plt.tight_layout()
 # feature and the target, conditionally on the other features. The
 # conditioning is difficult and not well controlled.
 #
-# Higher-cardinality categorical variables will have larger
-# feature importances
+# **Higher-cardinality categorical variables** will have larger
+# feature importances. In general, variables with a hire entropy will
+# give rise to larger feature importances.
 #
 # ________________________________________________________
 
